@@ -72,7 +72,7 @@ export const authOptions: NextAuthOptions = {
           })
 
           // Se o usuário existe mas não tem conta Google linkada, linkar automaticamente
-          if (existingUser && !existingUser.accounts.some(acc => acc.provider === 'google')) {
+          if (existingUser && !existingUser.accounts.some((acc: any) => acc.provider === 'google')) {
             await prisma.account.create({
               data: {
                 userId: existingUser.id,
@@ -120,6 +120,23 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string
       }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      // Se a URL já é absoluta e pertence ao nosso domínio, usar ela
+      if (url.startsWith(baseUrl)) return url
+      
+      // Se começa com "/", é relativa ao domínio
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      
+      // Se tem o parâmetro callbackUrl na query, usar ele
+      const urlObj = new URL(url, baseUrl)
+      const callbackUrl = urlObj.searchParams.get('callbackUrl')
+      if (callbackUrl && callbackUrl.startsWith('/')) {
+        return `${baseUrl}${callbackUrl}`
+      }
+      
+      // Default: redirecionar para dashboard
+      return `${baseUrl}/dashboard`
     }
   }
 }

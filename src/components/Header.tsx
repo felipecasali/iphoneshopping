@@ -71,6 +71,10 @@ export default function Header() {
             <Link href="/anuncios" className="text-gray-700 hover:text-primary font-medium">
               Anúncios
             </Link>
+            <Link href="/laudo/criar" className="text-gray-700 hover:text-primary font-medium flex items-center gap-1">
+              Laudo Técnico
+              <span className="text-xs bg-primary-600 text-white px-2 py-0.5 rounded-full">Novo</span>
+            </Link>
           </div>
 
           <div className="flex items-center space-x-4">

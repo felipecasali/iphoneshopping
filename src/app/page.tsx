@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Smartphone, Shield, MessageSquare, TrendingUp, Award, Clock, BadgeCheck, Target } from 'lucide-react'
+import { Smartphone, Shield, MessageSquare, TrendingUp, Award, Clock, BadgeCheck, Target, FileText, CheckCircle, Camera } from 'lucide-react'
 import Header from '@/components/Header'
 import { OrganizationSchema, WebSiteSchema, FAQSchema } from '@/components/StructuredData'
 
@@ -53,6 +53,14 @@ export default function Home() {
                 aria-label="Avaliar meu aparelho"
               >
                 ✨ Descobrir Valor do Meu Aparelho
+              </Link>
+              <Link 
+                href="/laudo/criar"
+                className="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2 justify-center"
+                aria-label="Criar laudo técnico"
+              >
+                <FileText className="h-5 w-5" />
+                Laudo Técnico Profissional
               </Link>
               <Link 
                 href="/anuncios"
@@ -155,6 +163,145 @@ export default function Home() {
             >
               Começar Avaliação Gratuita →
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Laudo Técnico Section - DESTAQUE */}
+      <section className="py-20 bg-gradient-to-br from-green-50 via-blue-50 to-primary-50 relative overflow-hidden" aria-labelledby="laudo-heading">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-green-200 rounded-full filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary-200 rounded-full filter blur-3xl opacity-20 translate-x-1/3 translate-y-1/3"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full mb-4">
+              <FileText className="h-5 w-5" />
+              <span className="font-semibold">NOVO: Laudo Técnico Profissional</span>
+            </div>
+            <h2 id="laudo-heading" className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+              Venda com Laudo Técnico
+              <span className="block text-green-600 mt-2">Como uma Vistoria Veicular</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Assim como carros premium têm laudo de vistoria, seu iPhone merece um certificado profissional que comprova qualidade e valoriza sua venda.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            {/* Card Principal */}
+            <div className="bg-white rounded-2xl shadow-2xl p-8 border-2 border-green-500">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="bg-green-100 p-4 rounded-xl">
+                  <FileText className="h-10 w-10 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold mb-2">O Que é o Laudo Técnico?</h3>
+                  <p className="text-gray-600">
+                    Certificado profissional completo que documenta todas as condições do seu aparelho com fotos, testes de funcionalidade e avaliação técnica detalhada.
+                  </p>
+                </div>
+              </div>
+              
+              <Link
+                href="/laudo/criar"
+                className="w-full bg-green-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group"
+              >
+                <FileText className="h-6 w-6 group-hover:scale-110 transition" />
+                Criar Meu Laudo Agora
+              </Link>
+            </div>
+
+            {/* Vantagens */}
+            <div className="space-y-4">
+              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition">
+                <div className="flex items-start gap-4">
+                  <div className="bg-blue-100 p-3 rounded-lg flex-shrink-0">
+                    <CheckCircle className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Mais Credibilidade</h4>
+                    <p className="text-gray-600">Compradores têm 3x mais confiança em anúncios com laudo técnico certificado</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition">
+                <div className="flex items-start gap-4">
+                  <div className="bg-green-100 p-3 rounded-lg flex-shrink-0">
+                    <TrendingUp className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Venda Mais Rápido</h4>
+                    <p className="text-gray-600">Anúncios com laudo vendem até 2x mais rápido que anúncios convencionais</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary-100 p-3 rounded-lg flex-shrink-0">
+                    <BadgeCheck className="h-6 w-6 text-primary-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Valorização Garantida</h4>
+                    <p className="text-gray-600">Aparelhos certificados podem alcançar até 15% mais valor de venda</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* O que inclui */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+            <h3 className="text-2xl font-bold mb-6 text-center">O Que Está Incluído no Laudo?</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Camera className="h-8 w-8" />
+                </div>
+                <h4 className="font-bold mb-2">Documentação Fotográfica</h4>
+                <p className="text-gray-600 text-sm">9 categorias de fotos: frente, verso, laterais, tela ligada, bateria, IMEI, nota fiscal, caixa e acessórios</p>
+              </div>
+
+              <div className="text-center">
+                <div className="bg-gradient-to-br from-green-500 to-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="h-8 w-8" />
+                </div>
+                <h4 className="font-bold mb-2">Testes de Funcionalidade</h4>
+                <p className="text-gray-600 text-sm">11 testes: touch, Face ID, câmeras, microfone, alto-falantes, botões, sensores e conectividade</p>
+              </div>
+
+              <div className="text-center">
+                <div className="bg-gradient-to-br from-primary-500 to-primary-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Award className="h-8 w-8" />
+                </div>
+                <h4 className="font-bold mb-2">Certificação Digital</h4>
+                <p className="text-gray-600 text-sm">Número único, validade de 90 dias, estimativa de preço e selo de autenticidade verificável</p>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Final */}
+          <div className="mt-12 text-center">
+            <p className="text-lg text-gray-700 mb-4">
+              <strong>Seja pioneiro!</strong> Destaque seu anúncio com certificação profissional
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/laudo/criar"
+                className="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition shadow-lg inline-flex items-center gap-2 justify-center"
+              >
+                <FileText className="h-6 w-6" />
+                Criar Laudo Técnico Grátis
+              </Link>
+              <Link
+                href="/avaliar"
+                className="bg-white text-gray-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-50 transition shadow-lg border-2 border-gray-300"
+              >
+                Começar com Avaliação Rápida
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -305,6 +452,7 @@ export default function Home() {
               <h3 className="text-lg font-semibold mb-4">Links Rápidos</h3>
               <ul className="space-y-2">
                 <li><Link href="/avaliar" className="text-gray-400 hover:text-white">Avaliar Aparelho</Link></li>
+                <li><Link href="/laudo/criar" className="text-gray-400 hover:text-white flex items-center gap-2">Laudo Técnico <span className="text-xs bg-green-600 px-2 py-0.5 rounded">Novo</span></Link></li>
                 <li><Link href="/anuncios" className="text-gray-400 hover:text-white">Ver Anúncios</Link></li>
                 <li><Link href="/login" className="text-gray-400 hover:text-white">Entrar</Link></li>
               </ul>

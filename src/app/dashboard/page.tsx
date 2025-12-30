@@ -13,7 +13,9 @@ import {
   LogOut,
   TrendingUp,
   Eye,
-  Plus
+  Plus,
+  FileText,
+  Award
 } from 'lucide-react'
 
 interface Stats {
@@ -212,6 +214,14 @@ export default function DashboardPage() {
                   <span>Mensagens</span>
                 </Link>
                 <Link
+                  href="/laudo/criar"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 text-gray-700 border-l-4 border-transparent hover:border-primary-500"
+                >
+                  <FileText className="h-5 w-5" />
+                  <span>Criar Laudo</span>
+                  <span className="ml-auto text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded-full">Novo</span>
+                </Link>
+                <Link
                   href="/dashboard/perfil"
                   className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 text-gray-700"
                 >
@@ -236,11 +246,23 @@ export default function DashboardPage() {
               <h2 className="text-lg font-semibold mb-4">Ações Rápidas</h2>
               <div className="grid grid-cols-2 gap-4">
                 <Link
+                  href="/laudo/criar"
+                  className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-primary-400 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition relative group"
+                >
+                  <div className="absolute top-2 right-2">
+                    <span className="text-xs bg-primary-600 text-white px-2 py-1 rounded-full">Novo!</span>
+                  </div>
+                  <FileText className="h-8 w-8 text-primary-600 mb-2 group-hover:scale-110 transition" />
+                  <span className="font-medium">Laudo Técnico</span>
+                  <span className="text-xs text-gray-500 mt-1">Certifique seu aparelho</span>
+                </Link>
+                <Link
                   href="/avaliar"
                   className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition"
                 >
                   <Plus className="h-8 w-8 text-primary-600 mb-2" />
                   <span className="font-medium">Criar Anúncio</span>
+                  <span className="text-xs text-gray-500 mt-1">Venda grátis</span>
                 </Link>
                 <Link
                   href="/anuncios"
@@ -248,6 +270,15 @@ export default function DashboardPage() {
                 >
                   <Eye className="h-8 w-8 text-primary-600 mb-2" />
                   <span className="font-medium">Ver Anúncios</span>
+                  <span className="text-xs text-gray-500 mt-1">Navegue ofertas</span>
+                </Link>
+                <Link
+                  href="/avaliar"
+                  className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition"
+                >
+                  <Award className="h-8 w-8 text-primary-600 mb-2" />
+                  <span className="font-medium">Avaliar Aparelho</span>
+                  <span className="text-xs text-gray-500 mt-1">Descubra o valor</span>
                 </Link>
               </div>
             </div>

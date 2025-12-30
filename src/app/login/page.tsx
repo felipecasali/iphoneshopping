@@ -1,15 +1,17 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, Suspense, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { Smartphone } from 'lucide-react'
 import GoogleSignInButton from '@/components/GoogleSignInButton'
 import LoginErrorHandler from '@/components/LoginErrorHandler'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect') || '/dashboard'
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -32,7 +34,7 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Email ou senha inválidos')
       } else if (result?.ok) {
-        router.push('/dashboard')
+        router.push(redirect)
       }
     } catch (err) {
       setError('Erro ao fazer login. Tente novamente.')
@@ -43,9 +45,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <Suspense fallback={null}>
-        <LoginErrorHandler onError={setError} />
-      </Suspense>
+      <LoginErrorHandler onError={setError} />
       
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex justify-center">
@@ -64,7 +64,7 @@ export default function LoginPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <GoogleSignInButton callbackUrl="/dashboard" />
+          <GoogleSignInButton callbackUrl={redirect} />
           
           <div className="mt-6 relative">
             <div className="absolute inset-0 flex items-center">
@@ -151,5 +151,20 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
