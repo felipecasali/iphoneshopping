@@ -29,19 +29,15 @@ export async function POST(request: Request) {
     const data = await request.json()
 
     // Validações básicas
-    if (!data.deviceType || !data.deviceModel || !data.imei) {
+    if (!data.deviceType || !data.deviceModel) {
       return NextResponse.json(
-        { error: 'Campos obrigatórios faltando' },
+        { error: 'Campos obrigatórios faltando: tipo e modelo do dispositivo' },
         { status: 400 }
       )
     }
 
-    if (!data.frontPhoto || !data.backPhoto || !data.screenOnPhoto || !data.batteryHealthPhoto) {
-      return NextResponse.json(
-        { error: 'Fotos obrigatórias faltando' },
-        { status: 400 }
-      )
-    }
+    // Enquanto não temos pagamento, todos os laudos são gratuitos
+    data.paidAmount = 0
 
     // Gerar número do laudo
     const reportNumber = generateReportNumber()
@@ -125,11 +121,78 @@ export async function POST(request: Request) {
         userId: user.id,
         reportNumber,
         status: 'COMPLETED',
-        ...data,
+        verifiedAt: new Date(),
+        expiresAt,
         estimatedPrice: estimatedPrice > 0 ? estimatedPrice : null,
         priceValidity: estimatedPrice > 0 ? priceValidity : null,
-        expiresAt,
-        verifiedAt: new Date(),
+        
+        // Dados do dispositivo
+        deviceType: data.deviceType,
+        deviceModel: data.deviceModel,
+        storage: data.storage || 0,
+        color: data.color || 'Não especificado',
+        imei: data.imei || 'Não informado',
+        serialNumber: data.serialNumber || null,
+        
+        // Tipo de laudo e pagamento (GRATUITO por enquanto)
+        reportType: data.reportType || 'BASIC',
+        paidAmount: 0,
+        
+        // Fotos obrigatórias (com fallback)
+        frontPhoto: data.frontPhoto || '',
+        backPhoto: data.backPhoto || '',
+        sidesPhotos: data.sidesPhotos || '[]',
+        screenOnPhoto: data.screenOnPhoto || data.frontPhoto || '',
+        screenOffPhoto: data.screenOffPhoto || data.frontPhoto || '',
+        batteryHealthPhoto: data.batteryHealthPhoto || '',
+        
+        // Fotos opcionais
+        imeiPhoto: data.imeiPhoto || null,
+        invoicePhoto: data.invoicePhoto || null,
+        boxPhoto: data.boxPhoto || null,
+        accessoriesPhotos: data.accessoriesPhotos || '[]',
+        
+        // Condições físicas
+        screenCondition: data.screenCondition || 'Não avaliado',
+        screenConditionNotes: data.screenConditionNotes || null,
+        bodyCondition: data.bodyCondition || 'Não avaliado',
+        bodyConditionNotes: data.bodyConditionNotes || null,
+        cameraCondition: data.cameraCondition || 'Não avaliado',
+        cameraConditionNotes: data.cameraConditionNotes || null,
+        
+        // Saúde da bateria
+        batteryHealthPercent: data.batteryHealthPercent || 0,
+        
+        // Testes funcionais
+        touchWorking: data.touchWorking ?? true,
+        faceIdWorking: data.faceIdWorking ?? true,
+        biometricsWorking: data.biometricsWorking ?? true,
+        wifiWorking: data.wifiWorking ?? true,
+        bluetoothWorking: data.bluetoothWorking ?? true,
+        speakersWorking: data.speakersWorking ?? true,
+        microphoneWorking: data.microphoneWorking ?? true,
+        vibrationWorking: data.vibrationWorking ?? true,
+        buttonsWorking: data.buttonsWorking ?? true,
+        
+        // Status e bloqueios
+        icloudFree: data.icloudFree ?? false,
+        carrierUnlocked: data.carrierUnlocked ?? false,
+        hasWaterDamage: data.hasWaterDamage ?? false,
+        hasRepairs: data.hasRepairs ?? false,
+        repairDetails: data.repairDetails || null,
+        
+        // Acessórios
+        hasBox: data.hasBox ?? false,
+        hasCharger: data.hasCharger ?? false,
+        hasCable: data.hasCable ?? false,
+        hasEarphones: data.hasEarphones ?? false,
+        hasInvoice: data.hasInvoice ?? false,
+        hasWarranty: data.hasWarranty ?? false,
+        warrantyUntil: data.warrantyUntil || null,
+        
+        // Vínculo com avaliação
+        evaluationId: data.evaluationId || null,
+        listingId: data.listingId || null,
       }
     })
 

@@ -411,6 +411,17 @@ function CriarLaudoContent() {
         {/* Step 1: Escolha do Tipo de Laudo */}
         {step === 1 && (
           <div className="space-y-8">
+            {/* Banner promocional */}
+            <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-6 text-white text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Sparkles className="h-6 w-6 mr-2" />
+                <h3 className="text-xl font-bold">🎉 Promoção de Lançamento!</h3>
+              </div>
+              <p className="text-green-50">
+                Todos os laudos estão <strong>GRATUITOS</strong> temporariamente! Aproveite para testar todas as funcionalidades premium enquanto desenvolvemos o sistema de pagamento.
+              </p>
+            </div>
+
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Escolha o Tipo de Laudo
@@ -471,10 +482,18 @@ function CriarLaudoContent() {
                           <span className="text-3xl font-bold text-green-600">Gratuito</span>
                         ) : (
                           <div>
-                            <span className="text-3xl font-bold text-gray-900">
-                              R$ {type.price.toFixed(2)}
-                            </span>
-                            <span className="text-gray-500 ml-2">por laudo</span>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-3xl font-bold text-green-600">
+                                GRÁTIS
+                              </span>
+                              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                                Promocional
+                              </span>
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              <span className="line-through">R$ {type.price.toFixed(2)}</span>
+                              <span className="ml-2">• Lançamento</span>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -1033,10 +1052,10 @@ function CriarLaudoContent() {
             <div className="text-center mb-8">
               <CreditCard className="h-12 w-12 text-green-600 mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Pagamento
+                Finalizar Laudo
               </h2>
               <p className="text-gray-600">
-                Complete o pagamento para gerar seu laudo profissional
+                Confirme a geração do seu laudo profissional
               </p>
             </div>
 
@@ -1052,12 +1071,25 @@ function CriarLaudoContent() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   {LAUDO_TYPES.find(t => t.id === selectedType)?.name}
                 </h3>
-                <div className="text-4xl font-bold text-primary-600 mb-4">
+                <div className="text-4xl font-bold text-green-600 mb-2">
+                  GRÁTIS
+                </div>
+                <div className="text-lg text-gray-500 line-through mb-4">
                   R$ {LAUDO_TYPES.find(t => t.id === selectedType)?.price.toFixed(2)}
                 </div>
                 <p className="text-gray-600">
-                  Pagamento único • Laudo válido por {selectedType === 'STANDARD' ? '90' : '180'} dias
+                  Promoção de Lançamento • Laudo válido por {selectedType === 'STANDARD' ? '90' : '180'} dias
                 </p>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 mr-2 flex-shrink-0" />
+                  <div className="text-sm text-green-800">
+                    <p className="font-medium">🎉 Sistema de Pagamento em Desenvolvimento</p>
+                    <p className="mt-1">Todos os laudos estão temporáriamente GRATUITOS enquanto desenvolvemos a integração de pagamento. Aproveite para testar todas as funcionalidades premium!</p>
+                  </div>
+                </div>
               </div>
 
               <div className="border-t border-b py-6 mb-6">
@@ -1072,22 +1104,12 @@ function CriarLaudoContent() {
                 </ul>
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                <div className="flex items-start">
-                  <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" />
-                  <div className="text-sm text-yellow-800">
-                    <p className="font-medium">Integração de Pagamento em Desenvolvimento</p>
-                    <p className="mt-1">Em breve você poderá pagar via PIX, Cartão de Crédito ou Boleto.</p>
-                  </div>
-                </div>
-              </div>
-
               <button
                 onClick={handleSubmit}
                 disabled={loading}
                 className="w-full py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Processando...' : '🎉 Finalizar e Gerar Laudo'}
+                {loading ? 'Processando...' : '🎉 Gerar Laudo Gratuito'}
               </button>
             </div>
 
