@@ -31,6 +31,7 @@ model User {
   givenRatings  Rating[]   @relation("RatingsGiven")
   accounts      Account[]
   sessions      Session[]
+  technicalReports TechnicalReport[]
 
   @@map("users")
 }
@@ -220,4 +221,93 @@ model Rating {
 
   @@index([userId])
   @@map("ratings")
+}
+
+model TechnicalReport {
+  id          String   @id @default(cuid())
+  userId      String
+  listingId   String?  // Opcional: pode estar vinculado a um anúncio
+  
+  // Identificação do Aparelho
+  deviceType  String   // "IPHONE" ou "IPAD"
+  deviceModel String
+  storage     Int
+  color       String
+  imei        String
+  serialNumber String?
+  
+  // Condição Física - Fotos obrigatórias
+  frontPhoto       String   // URL da foto frontal
+  backPhoto        String   // URL da foto traseira
+  sidesPhotos      String   // JSON array de URLs das laterais
+  screenOnPhoto    String   // Foto da tela ligada
+  screenOffPhoto   String   // Foto da tela desligada
+  
+  // Detalhes Técnicos - Com evidências
+  batteryHealthPhoto    String   // Screenshot da saúde da bateria
+  batteryHealthPercent  Int      // Porcentagem da bateria
+  imeiPhoto            String?  // Foto do IMEI nas configurações
+  
+  // Documentação
+  invoicePhoto         String?  // Foto da nota fiscal (se disponível)
+  boxPhoto            String?  // Foto da caixa original
+  accessoriesPhotos    String?  // JSON array de fotos dos acessórios
+  
+  // Avaliação Detalhada
+  screenCondition      String   // Perfeito, Arranhões leves, Trincas, etc
+  screenConditionNotes String?  // Observações detalhadas
+  bodyCondition        String   // Perfeito, Marcas de uso, Amassados, etc
+  bodyConditionNotes   String?
+  cameraCondition      String   // Funcionando perfeitamente, Com defeito, etc
+  cameraConditionNotes String?
+  
+  // Funcionalidades Testadas
+  touchWorking         Boolean  @default(true)
+  faceIdWorking        Boolean  @default(true)
+  biometricsWorking    Boolean  @default(true)
+  wifiWorking          Boolean  @default(true)
+  bluetoothWorking     Boolean  @default(true)
+  speakersWorking      Boolean  @default(true)
+  microphoneWorking    Boolean  @default(true)
+  vibrationWorking     Boolean  @default(true)
+  buttonsWorking       Boolean  @default(true)
+  
+  // Status e Bloqueios
+  icloudFree           Boolean  @default(false)
+  carrierUnlocked      Boolean  @default(false)
+  hasWaterDamage       Boolean  @default(false)
+  hasRepairs           Boolean  @default(false)
+  repairDetails        String?  // Detalhes de reparos realizados
+  
+  // Acessórios Inclusos
+  hasBox              Boolean  @default(false)
+  hasCharger          Boolean  @default(false)
+  hasCable            Boolean  @default(false)
+  hasEarphones        Boolean  @default(false)
+  hasInvoice          Boolean  @default(false)
+  hasWarranty         Boolean  @default(false)
+  warrantyUntil       DateTime?
+  
+  // Informações do Laudo
+  reportNumber        String   @unique // Número único do laudo (ex: LDO-2025-00001)
+  status              String   @default("DRAFT") // DRAFT, COMPLETED, VERIFIED, EXPIRED
+  verifiedAt          DateTime? // Data de verificação/assinatura
+  verifiedBy          String?  // ID do verificador (futuro: equipe técnica)
+  
+  // Valor Estimado
+  estimatedPrice      Float?   // Preço estimado baseado no laudo
+  priceValidity       DateTime? // Validade da estimativa
+  
+  // Metadados
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  expiresAt           DateTime? // Laudos podem expirar (ex: 90 dias)
+  
+  // Relação com usuário
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([reportNumber])
+  @@index([status])
+  @@map("technical_reports")
 }
