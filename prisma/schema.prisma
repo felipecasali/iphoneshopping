@@ -32,6 +32,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   technicalReports TechnicalReport[]
+  evaluations   Evaluation[]
 
   @@map("users")
 }
@@ -226,7 +227,12 @@ model Rating {
 model TechnicalReport {
   id          String   @id @default(cuid())
   userId      String
+  evaluationId String? // Referência à avaliação original
   listingId   String?  // Opcional: pode estar vinculado a um anúncio
+  
+  // Tipo de Laudo (monetização)
+  reportType  String   // "BASIC", "STANDARD", "PREMIUM"
+  paidAmount  Float?   // Valor pago pelo laudo (se não for gratuito)
   
   // Identificação do Aparelho
   deviceType  String   // "IPHONE" ou "IPAD"
@@ -303,11 +309,59 @@ model TechnicalReport {
   updatedAt           DateTime @updatedAt
   expiresAt           DateTime? // Laudos podem expirar (ex: 90 dias)
   
-  // Relação com usuário
+  // Relação com usuário e avaliação
   user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  evaluation          Evaluation? @relation(fields: [evaluationId], references: [id])
   
   @@index([userId])
+  @@index([evaluationId])
   @@index([reportNumber])
   @@index([status])
   @@map("technical_reports")
+}
+
+model Evaluation {
+  id                String   @id @default(cuid())
+  userId            String
+  
+  // Informações do Aparelho
+  deviceType        String   // "IPHONE" ou "IPAD"
+  deviceModel       String
+  storage           Int
+  color             String
+  
+  // Avaliação
+  condition         String   // Condição geral
+  estimatedValue    Float    // Valor estimado
+  purchaseDate      DateTime? // Data de compra (se informada)
+  
+  // Detalhes opcionais da avaliação
+  hasBox            Boolean  @default(false)
+  hasCharger        Boolean  @default(false)
+  hasCable          Boolean  @default(false)
+  hasInvoice        Boolean  @default(false)
+  hasWarranty       Boolean  @default(false)
+  icloudFree        Boolean  @default(true)
+  imeiClean         Boolean  @default(true)
+  batteryHealth     Int?     // Porcentagem
+  screenCondition   String?
+  bodyCondition     String?
+  hasWaterDamage    Boolean  @default(false)
+  hasFunctionalIssues Boolean @default(false)
+  
+  // Status
+  status            String   @default("ACTIVE") // ACTIVE, CONVERTED_TO_REPORT, EXPIRED
+  
+  // Metadados
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  expiresAt         DateTime? // Avaliações podem expirar
+  
+  // Relações
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  technicalReports  TechnicalReport[]
+  
+  @@index([userId])
+  @@index([status])
+  @@map("evaluations")
 }
