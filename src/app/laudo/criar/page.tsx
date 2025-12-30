@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Camera, CheckCircle, AlertCircle, FileText, Shield, Upload, X } from 'lucide-react'
+import { DEVICES } from '@/lib/device-pricing'
 
 interface PhotoSection {
   id: string
@@ -57,6 +58,11 @@ export default function CriarLaudoPage() {
     hasInvoice: false,
     hasWarranty: false,
   })
+
+  // Filtrar dispositivos por tipo
+  const iPhones = DEVICES.filter(d => d.type === 'IPHONE')
+  const iPads = DEVICES.filter(d => d.type === 'IPAD')
+  const selectedDevice = DEVICES.find(d => d.model === reportData.deviceModel && d.type === reportData.deviceType)
 
   const [photoSections, setPhotoSections] = useState<PhotoSection[]>([
     {
@@ -302,102 +308,144 @@ export default function CriarLaudoPage() {
           <div className="bg-white rounded-lg shadow-sm p-8">
             <h2 className="text-2xl font-bold mb-6">Informações do Aparelho</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Tipo de Aparelho *
                 </label>
-                <select
-                  value={reportData.deviceType}
-                  onChange={(e) => setReportData({...reportData, deviceType: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
-                >
-                  <option value="">Selecione...</option>
-                  <option value="IPHONE">iPhone</option>
-                  <option value="IPAD">iPad</option>
-                </select>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setReportData({...reportData, deviceType: 'IPHONE', deviceModel: '', storage: 0, color: ''})}
+                    className={`p-6 border-2 rounded-lg text-left transition ${
+                      reportData.deviceType === 'IPHONE'
+                        ? 'border-primary-600 bg-primary-50'
+                        : 'border-gray-200 hover:border-primary-300'
+                    }`}
+                  >
+                    <div className="text-4xl mb-2">📱</div>
+                    <h3 className="text-xl font-semibold mb-1">iPhone</h3>
+                    <p className="text-gray-600 text-sm">Smartphones da Apple</p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setReportData({...reportData, deviceType: 'IPAD', deviceModel: '', storage: 0, color: ''})}
+                    className={`p-6 border-2 rounded-lg text-left transition ${
+                      reportData.deviceType === 'IPAD'
+                        ? 'border-primary-600 bg-primary-50'
+                        : 'border-gray-200 hover:border-primary-300'
+                    }`}
+                  >
+                    <div className="text-4xl mb-2">📲</div>
+                    <h3 className="text-xl font-semibold mb-1">iPad</h3>
+                    <p className="text-gray-600 text-sm">Tablets da Apple</p>
+                  </button>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Modelo *
-                </label>
-                <input
-                  type="text"
-                  value={reportData.deviceModel}
-                  onChange={(e) => setReportData({...reportData, deviceModel: e.target.value})}
-                  placeholder="Ex: iPhone 15 Pro Max"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
-                />
-              </div>
+              {reportData.deviceType && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Modelo *
+                    </label>
+                    <select
+                      value={reportData.deviceModel}
+                      onChange={(e) => setReportData({...reportData, deviceModel: e.target.value, storage: 0})}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                    >
+                      <option value="">Selecione o modelo...</option>
+                      {(reportData.deviceType === 'IPHONE' ? iPhones : iPads).map(device => (
+                        <option key={device.model} value={device.model}>
+                          {device.model}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Armazenamento (GB) *
-                </label>
-                <select
-                  value={reportData.storage}
-                  onChange={(e) => setReportData({...reportData, storage: parseInt(e.target.value)})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
-                >
-                  <option value="0">Selecione...</option>
-                  <option value="64">64 GB</option>
-                  <option value="128">128 GB</option>
-                  <option value="256">256 GB</option>
-                  <option value="512">512 GB</option>
-                  <option value="1024">1 TB</option>
-                </select>
-              </div>
+                  {reportData.deviceModel && selectedDevice && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Armazenamento *
+                        </label>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                          {selectedDevice.storage.map(storage => (
+                            <button
+                              key={storage}
+                              type="button"
+                              onClick={() => setReportData({...reportData, storage})}
+                              className={`px-4 py-3 border-2 rounded-lg font-semibold transition ${
+                                reportData.storage === storage
+                                  ? 'border-primary-600 bg-primary-50 text-primary-700'
+                                  : 'border-gray-200 hover:border-primary-300'
+                              }`}
+                            >
+                              {storage} GB
+                            </button>
+                          ))}
+                        </div>
+                      </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Cor *
-                </label>
-                <input
-                  type="text"
-                  value={reportData.color}
-                  onChange={(e) => setReportData({...reportData, color: e.target.value})}
-                  placeholder="Ex: Azul Pacífico"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
-                />
-              </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Cor *
+                        </label>
+                        <select
+                          value={reportData.color}
+                          onChange={(e) => setReportData({...reportData, color: e.target.value})}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                        >
+                          <option value="">Selecione a cor...</option>
+                          {selectedDevice.colors.map(color => (
+                            <option key={color} value={color}>
+                              {color}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  IMEI *
-                </label>
-                <input
-                  type="text"
-                  value={reportData.imei}
-                  onChange={(e) => setReportData({...reportData, imei: e.target.value})}
-                  placeholder="15 dígitos"
-                  maxLength={15}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
-                />
-                <p className="text-xs text-gray-500 mt-1">*Discar *#06# para ver o IMEI</p>
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    IMEI *
+                  </label>
+                  <input
+                    type="text"
+                    value={reportData.imei}
+                    onChange={(e) => setReportData({...reportData, imei: e.target.value})}
+                    placeholder="Ex: 123456789012345"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Número de Série
-                </label>
-                <input
-                  type="text"
-                  value={reportData.serialNumber}
-                  onChange={(e) => setReportData({...reportData, serialNumber: e.target.value})}
-                  placeholder="Opcional"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Número de Série *
+                  </label>
+                  <input
+                    type="text"
+                    value={reportData.serialNumber}
+                    onChange={(e) => setReportData({...reportData, serialNumber: e.target.value})}
+                    placeholder="Ex: ABCD1234EFGH"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                  />
+                </div>
               </div>
             </div>
 
             <div className="mt-8 flex justify-end">
               <button
                 onClick={() => setStep(2)}
-                disabled={!reportData.deviceType || !reportData.deviceModel || !reportData.imei}
-                className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!reportData.deviceType || !reportData.deviceModel || !reportData.storage || !reportData.color || !reportData.imei || !reportData.serialNumber}
+                className="px-8 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Próximo: Fotos →
+                Próximo: Adicionar Fotos
               </button>
             </div>
           </div>
@@ -409,6 +457,7 @@ export default function CriarLaudoPage() {
             <h2 className="text-2xl font-bold mb-2">Documentação Fotográfica</h2>
             <p className="text-gray-600 mb-6">
               📸 Fotos nítidas e bem iluminadas garantem um laudo mais preciso e confiável
+            </p>
             </p>
 
             <div className="space-y-8">
