@@ -54,8 +54,61 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
     signOut: '/logout',
+    error: '/login', // Redireciona erros para a página de login
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Permitir login com credenciais normalmente
+      if (account?.provider === 'credentials') {
+        return true
+      }
+
+      // Para login com Google, verificar se já existe conta com esse email
+      if (account?.provider === 'google' && user.email) {
+        try {
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email },
+            include: { accounts: true }
+          })
+
+          // Se o usuário existe mas não tem conta Google linkada, linkar automaticamente
+          if (existingUser && !existingUser.accounts.some(acc => acc.provider === 'google')) {
+            await prisma.account.create({
+              data: {
+                userId: existingUser.id,
+                type: account.type,
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+                refresh_token: account.refresh_token,
+                access_token: account.access_token,
+                expires_at: account.expires_at,
+                token_type: account.token_type,
+                scope: account.scope,
+                id_token: account.id_token,
+                session_state: account.session_state as string | null,
+              }
+            })
+
+            // Atualizar emailVerified se não estiver definido
+            if (!existingUser.emailVerified) {
+              await prisma.user.update({
+                where: { id: existingUser.id },
+                data: { emailVerified: new Date() }
+              })
+            }
+
+            return true
+          }
+
+          return true
+        } catch (error) {
+          console.error('Erro ao linkar conta Google:', error)
+          return false
+        }
+      }
+
+      return true
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id

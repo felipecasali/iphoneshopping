@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { Smartphone } from 'lucide-react'
 import GoogleSignInButton from '@/components/GoogleSignInButton'
+import LoginErrorHandler from '@/components/LoginErrorHandler'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -42,6 +43,10 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <Suspense fallback={null}>
+        <LoginErrorHandler onError={setError} />
+      </Suspense>
+      
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex justify-center">
           <Smartphone className="h-12 w-12 text-primary-600" />
