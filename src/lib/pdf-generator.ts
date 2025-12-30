@@ -41,7 +41,14 @@ interface TechnicalReport {
   expiresAt?: Date
   frontPhoto?: string
   backPhoto?: string
+  sidesPhotos?: string
+  screenOnPhoto?: string
+  screenOffPhoto?: string
   batteryHealthPhoto?: string
+  imeiPhoto?: string
+  boxPhoto?: string
+  invoicePhoto?: string
+  accessoriesPhotos?: string
 }
 
 const CONDITION_LABELS: Record<string, string> = {
@@ -62,6 +69,23 @@ const REPORT_TYPE_LABELS: Record<string, string> = {
   BASIC: 'Laudo Básico',
   STANDARD: 'Laudo Profissional',
   PREMIUM: 'Laudo Premium'
+}
+
+// Helper para carregar imagem de URL
+async function loadImageAsDataURL(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result as string)
+      reader.onerror = reject
+      reader.readAsDataURL(blob)
+    })
+  } catch (error) {
+    console.error('Erro ao carregar imagem:', url, error)
+    return null
+  }
 }
 
 export async function generateTechnicalReportPDF(report: TechnicalReport): Promise<Blob> {
@@ -139,6 +163,87 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   yPos = (doc as any).lastAutoTable.finalY + 10
 
+  // Seção 1.5: Fotos do Dispositivo
+  if (yPos > pageHeight - 100) {
+    doc.addPage()
+    yPos = 20
+  }
+
+  doc.setFillColor(240, 240, 240)
+  doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(12)
+  doc.text('FOTOS DO DISPOSITIVO', 17, yPos + 5)
+  yPos += 15
+
+  // Carregar e adicionar fotos principais
+  const photoSize = 55
+  const photoSpacing = 10
+  let xPos = 15
+
+  if (report.frontPhoto) {
+    const imgData = await loadImageAsDataURL(report.frontPhoto)
+    if (imgData) {
+      doc.addImage(imgData, 'JPEG', xPos, yPos, photoSize, photoSize)
+      doc.setFontSize(8)
+      doc.setFont('helvetica', 'normal')
+      doc.text('Frontal', xPos + photoSize/2, yPos + photoSize + 4, { align: 'center' })
+      xPos += photoSize + photoSpacing
+    }
+  }
+
+  if (report.backPhoto) {
+    const imgData = await loadImageAsDataURL(report.backPhoto)
+    if (imgData) {
+      doc.addImage(imgData, 'JPEG', xPos, yPos, photoSize, photoSize)
+      doc.setFontSize(8)
+      doc.text('Traseira', xPos + photoSize/2, yPos + photoSize + 4, { align: 'center' })
+      xPos += photoSize + photoSpacing
+    }
+  }
+
+  if (report.screenOnPhoto) {
+    const imgData = await loadImageAsDataURL(report.screenOnPhoto)
+    if (imgData) {
+      doc.addImage(imgData, 'JPEG', xPos, yPos, photoSize, photoSize)
+      doc.setFontSize(8)
+      doc.text('Tela Ligada', xPos + photoSize/2, yPos + photoSize + 4, { align: 'center' })
+      xPos += photoSize + photoSpacing
+    }
+  }
+
+  yPos += photoSize + 15
+
+  // Fotos das laterais (se houver)
+  if (report.sidesPhotos) {
+    try {
+      const sidesPhotosArray = JSON.parse(report.sidesPhotos)
+      if (sidesPhotosArray.length > 0) {
+        if (yPos > pageHeight - 70) {
+          doc.addPage()
+          yPos = 20
+        }
+        
+        xPos = 15
+        doc.setFontSize(10)
+        doc.setFont('helvetica', 'bold')
+        doc.text('Laterais:', 17, yPos)
+        yPos += 5
+
+        for (let i = 0; i < Math.min(sidesPhotosArray.length, 3); i++) {
+          const imgData = await loadImageAsDataURL(sidesPhotosArray[i])
+          if (imgData) {
+            doc.addImage(imgData, 'JPEG', xPos, yPos, photoSize, photoSize)
+            xPos += photoSize + photoSpacing
+          }
+        }
+        yPos += photoSize + 10
+      }
+    } catch (e) {
+      // Ignora erro de parse
+    }
+  }
+
   // Seção 2: Condição Física
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
@@ -181,6 +286,29 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.text(`${report.batteryHealthPercent}%`, 95, yPos, { align: 'center' })
 
   yPos += 10
+
+  // Adicionar foto da saúde da bateria
+  if (report.batteryHealthPhoto) {
+    if (yPos > pageHeight - 70) {
+      doc.addPage()
+      yPos = 20
+    }
+    
+    const imgData = await loadImageAsDataURL(report.batteryHealthPhoto)
+    if (imgData) {
+      doc.setTextColor(0, 0, 0)
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9)
+      doc.text('Evidência (Screenshot das Configurações):', 17, yPos)
+      yPos += 5
+      const imgWidth = 60
+      const imgHeight = 60
+      doc.addImage(imgData, 'JPEG', 17, yPos, imgWidth, imgHeight)
+      yPos += imgHeight + 5
+    }
+  }
+
+  yPos += 5
 
   // Seção 4: Testes Funcionais
   if (yPos > pageHeight - 60) {
@@ -299,6 +427,92 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   })
 
   yPos = (doc as any).lastAutoTable.finalY + 15
+
+  // Seção 7: Documentação e Evidências Fotográficas
+  if (report.imeiPhoto || report.boxPhoto || report.invoicePhoto || (report.accessoriesPhotos && report.accessoriesPhotos !== '[]')) {
+    if (yPos > pageHeight - 80) {
+      doc.addPage()
+      yPos = 20
+    }
+
+    doc.setFillColor(240, 240, 240)
+    doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(12)
+    doc.text('7. DOCUMENTAÇÃO E EVIDÊNCIAS', 17, yPos + 5)
+    yPos += 15
+
+    const docPhotoSize = 50
+    let docXPos = 15
+
+    // Foto do IMEI
+    if (report.imeiPhoto) {
+      const imgData = await loadImageAsDataURL(report.imeiPhoto)
+      if (imgData) {
+        doc.addImage(imgData, 'JPEG', docXPos, yPos, docPhotoSize, docPhotoSize)
+        doc.setFontSize(8)
+        doc.setFont('helvetica', 'normal')
+        doc.text('IMEI/Serial', docXPos + docPhotoSize/2, yPos + docPhotoSize + 4, { align: 'center' })
+        docXPos += docPhotoSize + 8
+      }
+    }
+
+    // Foto da caixa
+    if (report.boxPhoto && report.hasBox) {
+      const imgData = await loadImageAsDataURL(report.boxPhoto)
+      if (imgData) {
+        doc.addImage(imgData, 'JPEG', docXPos, yPos, docPhotoSize, docPhotoSize)
+        doc.setFontSize(8)
+        doc.text('Caixa Original', docXPos + docPhotoSize/2, yPos + docPhotoSize + 4, { align: 'center' })
+        docXPos += docPhotoSize + 8
+      }
+    }
+
+    // Foto da nota fiscal
+    if (report.invoicePhoto && report.hasInvoice) {
+      const imgData = await loadImageAsDataURL(report.invoicePhoto)
+      if (imgData) {
+        doc.addImage(imgData, 'JPEG', docXPos, yPos, docPhotoSize, docPhotoSize)
+        doc.setFontSize(8)
+        doc.text('Nota Fiscal', docXPos + docPhotoSize/2, yPos + docPhotoSize + 4, { align: 'center' })
+        docXPos += docPhotoSize + 8
+      }
+    }
+
+    yPos += docPhotoSize + 10
+
+    // Fotos de acessórios
+    if (report.accessoriesPhotos) {
+      try {
+        const accessoriesArray = JSON.parse(report.accessoriesPhotos)
+        if (accessoriesArray.length > 0) {
+          if (yPos > pageHeight - 70) {
+            doc.addPage()
+            yPos = 20
+          }
+
+          doc.setFontSize(10)
+          doc.setFont('helvetica', 'bold')
+          doc.text('Acessórios:', 17, yPos)
+          yPos += 5
+
+          docXPos = 15
+          for (let i = 0; i < Math.min(accessoriesArray.length, 3); i++) {
+            const imgData = await loadImageAsDataURL(accessoriesArray[i])
+            if (imgData) {
+              doc.addImage(imgData, 'JPEG', docXPos, yPos, docPhotoSize, docPhotoSize)
+              docXPos += docPhotoSize + 8
+            }
+          }
+          yPos += docPhotoSize + 10
+        }
+      } catch (e) {
+        // Ignora erro de parse
+      }
+    }
+
+    yPos += 5
+  }
 
   // Footer com assinatura digital
   if (yPos > pageHeight - 40) {
