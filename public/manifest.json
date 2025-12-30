@@ -1,0 +1,26 @@
+{
+  "name": "iPhoneShopping - Marketplace de iPhones e iPads",
+  "short_name": "iPhoneShopping",
+  "description": "Compre e venda iPhones e iPads com segurança no maior marketplace especializado do Brasil",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "business"],
+  "lang": "pt-BR"
+}
