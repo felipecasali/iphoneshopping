@@ -1,37 +1,12 @@
 import Link from 'next/link'
 import { Smartphone, Shield, MessageSquare, TrendingUp } from 'lucide-react'
+import Header from '@/components/Header'
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <Smartphone className="h-8 w-8 text-primary-600" />
-              <span className="text-2xl font-bold text-gray-900">iPhoneShopping</span>
-            </Link>
-            <div className="flex items-center space-x-6">
-              <Link href="/avaliar" className="text-gray-700 hover:text-primary-600">
-                Avaliar Aparelho
-              </Link>
-              <Link href="/anuncios" className="text-gray-700 hover:text-primary-600">
-                Anúncios
-              </Link>
-              <Link href="/login" className="text-gray-700 hover:text-primary-600">
-                Entrar
-              </Link>
-              <Link 
-                href="/register" 
-                className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700"
-              >
-                Cadastrar
-              </Link>
-            </div>
-          </div>
-        </nav>
-      </header>
+      {/* Header com detecção de sessão */}
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">

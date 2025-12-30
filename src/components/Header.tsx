@@ -52,9 +52,11 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             {status === 'authenticated' ? (
               <>
+                {/* Mensagens */}
                 <Link 
                   href="/dashboard/mensagens" 
                   className="p-2 text-gray-600 hover:text-primary relative"
+                  title="Mensagens"
                   onClick={() => setUnreadCount(0)}
                 >
                   <MessageSquare className="h-6 w-6" />
@@ -65,14 +67,23 @@ export default function Header() {
                   )}
                 </Link>
 
+                {/* Menu do usuário */}
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center gap-2 p-2 text-gray-600 hover:text-primary"
+                    className="flex items-center gap-2 p-2 text-gray-600 hover:text-primary transition"
+                    title="Menu do usuário"
                   >
-                    <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
-                      {session.user?.name?.charAt(0).toUpperCase() || 'U'}
+                    <div className="relative">
+                      <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold ring-2 ring-primary ring-offset-2">
+                        {session.user?.name?.charAt(0).toUpperCase() || 'U'}
+                      </div>
+                      {/* Indicador online */}
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                     </div>
+                    <span className="hidden md:block font-medium text-gray-700">
+                      {session.user?.name?.split(' ')[0] || 'Usuário'}
+                    </span>
                   </button>
 
                   {showUserMenu && (
