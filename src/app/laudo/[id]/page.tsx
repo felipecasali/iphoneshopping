@@ -5,10 +5,12 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FileText, Download, Share2, CheckCircle, XCircle, Award, Calendar, Shield, Smartphone } from 'lucide-react'
+import { generateTechnicalReportPDF, downloadPDF } from '@/lib/pdf-generator'
 
 interface TechnicalReport {
   id: string
   reportNumber: string
+  reportType: string
   deviceType: string
   deviceModel: string
   storage: number
@@ -26,11 +28,16 @@ interface TechnicalReport {
   cameraCondition: string
   screenConditionNotes?: string
   bodyConditionNotes?: string
+  cameraConditionNotes?: string
   touchWorking: boolean
   faceIdWorking: boolean
+  biometricsWorking: boolean
   wifiWorking: boolean
   bluetoothWorking: boolean
   speakersWorking: boolean
+  microphoneWorking: boolean
+  vibrationWorking: boolean
+  buttonsWorking: boolean
   icloudFree: boolean
   carrierUnlocked: boolean
   hasWaterDamage: boolean
@@ -39,6 +46,7 @@ interface TechnicalReport {
   hasBox: boolean
   hasCharger: boolean
   hasCable: boolean
+  hasEarphones: boolean
   hasInvoice: boolean
   hasWarranty: boolean
   estimatedPrice?: number
@@ -56,6 +64,7 @@ export default function LaudoPage() {
   const params = useParams()
   const [report, setReport] = useState<TechnicalReport | null>(null)
   const [loading, setLoading] = useState(true)
+  const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
     fetchReport()
@@ -72,6 +81,22 @@ export default function LaudoPage() {
       console.error('Erro ao carregar laudo:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDownloadPDF = async () => {
+    if (!report) return
+    
+    setDownloading(true)
+    try {
+      const pdfBlob = await generateTechnicalReportPDF(report as any)
+      const filename = `Laudo_${report.reportNumber}_${report.deviceModel.replace(/\s/g, '_')}.pdf`
+      downloadPDF(pdfBlob, filename)
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error)
+      alert('Erro ao gerar PDF. Tente novamente.')
+    } finally {
+      setDownloading(false)
     }
   }
 
@@ -121,9 +146,13 @@ export default function LaudoPage() {
         {/* Actions */}
         <div className="bg-white rounded-lg shadow-sm p-4 mb-6 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <button className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition">
+            <button 
+              onClick={handleDownloadPDF}
+              disabled={downloading}
+              className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <Download className="h-4 w-4" />
-              <span>Baixar PDF</span>
+              <span>{downloading ? 'Gerando PDF...' : 'Baixar PDF'}</span>
             </button>
             <button className="flex items-center space-x-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
               <Share2 className="h-4 w-4" />
