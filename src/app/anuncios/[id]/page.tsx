@@ -6,6 +6,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Smartphone, MapPin, Calendar, CheckCircle, ArrowLeft, MessageCircle, Share2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { ProductSchema, BreadcrumbSchema } from '@/components/StructuredData'
+import Head from 'next/head'
 
 interface Listing {
   id: string
@@ -118,9 +120,47 @@ export default function AnuncioDetalhesPage() {
     : listing.images
 
   const isOwner = session?.user?.email && listing.user.id === session.user.id
+  
+  const pageTitle = `${listing.device.model} ${listing.device.storage}GB - R$ ${listing.price.toLocaleString('pt-BR')}`
+  const pageDescription = listing.description 
+    ? listing.description.substring(0, 160) 
+    : `${listing.device.model} de ${listing.device.storage}GB em ${listing.condition}. ${listing.location}.`
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <Head>
+        <title>{pageTitle} | iPhoneShopping</title>
+        <meta name="description" content={pageDescription} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={images && images[0] || '/og-image.jpg'} />
+        <meta property="og:type" content="product" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={images && images[0] || '/og-image.jpg'} />
+      </Head>
+      
+      {/* Structured Data */}
+      <ProductSchema
+        name={`${listing.device.model} ${listing.device.storage}GB`}
+        description={pageDescription}
+        image={images && images[0]}
+        brand="Apple"
+        model={listing.device.model}
+        price={listing.price}
+        condition={listing.condition === 'Excelente' ? 'RefurbishedCondition' : 'UsedCondition'}
+        seller={{ name: listing.user.name }}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: 'Início', url: 'https://www.iphoneshopping.com.br' },
+          { name: 'Anúncios', url: 'https://www.iphoneshopping.com.br/anuncios' },
+          { name: pageTitle, url: `https://www.iphoneshopping.com.br/anuncios/${listing.id}` }
+        ]}
+      />
+      
+      <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -315,5 +355,6 @@ export default function AnuncioDetalhesPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
