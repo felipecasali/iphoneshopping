@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Smartphone, Shield, MessageSquare, TrendingUp } from 'lucide-react'
+import { Smartphone, Shield, MessageSquare, TrendingUp, Award, Clock, BadgeCheck, Target } from 'lucide-react'
 import Header from '@/components/Header'
 import { OrganizationSchema, WebSiteSchema, FAQSchema } from '@/components/StructuredData'
 
@@ -37,28 +37,124 @@ export default function Home() {
       <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white" aria-label="Seção principal">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
-            <h1 className="text-5xl font-bold mb-6">
-              Compre e Venda iPhones e iPads com Segurança
+            <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+              <p className="text-sm font-semibold">🚗 Venda seu iPhone como quem vende um carro: com valor, confiança e transparência</p>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Seu iPhone Vale Mais<br />Do Que Você Imagina
             </h1>
-            <p className="text-xl mb-8 text-primary-100">
-              O marketplace especializado em dispositivos Apple no Brasil
+            <p className="text-xl mb-8 text-primary-100 max-w-3xl mx-auto">
+              Assim como carros premium, iPhones e iPads mantêm valor excepcional. Avalie, anuncie e venda com a mesma segurança e profissionalismo.
             </p>
-            <nav className="flex justify-center gap-4" aria-label="Ações principais">
+            <nav className="flex flex-col sm:flex-row justify-center gap-4 mb-12" aria-label="Ações principais">
               <Link 
                 href="/avaliar"
-                className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+                className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 aria-label="Avaliar meu aparelho"
               >
-                Avaliar Meu Aparelho
+                ✨ Descobrir Valor do Meu Aparelho
               </Link>
               <Link 
                 href="/anuncios"
-                className="bg-primary-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-400 transition"
+                className="bg-primary-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-400 transition border-2 border-white/30"
                 aria-label="Ver anúncios disponíveis"
               >
-                Ver Anúncios
+                🔍 Explorar Anúncios
               </Link>
             </nav>
+            
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12">
+              <div className="text-center">
+                <div className="text-3xl font-bold mb-1">5-7 anos</div>
+                <div className="text-sm text-primary-100">Vida útil média</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold mb-1">70%+</div>
+                <div className="text-sm text-primary-100">Retenção de valor</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold mb-1">100%</div>
+                <div className="text-sm text-primary-100">Avaliação grátis</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold mb-1">0 taxas</div>
+                <div className="text-sm text-primary-100">Para anunciar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Value Proposition - Like Premium Cars */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">
+              Produtos Apple São Investimentos Duráveis
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Assim como veículos premium, iPhones e iPads são projetados para durar. Qualidade de construção, 
+              sistema operacional otimizado e suporte de longa duração fazem toda a diferença.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-blue-500">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Award className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-center">Qualidade Premium</h3>
+              <p className="text-gray-600 text-center">
+                Construção em alumínio e vidro, processadores de última geração e câmeras profissionais.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-green-500">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Clock className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-center">Longa Durabilidade</h3>
+              <p className="text-gray-600 text-center">
+                Atualizações de iOS por até 7 anos. Seu aparelho continua atual e valorizado por muito tempo.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-purple-500">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <BadgeCheck className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-center">Valor Preservado</h3>
+              <p className="text-gray-600 text-center">
+                Produtos Apple mantêm 60-80% do valor original mesmo após anos de uso.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-orange-500">
+              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Target className="h-8 w-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-center">Alta Demanda</h3>
+              <p className="text-gray-600 text-center">
+                Mercado aquecido com milhares de compradores procurando iPhones e iPads usados.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-16 bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-12 text-white text-center">
+            <h3 className="text-3xl font-bold mb-4">
+              🏆 Venda com Transparência Total
+            </h3>
+            <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
+              Nossa avaliação considera mais de 15 fatores - do estado da bateria aos acessórios inclusos. 
+              Você recebe um laudo completo como uma vistoria veicular!
+            </p>
+            <Link 
+              href="/avaliar"
+              className="inline-block bg-white text-primary-600 px-10 py-4 rounded-lg font-bold hover:bg-gray-100 transition shadow-lg text-lg"
+            >
+              Começar Avaliação Gratuita →
+            </Link>
           </div>
         </div>
       </section>
