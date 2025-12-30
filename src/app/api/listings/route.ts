@@ -131,13 +131,23 @@ export async function POST(request: Request) {
       currency: 'BRL',
     }).format(listing.price)
 
+    console.log('🎯 Preparando email de anúncio criado...')
+    console.log('   Para:', user.email)
+    console.log('   Usuário:', user.name)
+    console.log('   Anúncio:', listingTitle)
+    console.log('   Preço:', listingPrice)
+
     sendListingCreatedEmail(
       user.email,
       user.name,
       listingTitle,
       listingPrice,
       listing.id
-    ).catch(err => console.error('Erro ao enviar email de anúncio criado:', err))
+    ).catch(err => {
+      console.error('❌ ERRO ao enviar email de anúncio criado:', err)
+      console.error('   Mensagem:', err.message)
+      console.error('   Stack:', err.stack)
+    })
 
     return NextResponse.json(listing, { status: 201 })
   } catch (error) {
