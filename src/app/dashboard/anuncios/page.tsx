@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Smartphone, Package, Plus, Eye, Edit, Trash2 } from 'lucide-react'
+import { Smartphone, Package, Plus, Eye, Edit, Trash2, FileText } from 'lucide-react'
 
 interface Listing {
   id: string
@@ -80,6 +80,46 @@ export default function MeusAnunciosPage() {
     } catch (err) {
       console.error('Erro:', err)
       alert('Erro ao excluir anúncio. Tente novamente.')
+    }
+  }
+
+  const handleCreateReport = async (listing: Listing) => {
+    try {
+      // Criar uma avaliação baseada no anúncio para poder gerar o laudo
+      const evaluationData = {
+        type: listing.device.type,
+        model: listing.device.model,
+        storage: listing.device.storage,
+        color: 'Não especificado',
+        condition: 'BOM', // Valor padrão, pode ser ajustado
+        icloudFree: true,
+        imeiClean: true,
+        hasBox: false,
+        hasCharger: false,
+        hasCable: false,
+        hasInvoice: false,
+        hasWarranty: false,
+        hasWaterDamage: false,
+        hasFunctionalIssues: false
+      }
+
+      const response = await fetch('/api/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(evaluationData)
+      })
+
+      const data = await response.json()
+      
+      if (data.evaluationId) {
+        // Redirecionar para criação do laudo
+        router.push(`/laudo/criar?evaluationId=${data.evaluationId}&listingId=${listing.id}`)
+      } else {
+        alert('Erro ao preparar laudo. Tente novamente.')
+      }
+    } catch (err) {
+      console.error('Erro:', err)
+      alert('Erro ao criar laudo. Tente novamente.')
     }
   }
 
@@ -209,19 +249,28 @@ export default function MeusAnunciosPage() {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex gap-2">
-                      <Link
-                        href={`/dashboard/anuncios/${listing.id}/editar`}
-                        className="flex-1 flex items-center justify-center px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
-                      >
-                        <Edit className="h-4 w-4 mr-1" />
-                        Editar
-                      </Link>
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <Link
+                          href={`/dashboard/anuncios/${listing.id}/editar`}
+                          className="flex-1 flex items-center justify-center px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
+                        >
+                          <Edit className="h-4 w-4 mr-1" />
+                          Editar
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(listing.id)}
+                          className="flex items-center justify-center px-3 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 text-sm"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                       <button
-                        onClick={() => handleDelete(listing.id)}
-                        className="flex items-center justify-center px-3 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 text-sm"
+                        onClick={() => handleCreateReport(listing)}
+                        className="w-full flex items-center justify-center px-3 py-2 bg-green-50 border border-green-300 text-green-700 rounded-lg hover:bg-green-100 text-sm font-medium transition-colors"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <FileText className="h-4 w-4 mr-1" />
+                        Criar Laudo Técnico
                       </button>
                     </div>
                   </div>

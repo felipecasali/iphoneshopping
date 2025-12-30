@@ -29,6 +29,7 @@ export default function AvaliarPage() {
     functionalIssuesDescription: '',
   })
   const [estimatedPrice, setEstimatedPrice] = useState<number | null>(null)
+  const [evaluationId, setEvaluationId] = useState<string | null>(null)
 
   const iPhones = DEVICES.filter(d => d.type === 'IPHONE')
   const iPads = DEVICES.filter(d => d.type === 'IPAD')
@@ -43,6 +44,7 @@ export default function AvaliarPage() {
       })
       const data = await response.json()
       setEstimatedPrice(data.estimatedPrice)
+      setEvaluationId(data.evaluationId || null)
       setStep(7)
     } catch (error) {
       console.error('Erro ao calcular preço:', error)
@@ -547,7 +549,7 @@ export default function AvaliarPage() {
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              <div className="space-y-3">
                 <button
                   onClick={() => {
                     // Salva os dados da avaliação no localStorage
@@ -557,14 +559,25 @@ export default function AvaliarPage() {
                     }))
                     window.location.href = '/criar-anuncio'
                   }}
-                  className="flex-1 bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition"
+                  className="w-full bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors shadow-lg hover:shadow-xl"
                 >
-                  Anunciar Agora
+                  🚀 Anunciar Agora
                 </button>
+
+                {evaluationId && (
+                  <Link
+                    href={`/laudo/criar?evaluationId=${evaluationId}`}
+                    className="w-full block bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors text-center shadow-lg hover:shadow-xl"
+                  >
+                    📋 Criar Laudo Técnico Profissional
+                  </Link>
+                )}
+
                 <button
                   onClick={() => {
                     setStep(1)
                     setEstimatedPrice(null)
+                    setEvaluationId(null)
                     setEvaluation({
                       type: '',
                       model: '',
@@ -587,9 +600,9 @@ export default function AvaliarPage() {
                       functionalIssuesDescription: '',
                     })
                   }}
-                  className="flex-1 bg-gray-200 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition"
+                  className="w-full bg-gray-200 text-gray-700 px-8 py-4 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
                 >
-                  Nova Avaliação
+                  🔄 Nova Avaliação
                 </button>
               </div>
             </div>
