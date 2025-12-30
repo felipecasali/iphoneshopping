@@ -1,0 +1,182 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  phone         String?
+  cpf           String?   @unique
+  avatar        String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relações
+  listings      Listing[]
+  sentMessages  Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  buyerConversations Conversation[] @relation("BuyerConversations")
+  sellerConversations Conversation[] @relation("SellerConversations")
+  transactions  Transaction[]
+  ratings       Rating[]   @relation("RatingsReceived")
+  givenRatings  Rating[]   @relation("RatingsGiven")
+
+  @@map("users")
+}
+
+model Device {
+  id          String   @id @default(cuid())
+  type        String   // "IPHONE" ou "IPAD"
+  model       String   // Ex: "iPhone 15 Pro Max", "iPad Pro 12.9"
+  storage     Int      // Em GB: 64, 128, 256, 512, 1024
+  color       String   // Cor do aparelho
+  year        Int      // Ano de lançamento
+  basePrice   Float    // Preço base de referência
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  listings    Listing[]
+
+  @@map("devices")
+}
+
+model Listing {
+  id          String   @id @default(cuid())
+  userId      String
+  deviceId    String
+  
+  // Informações do aparelho
+  condition   String   // "NOVO", "EXCELENTE", "MUITO_BOM", "BOM", "REGULAR", "DEFEITO"
+  hasBox      Boolean  @default(false)
+  hasCharger  Boolean  @default(false)
+  hasEarphones Boolean @default(false)
+  imei        String?
+  icloudFree  Boolean  @default(false)
+  batteryHealth Int?   // Porcentagem de saúde da bateria
+  
+  // Avaliação detalhada
+  screenCondition    String? // Perfeito, Arranhões leves, Trincas, etc
+  bodyCondition      String? // Perfeito, Marcas de uso, Amassados, etc
+  cameraCondition    String? // Funcionando perfeitamente, Com defeito, etc
+  hasWaterDamage     Boolean @default(false)
+  
+  // Preço e negociação
+  price       Float
+  acceptsTrade Boolean @default(false)
+  negotiable  Boolean  @default(true)
+  
+  // Informações adicionais
+  description String?
+  images      String?  // URLs das imagens (JSON string)
+  location    String   // Cidade/Estado
+  
+  // Status
+  status      String   @default("ACTIVE") // "ACTIVE", "SOLD", "RESERVED", "INACTIVE"
+  views       Int      @default(0)
+  featured    Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relações
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device      Device   @relation(fields: [deviceId], references: [id])
+  conversations Conversation[]
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([deviceId])
+  @@index([status])
+  @@map("listings")
+}
+
+model Conversation {
+  id          String   @id @default(cuid())
+  listingId   String
+  buyerId     String
+  sellerId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relações
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyer       User     @relation("BuyerConversations", fields: [buyerId], references: [id], onDelete: Cascade)
+  seller      User     @relation("SellerConversations", fields: [sellerId], references: [id], onDelete: Cascade)
+  messages    Message[]
+
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([sellerId])
+  @@map("conversations")
+}
+
+model Message {
+  id              String   @id @default(cuid())
+  conversationId  String
+  senderId        String
+  receiverId      String
+  content         String
+  read            Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  // Relações
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender          User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver        User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([receiverId])
+  @@map("messages")
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  listingId   String
+  buyerId     String
+  sellerId    String
+  price       Float
+  status      String   @default("PENDING") // "PENDING", "CONFIRMED", "IN_TRANSIT", "DELIVERED", "COMPLETED", "CANCELLED"
+  
+  // Informações de pagamento/entrega
+  paymentMethod String?
+  deliveryMethod String?
+  trackingCode   String?
+  
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+  updatedAt   DateTime @updatedAt
+
+  // Relações
+  listing     Listing  @relation(fields: [listingId], references: [id])
+  buyer       User     @relation(fields: [buyerId], references: [id])
+
+  @@index([listingId])
+  @@index([buyerId])
+  @@map("transactions")
+}
+
+model Rating {
+  id          String   @id @default(cuid())
+  userId      String   // Usuário avaliado
+  authorId    String   // Usuário que fez a avaliação
+  rating      Int      // 1-5 estrelas
+  comment     String?
+  createdAt   DateTime @default(now())
+
+  // Relações
+  user        User     @relation("RatingsReceived", fields: [userId], references: [id], onDelete: Cascade)
+  author      User     @relation("RatingsGiven", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("ratings")
+}
