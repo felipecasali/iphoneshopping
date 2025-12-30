@@ -283,7 +283,8 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.rect(70, yPos - 4, 50, 6, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
-  doc.text(`${report.batteryHealthPercent}%`, 95, yPos, { align: 'center' })
+  const batteryPercent = report.batteryHealthPercent || 0
+  doc.text(`${batteryPercent}%`, 95, yPos, { align: 'center' })
 
   yPos += 10
 
@@ -345,8 +346,9 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     headStyles: { fillColor: [37, 99, 235] },
     margin: { left: 15, right: 15 },
     columnStyles: {
+      0: { cellWidth: 100 },
       1: { 
-        cellWidth: 40,
+        cellWidth: 60,
         halign: 'center'
       }
     }

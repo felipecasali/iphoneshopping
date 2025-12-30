@@ -294,6 +294,7 @@ function CriarLaudoContent() {
         storage: evaluation?.storage,
         color: evaluation?.color,
         ...reportData,
+        batteryHealthPercent: reportData.batteryHealth, // Mapear batteryHealth para batteryHealthPercent
         frontPhoto: uploadedPhotos.frontal?.[0] || '',
         backPhoto: uploadedPhotos.traseira?.[0] || '',
         sidesPhotos: JSON.stringify(uploadedPhotos.lateral || []),
