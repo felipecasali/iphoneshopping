@@ -1,5 +1,20 @@
 # Configuração do Google OAuth
 
+## 🚨 CORREÇÃO RÁPIDA - Erro redirect_uri_mismatch
+
+Se você está vendo o erro **"redirect_uri=https://www.iphoneshopping.com.br/api/auth/callback/google"**, faça:
+
+1. Acesse: https://console.cloud.google.com/apis/credentials
+2. Clique no seu **OAuth 2.0 Client ID** existente
+3. Adicione em **Authorized redirect URIs**:
+   ```
+   https://www.iphoneshopping.com.br/api/auth/callback/google
+   ```
+4. Clique em **Save**
+5. Aguarde 5 minutos e tente novamente
+
+---
+
 ## Passo 1: Criar um Projeto no Google Cloud Console
 
 1. Acesse https://console.cloud.google.com/
@@ -33,12 +48,16 @@
 4. Nome: "iPhoneShopping Web Client"
 5. **Authorized JavaScript origins**:
    - `http://localhost:3000` (para desenvolvimento)
-   - `https://iphoneshopping.vercel.app` (para produção)
+   - `https://www.iphoneshopping.com.br` (para produção)
+   - `https://iphoneshopping.vercel.app` (Vercel alternativo)
 6. **Authorized redirect URIs**:
    - `http://localhost:3000/api/auth/callback/google` (desenvolvimento)
-   - `https://iphoneshopping.vercel.app/api/auth/callback/google` (produção)
+   - `https://www.iphoneshopping.com.br/api/auth/callback/google` (produção)
+   - `https://iphoneshopping.vercel.app/api/auth/callback/google` (Vercel alternativo)
 7. Clique em "Create"
 8. **Copie o Client ID e Client Secret** que aparecerem na tela
+
+⚠️ **IMPORTANTE**: Se você já criou as credenciais anteriormente, você precisa **editar** o OAuth client e adicionar os novos redirect URIs acima.
 
 ## Passo 4: Adicionar ao .env.local
 
@@ -77,9 +96,26 @@ GOOGLE_CLIENT_SECRET=seu_client_secret_aqui
 
 ## Troubleshooting
 
-### Erro: redirect_uri_mismatch
-- Verifique se as URLs de redirect no Google Console estão corretas
-- Certifique-se de incluir `/api/auth/callback/google` no final
+### ⚠️ Erro: redirect_uri_mismatch (COMUM!)
+
+**Mensagem de erro:**
+```
+Não é possível fazer login no app porque ele não obedece à política do OAuth 2.0 do Google.
+redirect_uri=https://www.iphoneshopping.com.br/api/auth/callback/google
+```
+
+**Solução:**
+1. Acesse https://console.cloud.google.com/apis/credentials
+2. Encontre seu "OAuth client ID" criado anteriormente
+3. Clique no nome do client para **editar**
+4. Em "Authorized redirect URIs", adicione:
+   - `https://www.iphoneshopping.com.br/api/auth/callback/google`
+   - `http://localhost:3000/api/auth/callback/google`
+5. Clique em "Save"
+6. Aguarde 5-10 minutos para as mudanças se propagarem
+7. Tente fazer login novamente
+
+**Dica:** O redirect URI deve ser EXATAMENTE a URL que aparece no erro, incluindo `/api/auth/callback/google` no final.
 
 ### Erro: invalid_client
 - Verifique se o GOOGLE_CLIENT_ID e GOOGLE_CLIENT_SECRET estão corretos no .env.local
