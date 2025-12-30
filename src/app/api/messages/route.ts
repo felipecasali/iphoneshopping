@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { sendNewMessageEmail } from '@/lib/emailTemplates'
 
 const sendMessageSchema = z.object({
   listingId: z.string(),
@@ -96,8 +97,37 @@ export async function POST(request: NextRequest) {
             avatar: true,
           },
         },
+        receiver: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
       },
     })
+
+    // Enviar email de notificação (não aguarda)
+    const listingWithDevice = await prisma.listing.findUnique({
+      where: { id: listingId },
+      include: { device: true },
+    })
+
+    if (listingWithDevice && message.receiver) {
+      const listingTitle = `${listingWithDevice.device.model} ${listingWithDevice.device.storage}GB`
+      const messagePreview = content.length > 100 
+        ? content.substring(0, 100) + '...' 
+        : content
+
+      sendNewMessageEmail(
+        message.receiver.email,
+        message.receiver.name,
+        user.name,
+        messagePreview,
+        listingTitle,
+        conversation.id
+      ).catch(err => console.error('Erro ao enviar email de nova mensagem:', err))
+    }
 
     return NextResponse.json({
       success: true,

@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { DEVICES } from '@/lib/device-pricing'
+import { sendListingCreatedEmail } from '@/lib/emailTemplates'
 
 const listingSchema = z.object({
   deviceModel: z.string(),
@@ -122,6 +123,21 @@ export async function POST(request: Request) {
         }
       }
     })
+
+    // Enviar email de confirmação (não aguarda)
+    const listingTitle = `${device.model} ${device.storage}GB`
+    const listingPrice = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(listing.price)
+
+    sendListingCreatedEmail(
+      user.email,
+      user.name,
+      listingTitle,
+      listingPrice,
+      listing.id
+    ).catch(err => console.error('Erro ao enviar email de anúncio criado:', err))
 
     return NextResponse.json(listing, { status: 201 })
   } catch (error) {

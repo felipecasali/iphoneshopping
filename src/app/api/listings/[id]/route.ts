@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { sendListingUpdatedEmail } from '@/lib/emailTemplates'
 
 const updateListingSchema = z.object({
   price: z.number().min(0).optional(),
@@ -151,10 +152,20 @@ export async function PUT(
             id: true,
             name: true,
             avatar: true,
+            email: true,
           },
         },
       },
     })
+
+    // Enviar email de atualização (não aguarda)
+    const listingTitle = `${listing.device.model} ${listing.device.storage}GB`
+    sendListingUpdatedEmail(
+      listing.user.email,
+      listing.user.name,
+      listingTitle,
+      listing.id
+    ).catch(err => console.error('Erro ao enviar email de anúncio atualizado:', err))
 
     return NextResponse.json({
       success: true,

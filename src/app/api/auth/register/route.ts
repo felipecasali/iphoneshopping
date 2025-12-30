@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcrypt'
 import { z } from 'zod'
+import { sendWelcomeEmail } from '@/lib/emailTemplates'
 
 const registerSchema = z.object({
   name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
@@ -47,6 +48,11 @@ export async function POST(request: Request) {
         createdAt: true,
       }
     })
+
+    // Enviar email de boas-vindas (não aguarda para não bloquear a resposta)
+    sendWelcomeEmail(user.name, user.email).catch(err => 
+      console.error('Erro ao enviar email de boas-vindas:', err)
+    )
 
     return NextResponse.json(user, { status: 201 })
   } catch (error) {
