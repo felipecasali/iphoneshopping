@@ -4,20 +4,35 @@ import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { Smartphone, MessageSquare, User, LogOut, LayoutDashboard } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 
 export default function Header() {
   const { data: session, status } = useSession()
   const [unreadCount, setUnreadCount] = useState(0)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [userAvatar, setUserAvatar] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === 'authenticated') {
       fetchUnreadCount()
+      fetchUserProfile()
       // Atualizar contador a cada 30 segundos
       const interval = setInterval(fetchUnreadCount, 30000)
       return () => clearInterval(interval)
     }
   }, [status])
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch('/api/user/profile')
+      const data = await response.json()
+      if (data.user?.avatar) {
+        setUserAvatar(data.user.avatar)
+      }
+    } catch (error) {
+      console.error('Erro ao buscar perfil:', error)
+    }
+  }
 
   const fetchUnreadCount = async () => {
     try {
@@ -84,8 +99,18 @@ export default function Header() {
                     title="Menu do usuário"
                   >
                     <div className="relative">
-                      <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold ring-2 ring-primary ring-offset-2">
-                        {session.user?.name?.charAt(0).toUpperCase() || 'U'}
+                      <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold ring-2 ring-primary ring-offset-2 overflow-hidden">
+                        {userAvatar ? (
+                          <Image
+                            src={userAvatar}
+                            alt={session.user?.name || 'Avatar'}
+                            width={32}
+                            height={32}
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          session.user?.name?.charAt(0).toUpperCase() || 'U'
+                        )}
                       </div>
                       {/* Indicador online */}
                       <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
@@ -112,6 +137,14 @@ export default function Header() {
                       >
                         <LayoutDashboard className="w-4 h-4" />
                         Dashboard
+                      </Link>
+                      <Link
+                        href="/dashboard/perfil"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full"
+                        onClick={() => setShowUserMenu(false)}
+                      >
+                        <User className="w-4 h-4" />
+                        Perfil
                       </Link>
                       <Link
                         href="/dashboard/anuncios"

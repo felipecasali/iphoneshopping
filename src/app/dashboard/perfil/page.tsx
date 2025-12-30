@@ -2,19 +2,35 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Smartphone, MessageSquare, User, Mail } from 'lucide-react'
+import AvatarUpload from '@/components/AvatarUpload'
 
 export default function PerfilPage() {
-  const { data: session, status } = useSession()
+  const { data: session, status, update } = useSession()
   const router = useRouter()
+  const [userAvatar, setUserAvatar] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login')
     }
   }, [status, router])
+
+  useEffect(() => {
+    // Carregar avatar do usuário
+    if (session?.user?.email) {
+      fetch('/api/user/profile')
+        .then(res => res.json())
+        .then(data => {
+          if (data.user?.avatar) {
+            setUserAvatar(data.user.avatar)
+          }
+        })
+        .catch(err => console.error('Erro ao carregar perfil:', err))
+    }
+  }, [session?.user?.email])
 
   if (status === 'loading') {
     return (
@@ -52,11 +68,18 @@ export default function PerfilPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-8">
-          <div className="flex items-center mb-8">
-            <div className="bg-primary-100 rounded-full p-6">
-              <User className="h-16 w-16 text-primary-600" />
+          <div className="flex flex-col md:flex-row items-center md:items-start mb-8">
+            <div className="mb-6 md:mb-0">
+              <AvatarUpload 
+                currentAvatar={userAvatar}
+                onUploadComplete={(avatarUrl) => {
+                  setUserAvatar(avatarUrl)
+                  // Atualizar a sessão para refletir a mudança no Header
+                  update()
+                }}
+              />
             </div>
-            <div className="ml-6">
+            <div className="md:ml-8 text-center md:text-left">
               <h2 className="text-2xl font-bold text-gray-900">{session.user.name}</h2>
               <p className="text-gray-600">{session.user.email}</p>
             </div>
