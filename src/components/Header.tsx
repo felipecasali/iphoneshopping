@@ -32,7 +32,16 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <>
+      {/* Overlay para fechar o menu */}
+      {showUserMenu && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setShowUserMenu(false)}
+        />
+      )}
+      
+      <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-2">
@@ -87,7 +96,7 @@ export default function Header() {
                   </button>
 
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-gray-200">
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-gray-200 z-50">
                       <div className="px-4 py-2 border-b border-gray-200">
                         <p className="text-sm font-semibold text-gray-900">
                           {session.user?.name}
@@ -98,7 +107,7 @@ export default function Header() {
                       </div>
                       <Link
                         href="/dashboard"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full"
                         onClick={() => setShowUserMenu(false)}
                       >
                         <LayoutDashboard className="w-4 h-4" />
@@ -106,7 +115,7 @@ export default function Header() {
                       </Link>
                       <Link
                         href="/dashboard/anuncios"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full"
                         onClick={() => setShowUserMenu(false)}
                       >
                         <Smartphone className="w-4 h-4" />
@@ -114,7 +123,7 @@ export default function Header() {
                       </Link>
                       <Link
                         href="/dashboard/mensagens"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full"
                         onClick={() => setShowUserMenu(false)}
                       >
                         <MessageSquare className="w-4 h-4" />
@@ -125,7 +134,7 @@ export default function Header() {
                           setShowUserMenu(false)
                           signOut({ callbackUrl: '/' })
                         }}
-                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
+                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-50 text-left"
                       >
                         <LogOut className="w-4 h-4" />
                         Sair
@@ -157,14 +166,7 @@ export default function Header() {
           </div>
         </div>
       </nav>
-
-      {/* Overlay para fechar o menu */}
-      {showUserMenu && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={() => setShowUserMenu(false)}
-        />
-      )}
     </header>
+    </>
   )
 }
