@@ -15,7 +15,7 @@ Exemplo:
 ```
 postgresql://user:pass@ep-cool-name-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
 ```
-
+psql 'postgresql://neondb_owner:npg_5IMjL7yZuBQR@ep-shy-haze-ahnaqo4o-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
 ---
 
 ## Passo 2: Gerar Secret do NextAuth (1 min)
@@ -77,17 +77,47 @@ Depois que o deploy terminar:
    npm i -g vercel
    ```
 
+   **⚠️ IMPORTANTE (Windows/PowerShell):**
+   
+   Se o comando `vercel` não for reconhecido após a instalação:
+   
+   ```powershell
+   # Opção 1: Adicionar ao PATH temporariamente (nesta sessão)
+   $env:Path += ";$env:APPDATA\npm"
+   
+   # Opção 2: Adicionar permanentemente (recomendado)
+   [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$env:APPDATA\npm", [EnvironmentVariableTarget]::User)
+   
+   # Depois feche e reabra o PowerShell
+   ```
+   
+   Ou simplesmente use o caminho completo:
+   ```powershell
+   & "$env:APPDATA\npm\vercel.cmd" --version
+   ```
+
 2. **Fazer login:**
    ```bash
    vercel login
    ```
 
-3. **Puxar variáveis de ambiente:**
+3. **Conectar ao projeto na Vercel:**
+   ```bash
+   vercel link
+   ```
+   
+   Responda as perguntas:
+   - `Set up and deploy "..."?` → **N** (não queremos fazer deploy agora)
+   - `Link to existing project?` → **Y**
+   - Selecione seu projeto da lista
+   - `Link to it?` → **Y**
+
+4. **Puxar variáveis de ambiente:**
    ```bash
    vercel env pull
    ```
 
-4. **Atualizar schema.prisma:**
+5. **Atualizar schema.prisma:**
    
    Abra `prisma/schema.prisma` e mude:
    ```prisma
@@ -97,12 +127,12 @@ Depois que o deploy terminar:
    }
    ```
 
-5. **Executar migrações:**
+6. **Executar migrações:**
    ```bash
    npx prisma migrate deploy
    ```
 
-6. **Commit e push:**
+7. **Commit e push:**
    ```bash
    git add .
    git commit -m "Migrar para PostgreSQL"
@@ -124,6 +154,29 @@ Depois que o deploy terminar:
 ---
 
 ## 🐛 Problemas Comuns
+
+### Comando 'vercel' não encontrado (Windows)
+**Solução rápida:**
+```powershell
+# Execute este comando e tente novamente
+$env:Path += ";$env:APPDATA\npm"
+vercel --version
+```
+
+**Solução permanente:**
+```powershell
+# Adiciona ao PATH permanentemente
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$env:APPDATA\npm", [EnvironmentVariableTarget]::User)
+
+# Feche e reabra o PowerShell
+```
+
+**Alternativa:**
+Use o caminho completo sempre:
+```powershell
+& "$env:APPDATA\npm\vercel.cmd" login
+& "$env:APPDATA\npm\vercel.cmd" env pull
+```
 
 ### Erro de build
 - Execute `npm run build` localmente
