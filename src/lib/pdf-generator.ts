@@ -181,23 +181,12 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(0, 0, 0)
   doc.text('PARECER FINAL', parecerBoxX + parecerBoxWidth/2, parecerBoxY + 5, { align: 'center' })
   
-  // Ícone e status
-  doc.setFillColor(...parecerColor)
-  const iconSize = 12
-  const iconX = parecerBoxX + (parecerBoxWidth - iconSize) / 2
-  const iconY = parecerBoxY + 8
-  doc.circle(iconX + iconSize/2, iconY + iconSize/2, iconSize/2, 'F')
-  doc.setTextColor(255, 255, 255)
+  // Texto do parecer em destaque (sem círculo)
+  doc.setTextColor(...parecerColor)
   doc.setFontSize(10)
   doc.setFont('helvetica', 'bold')
-  doc.text(parecerIcon, iconX + iconSize/2, iconY + iconSize/2 + 0.5, { align: 'center', baseline: 'middle' })
-  
-  // Texto do parecer
-  doc.setTextColor(...parecerColor)
-  doc.setFontSize(6.5)
-  doc.setFont('helvetica', 'bold')
-  const parecerLines = doc.splitTextToSize(parecerTexto, parecerBoxWidth - 4)
-  doc.text(parecerLines, parecerBoxX + parecerBoxWidth/2, iconY + iconSize + 2, { align: 'center' })
+  const parecerLines = doc.splitTextToSize(parecerTexto, parecerBoxWidth - 8)
+  doc.text(parecerLines, parecerBoxX + parecerBoxWidth/2, parecerBoxY + 17, { align: 'center' })
 
   yPos = 45
 
@@ -292,85 +281,49 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     doc.circle(deviceX + deviceWidth/2, deviceIconY + deviceHeight - 2, 1, 'F')
   }
   
-  // Calcular ângulos
-  const conformeAngle = (totalConforme / totalVerificado) * 360
-  const naoConformeAngle = (totalNaoConforme / totalVerificado) * 360
-  
-  // Desenhar pizza
-  doc.setFillColor(34, 197, 94) // verde
-  doc.circle(chartCenterX, chartCenterY, chartRadius, 'F')
-  
-  if (totalNaoConforme > 0) {
-    doc.setFillColor(239, 68, 68) // vermelho
-    // Desenhar fatia de não conforme
-    const startAngle = -90
-    const endAngle = startAngle + naoConformeAngle
-    
-    // Aproximação simples com polígono
-    const points: [number, number][] = [[chartCenterX, chartCenterY]]
-    for (let angle = startAngle; angle <= endAngle; angle += 10) {
-      const rad = (angle * Math.PI) / 180
-      points.push([
-        chartCenterX + chartRadius * Math.cos(rad),
-        chartCenterY + chartRadius * Math.sin(rad)
-      ])
-    }
-    
-    if (points.length > 2) {
-      doc.setFillColor(239, 68, 68)
-      const pathData = points.map((p, i) => (i === 0 ? `M ${p[0]} ${p[1]}` : `L ${p[0]} ${p[1]}`)).join(' ') + ' Z'
-      // Fallback: usar retângulo se não conforme > 50%
-      if (totalNaoConforme > totalConforme) {
-        doc.circle(chartCenterX + chartRadius/2, chartCenterY, chartRadius/2, 'F')
-      }
-    }
-  }
-  
-  // Número no centro
-  doc.setFontSize(16)
-  doc.setFont('helvetica', 'bold')
-  doc.setTextColor(255, 255, 255)
-  doc.text(totalVerificado.toString(), chartCenterX, chartCenterY + 1, { align: 'center', baseline: 'middle' })
-  
-  doc.setFontSize(7)
-  doc.setTextColor(100, 100, 100)
-  doc.text('ITENS', chartCenterX, chartCenterY + 7, { align: 'center' })
-  doc.text('VERIFICADOS', chartCenterX, chartCenterY + 11, { align: 'center' })
-  
-  // Legenda
-  const legendY = chartCenterY + chartRadius + 8
+  // Informações dentro do quadro (sem gráfico circular)
+  const infoY = deviceIconY + deviceHeight + 8
   doc.setFontSize(8)
+  
+  // Total de itens
+  doc.setTextColor(0, 0, 0)
+  doc.setFont('helvetica', 'bold')
+  doc.text(`${totalVerificado} ITENS VERIFICADOS`, chartCenterX, infoY, { align: 'center' })
+  
+  // Legenda dentro do quadro
+  const legendStartY = infoY + 6
   
   // Conforme
   doc.setFillColor(34, 197, 94)
-  doc.circle(situacaoBoxX + 8, legendY, 2, 'F')
+  doc.circle(situacaoBoxX + 8, legendStartY, 2, 'F')
   doc.setTextColor(0, 0, 0)
   doc.setFont('helvetica', 'normal')
-  doc.text(`CONFORME`, situacaoBoxX + 12, legendY + 1)
+  doc.setFontSize(7.5)
+  doc.text(`CONFORME`, situacaoBoxX + 12, legendStartY + 1)
   doc.setFont('helvetica', 'bold')
-  doc.text(`${totalConforme} ITENS`, situacaoBoxX + situacaoBoxWidth - 5, legendY + 1, { align: 'right' })
+  doc.text(`${totalConforme}`, situacaoBoxX + situacaoBoxWidth - 5, legendStartY + 1, { align: 'right' })
   
   // Com Observação (se houver)
   if (totalNaoConforme > 0 && totalNaoConforme <= 2) {
     doc.setFillColor(234, 179, 8)
-    doc.circle(situacaoBoxX + 8, legendY + 5, 2, 'F')
+    doc.circle(situacaoBoxX + 8, legendStartY + 5, 2, 'F')
     doc.setTextColor(0, 0, 0)
     doc.setFont('helvetica', 'normal')
-    doc.text(`C/ OBSERVAÇÃO`, situacaoBoxX + 12, legendY + 6)
+    doc.text(`C/ OBSERVAÇÃO`, situacaoBoxX + 12, legendStartY + 6)
     doc.setFont('helvetica', 'bold')
-    doc.text(`${totalNaoConforme} ITENS`, situacaoBoxX + situacaoBoxWidth - 5, legendY + 6, { align: 'right' })
+    doc.text(`${totalNaoConforme}`, situacaoBoxX + situacaoBoxWidth - 5, legendStartY + 6, { align: 'right' })
   }
   
-  // Não Conforme
-  if (totalNaoConforme > 0) {
-    const ncLegendY = totalNaoConforme <= 2 ? legendY + 10 : legendY + 5
+  // Não Conforme (se houver)
+  if (totalNaoConforme > 2) {
+    const ncY = legendStartY + 5
     doc.setFillColor(239, 68, 68)
-    doc.circle(situacaoBoxX + 8, ncLegendY, 2, 'F')
+    doc.circle(situacaoBoxX + 8, ncY, 2, 'F')
     doc.setTextColor(0, 0, 0)
     doc.setFont('helvetica', 'normal')
-    doc.text(`NÃO CONFORME`, situacaoBoxX + 12, ncLegendY + 1)
+    doc.text(`NÃO CONFORME`, situacaoBoxX + 12, ncY + 1)
     doc.setFont('helvetica', 'bold')
-    doc.text(`0 ITENS`, situacaoBoxX + situacaoBoxWidth - 5, ncLegendY + 1, { align: 'right' })
+    doc.text(`${totalNaoConforme}`, situacaoBoxX + situacaoBoxWidth - 5, ncY + 1, { align: 'right' })
   }
 
   yPos = tableEndY + 10
@@ -610,17 +563,17 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   let col = 0
 
   functionalTests.forEach((test, index) => {
-    // Check icon
+    // Check icon com círculo
     const checkColor: [number, number, number] = test.value ? [34, 197, 94] : [239, 68, 68]
     doc.setFillColor(...checkColor)
     doc.circle(testX + 3, testY + 4, 2.5, 'F')
     
-    // Icon
+    // Ícone dentro do círculo
     doc.setTextColor(255, 255, 255)
-    doc.setFontSize(8)
+    doc.setFontSize(9)
     doc.setFont('helvetica', 'bold')
-    const icon = test.value ? '✓' : '✗'
-    doc.text(icon, testX + 3, testY + 4.5, { align: 'center', baseline: 'middle' })
+    const icon = test.value ? '✓' : '✕'
+    doc.text(icon, testX + 3, testY + 4.8, { align: 'center', baseline: 'middle' })
     
     // Label
     doc.setTextColor(75, 85, 99)
@@ -652,18 +605,24 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.text('6. STATUS E BLOQUEIOS', 17, yPos + 5)
   yPos += 12
 
+  const statusData = [
+    ['iCloud', report.icloudFree ? '✓ Livre' : '✗ Bloqueado'],
+    ['Operadora', report.carrierUnlocked ? '✓ Desbloqueado' : '✗ Bloqueado'],
+    ['Contato com Líquido', report.hasWaterDamage ? '✗ Detectado' : '✓ Não Detectado'],
+    ['Reparos Anteriores', report.hasRepairs ? '✗ Sim' : '✓ Não']
+  ]
+
   autoTable(doc, {
     startY: yPos,
     head: [['Item', 'Status']],
-    body: [
-      ['iCloud', report.icloudFree ? '✓ Livre' : '✗ Bloqueado'],
-      ['Operadora', report.carrierUnlocked ? '✓ Desbloqueado' : '🔒 Bloqueado'],
-      ['Contato com Líquido', report.hasWaterDamage ? '⚠ Sim' : '✓ Não'],
-      ['Reparos Anteriores', report.hasRepairs ? '⚠ Sim' : '✓ Não']
-    ],
+    body: statusData,
     theme: 'striped',
     headStyles: { fillColor: [37, 99, 235] },
-    margin: { left: 15, right: 15 }
+    margin: { left: 15, right: 15 },
+    columnStyles: {
+      0: { cellWidth: 100 },
+      1: { cellWidth: 60 }
+    }
   })
 
   if (report.hasRepairs && report.repairDetails) {
@@ -691,11 +650,11 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   yPos += 15
 
   const accessories = [
-    { label: 'Caixa Original', value: report.hasBox, icon: '📦' },
-    { label: 'Carregador', value: report.hasCharger, icon: '🔌' },
-    { label: 'Cabo', value: report.hasCable, icon: '🔌' },
-    { label: 'Fones de Ouvido', value: report.hasEarphones, icon: '🎧' },
-    { label: 'Nota Fiscal', value: report.hasInvoice, icon: '🧾' }
+    { label: 'Caixa Original', value: report.hasBox, symbol: '▣' },
+    { label: 'Carregador', value: report.hasCharger, symbol: '◎' },
+    { label: 'Cabo', value: report.hasCable, symbol: '〰' },
+    { label: 'Fones de Ouvido', value: report.hasEarphones, symbol: '♫' },
+    { label: 'Nota Fiscal', value: report.hasInvoice, symbol: '▤' }
   ]
 
   // Desenhar blocos de acessórios em grid 3x2
@@ -712,35 +671,44 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
       boxY += boxHeight + boxSpacing
     }
     
-    // Box de fundo
+    // Box de fundo com cantos arredondados
     const bgColor: [number, number, number] = acc.value ? [240, 253, 244] : [254, 242, 242]
     const borderColor: [number, number, number] = acc.value ? [34, 197, 94] : [239, 68, 68]
     
     doc.setFillColor(...bgColor)
     doc.setDrawColor(...borderColor)
     doc.setLineWidth(0.5)
-    doc.rect(boxX, boxY, boxWidth, boxHeight, 'FD')
+    doc.roundedRect(boxX, boxY, boxWidth, boxHeight, 3, 3, 'FD')
     
-    // Ícone de status
-    const statusIcon = acc.value ? '✓' : '✗'
+    // Círculo de status
     const statusColor: [number, number, number] = acc.value ? [34, 197, 94] : [239, 68, 68]
-    doc.setTextColor(...statusColor)
-    doc.setFontSize(12)
+    doc.setFillColor(...statusColor)
+    doc.circle(boxX + 6, boxY + 7, 3, 'F')
+    
+    // Ícone de status dentro do círculo
+    doc.setTextColor(255, 255, 255)
+    doc.setFontSize(8)
     doc.setFont('helvetica', 'bold')
-    doc.text(statusIcon, boxX + 4, boxY + 8)
+    const statusIcon = acc.value ? '✓' : '✕'
+    doc.text(statusIcon, boxX + 6, boxY + 7.5, { align: 'center', baseline: 'middle' })
+    
+    // Símbolo do acessório
+    doc.setTextColor(100, 100, 100)
+    doc.setFontSize(10)
+    doc.text(acc.symbol, boxX + 12, boxY + 8)
     
     // Label do acessório
     doc.setTextColor(0, 0, 0)
-    doc.setFontSize(9)
+    doc.setFontSize(8)
     doc.setFont('helvetica', 'normal')
-    doc.text(acc.label, boxX + 10, boxY + 8)
+    doc.text(acc.label, boxX + 18, boxY + 8)
     
     // Status text
     doc.setTextColor(...statusColor)
-    doc.setFontSize(7)
+    doc.setFontSize(6.5)
     doc.setFont('helvetica', 'bold')
     const statusText = acc.value ? 'INCLUÍDO' : 'NÃO INCLUÍDO'
-    doc.text(statusText, boxX + 10, boxY + 14)
+    doc.text(statusText, boxX + 18, boxY + 14)
     
     boxX += boxWidth + boxSpacing
   })
