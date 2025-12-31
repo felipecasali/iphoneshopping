@@ -169,11 +169,11 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   const parecerBoxWidth = 58
   const parecerBoxHeight = 28.5
   
-  // Box branco com borda
+  // Box branco com borda e cantos arredondados
   doc.setFillColor(255, 255, 255)
   doc.setDrawColor(200, 200, 200)
   doc.setLineWidth(0.5)
-  doc.rect(parecerBoxX, parecerBoxY, parecerBoxWidth, parecerBoxHeight, 'FD')
+  doc.roundedRect(parecerBoxX, parecerBoxY, parecerBoxWidth, parecerBoxHeight, 3, 3, 'FD')
   
   // Título
   doc.setFontSize(8)
@@ -255,7 +255,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(249, 250, 251)
   doc.setDrawColor(200, 200, 200)
   doc.setLineWidth(0.5)
-  doc.rect(situacaoBoxX, situacaoBoxY, situacaoBoxWidth, situacaoBoxHeight, 'FD')
+  doc.roundedRect(situacaoBoxX, situacaoBoxY, situacaoBoxWidth, situacaoBoxHeight, 3, 3, 'FD')
   
   doc.setFontSize(10)
   doc.setFont('helvetica', 'bold')
@@ -265,7 +265,32 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   // Gráfico de pizza simplificado
   const chartCenterX = situacaoBoxX + situacaoBoxWidth / 2
   const chartCenterY = situacaoBoxY + situacaoBoxHeight / 2 + 2
-  const chartRadius = 20
+  const chartRadius = 18
+  
+  // Ícone do dispositivo com cor baseada na avaliação (acima do gráfico)
+  const deviceIconY = chartCenterY - chartRadius - 20
+  const deviceColor: [number, number, number] = totalNaoConforme === 0 ? [34, 197, 94] : // Verde - tudo conforme
+                                                  totalNaoConforme <= 2 ? [234, 179, 8] : // Amarelo - poucos problemas
+                                                  [239, 68, 68] // Vermelho - muitos problemas
+  
+  // Desenhar dispositivo (iPhone ou iPad)
+  const isIPad = report.evaluation?.deviceType === 'IPAD'
+  const deviceWidth = isIPad ? 20 : 12
+  const deviceHeight = isIPad ? 16 : 20
+  const deviceX = chartCenterX - deviceWidth/2
+  
+  doc.setFillColor(...deviceColor)
+  doc.roundedRect(deviceX, deviceIconY, deviceWidth, deviceHeight, 2, 2, 'F')
+  
+  // Tela (parte clara)
+  doc.setFillColor(255, 255, 255)
+  doc.roundedRect(deviceX + 1, deviceIconY + 1, deviceWidth - 2, deviceHeight - 2, 1, 1, 'F')
+  
+  // Botão home (se iPhone)
+  if (!isIPad) {
+    doc.setFillColor(...deviceColor)
+    doc.circle(deviceX + deviceWidth/2, deviceIconY + deviceHeight - 2, 1, 'F')
+  }
   
   // Calcular ângulos
   const conformeAngle = (totalConforme / totalVerificado) * 360
@@ -456,7 +481,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     doc.setFillColor(249, 250, 251)
     doc.setDrawColor(229, 231, 235)
     doc.setLineWidth(0.5)
-    doc.rect(15, yPos, pageWidth - 30, 18, 'FD')
+    doc.roundedRect(15, yPos, pageWidth - 30, 18, 3, 3, 'FD')
     
     // Label
     doc.setTextColor(75, 85, 99)
@@ -513,7 +538,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(249, 250, 251)
   doc.setDrawColor(229, 231, 235)
   doc.setLineWidth(0.5)
-  doc.rect(15, yPos, pageWidth - 30, 18, 'FD')
+  doc.roundedRect(15, yPos, pageWidth - 30, 18, 3, 3, 'FD')
   
   // Label
   doc.setTextColor(75, 85, 99)
