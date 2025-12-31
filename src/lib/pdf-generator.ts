@@ -274,7 +274,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
                                                   [239, 68, 68] // Vermelho - muitos problemas
   
   // Desenhar dispositivo (iPhone ou iPad)
-  const isIPad = report.evaluation?.deviceType === 'IPAD'
+  const isIPad = report.deviceType === 'IPAD'
   const deviceWidth = isIPad ? 20 : 12
   const deviceHeight = isIPad ? 16 : 20
   const deviceX = chartCenterX - deviceWidth/2
