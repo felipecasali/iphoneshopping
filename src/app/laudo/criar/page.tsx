@@ -1112,7 +1112,7 @@ function CriarLaudoContent() {
                 disabled={loading}
                 className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Criando...' : selectedType === 'BASIC' ? '✅ Finalizar Laudo Gratuito' : 'Ir para Pagamento'}
+                {loading ? 'Criando...' : selectedType === 'BASIC' ? '✅ Finalizar Laudo Gratuito' : 'Concluir Laudo'}
                 {!loading && <ChevronRight className="ml-2 h-5 w-5" />}
               </button>
             </div>
