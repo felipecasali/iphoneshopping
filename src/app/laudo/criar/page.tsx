@@ -74,6 +74,15 @@ interface Evaluation {
   estimatedValue: number
   condition: string
   createdAt: string
+  batteryHealth?: number
+  screenCondition?: string
+  bodyCondition?: string
+  icloudFree: boolean
+  hasWaterDamage: boolean
+  hasBox: boolean
+  hasCharger: boolean
+  hasCable: boolean
+  hasInvoice: boolean
 }
 
 interface PhotoUpload {
@@ -171,6 +180,21 @@ function CriarLaudoContent() {
       const data = await res.json()
       if (data.evaluation) {
         setEvaluation(data.evaluation)
+        
+        // Pré-preencher campos do reportData com dados da avaliação
+        setReportData(prev => ({
+          ...prev,
+          batteryHealth: data.evaluation.batteryHealth || prev.batteryHealth,
+          screenCondition: data.evaluation.screenCondition || prev.screenCondition,
+          bodyCondition: data.evaluation.bodyCondition || prev.bodyCondition,
+          icloudFree: data.evaluation.icloudFree ?? prev.icloudFree,
+          hasWaterDamage: data.evaluation.hasWaterDamage ?? prev.hasWaterDamage,
+          hasBox: data.evaluation.hasBox ?? prev.hasBox,
+          hasCharger: data.evaluation.hasCharger ?? prev.hasCharger,
+          hasCable: data.evaluation.hasCable ?? prev.hasCable,
+          hasInvoice: data.evaluation.hasInvoice ?? prev.hasInvoice,
+          hasEarphones: false, // Não existe na avaliação, mantém valor padrão
+        }))
       }
     } catch (error) {
       console.error('Erro ao carregar avaliação:', error)
@@ -656,6 +680,19 @@ function CriarLaudoContent() {
               </p>
             </div>
 
+            {/* Banner informativo sobre dados pré-preenchidos */}
+            {evaluation && (evaluation.batteryHealth || evaluation.screenCondition || evaluation.bodyCondition) && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
+                  <div className="text-sm text-blue-800">
+                    <p className="font-medium">Dados da sua avaliação carregados</p>
+                    <p className="mt-1">Alguns campos foram pré-preenchidos com as informações da sua avaliação. Você pode revisar e ajustar conforme necessário.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
               {/* IMEI e Serial */}
               <div className="grid md:grid-cols-2 gap-6">
@@ -929,6 +966,19 @@ function CriarLaudoContent() {
                 Marque os acessórios inclusos e revise todas as informações
               </p>
             </div>
+
+            {/* Banner informativo sobre acessórios pré-preenchidos */}
+            {evaluation && (evaluation.hasBox || evaluation.hasCharger || evaluation.hasCable || evaluation.hasInvoice) && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
+                  <div className="text-sm text-blue-800">
+                    <p className="font-medium">Acessórios da avaliação carregados</p>
+                    <p className="mt-1">Os acessórios que você informou na avaliação foram marcados automaticamente. Revise e ajuste se necessário.</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
               <div>
