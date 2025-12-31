@@ -339,6 +339,8 @@ model Evaluation {
   hasBox            Boolean  @default(false)
   hasCharger        Boolean  @default(false)
   hasCable          Boolean  @default(false)
+  hasPencil         Boolean  @default(false)
+  hasKeyboard       Boolean  @default(false)
   hasInvoice        Boolean  @default(false)
   hasWarranty       Boolean  @default(false)
   icloudFree        Boolean  @default(true)

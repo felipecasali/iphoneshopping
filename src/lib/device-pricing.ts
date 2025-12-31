@@ -268,6 +268,8 @@ export const ADJUSTMENTS = {
   hasBox: 150,           // + R$ 150
   hasCharger: 100,       // + R$ 100
   hasCable: 80,          // + R$ 80
+  hasPencil: 400,        // + R$ 400 (Apple Pencil)
+  hasKeyboard: 600,      // + R$ 600 (Teclado/Capa)
   hasInvoice: 200,       // + R$ 200
   hasWarranty: 300,      // + R$ 300
   icloudFree: 0,         // Obrigatório, não adiciona valor
@@ -303,6 +305,8 @@ export function calculateDevicePrice(evaluation: {
   hasBox: boolean
   hasCharger: boolean
   hasCable?: boolean
+  hasPencil?: boolean
+  hasKeyboard?: boolean
   hasInvoice?: boolean
   hasWarranty?: boolean
   icloudFree: boolean
@@ -348,6 +352,8 @@ export function calculateDevicePrice(evaluation: {
   if (evaluation.hasBox) price += ADJUSTMENTS.hasBox
   if (evaluation.hasCharger) price += ADJUSTMENTS.hasCharger
   if (evaluation.hasCable) price += ADJUSTMENTS.hasCable
+  if (evaluation.hasPencil) price += ADJUSTMENTS.hasPencil
+  if (evaluation.hasKeyboard) price += ADJUSTMENTS.hasKeyboard
   if (evaluation.hasInvoice) price += ADJUSTMENTS.hasInvoice
   if (evaluation.hasWarranty) price += ADJUSTMENTS.hasWarranty
 

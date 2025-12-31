@@ -117,7 +117,6 @@ interface ReportData {
   hasBox: boolean
   hasCharger: boolean
   hasCable: boolean
-  hasEarphones: boolean
   hasInvoice: boolean
 }
 
@@ -156,7 +155,6 @@ function CriarLaudoContent() {
     hasBox: false,
     hasCharger: false,
     hasCable: false,
-    hasEarphones: false,
     hasInvoice: false
   })
 
@@ -214,7 +212,6 @@ function CriarLaudoContent() {
           hasCharger: data.evaluation.hasCharger ?? prev.hasCharger,
           hasCable: data.evaluation.hasCable ?? prev.hasCable,
           hasInvoice: data.evaluation.hasInvoice ?? prev.hasInvoice,
-          hasEarphones: false, // Não existe na avaliação, mantém valor padrão
         }))
       }
     } catch (error) {
@@ -1039,15 +1036,6 @@ function CriarLaudoContent() {
                       className="w-5 h-5 text-primary-600 rounded"
                     />
                     <span>🔋 Cabo</span>
-                  </label>
-                  <label className="flex items-center space-x-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={reportData.hasEarphones}
-                      onChange={(e) => setReportData({ ...reportData, hasEarphones: e.target.checked })}
-                      className="w-5 h-5 text-primary-600 rounded"
-                    />
-                    <span>🎧 Fones de Ouvido</span>
                   </label>
                   <label className="flex items-center space-x-3 cursor-pointer">
                     <input

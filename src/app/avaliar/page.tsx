@@ -22,6 +22,8 @@ export default function AvaliarPage() {
     hasBox: false,
     hasCharger: false,
     hasCable: false,
+    hasPencil: false,
+    hasKeyboard: false,
     icloudFree: false,
     imeiClean: false,
     hasWaterDamage: false,
@@ -451,6 +453,36 @@ export default function AvaliarPage() {
                   <div className="text-sm text-gray-600">+R$ 80</div>
                 </div>
               </label>
+
+              {evaluation.type === 'IPAD' && (
+                <>
+                  <label className="flex items-center space-x-3 p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="checkbox"
+                      checked={evaluation.hasPencil}
+                      onChange={(e) => setEvaluation({ ...evaluation, hasPencil: e.target.checked })}
+                      className="w-5 h-5 text-primary-600 rounded focus:ring-primary-500"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">Apple Pencil</div>
+                      <div className="text-sm text-gray-600">+R$ 400</div>
+                    </div>
+                  </label>
+
+                  <label className="flex items-center space-x-3 p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="checkbox"
+                      checked={evaluation.hasKeyboard}
+                      onChange={(e) => setEvaluation({ ...evaluation, hasKeyboard: e.target.checked })}
+                      className="w-5 h-5 text-primary-600 rounded focus:ring-primary-500"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">Teclado/Capa com Teclado</div>
+                      <div className="text-sm text-gray-600">+R$ 600</div>
+                    </div>
+                  </label>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -601,6 +633,8 @@ export default function AvaliarPage() {
                       hasBox: false,
                       hasCharger: false,
                       hasCable: false,
+                      hasPencil: false,
+                      hasKeyboard: false,
                       icloudFree: false,
                       imeiClean: false,
                       hasWaterDamage: false,
