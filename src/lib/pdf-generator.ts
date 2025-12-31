@@ -126,10 +126,10 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   // Tipo de Laudo e Número
   doc.setTextColor(0, 0, 0)
-  doc.setFontSize(10)
+  doc.setFontSize(9)
   doc.setFont('helvetica', 'normal')
   doc.text(`Tipo: ${REPORT_TYPE_LABELS[report.reportType] || report.reportType}`, 15, yPos)
-  doc.text(`Número: ${report.reportNumber}`, 15, yPos + 5)
+  doc.text(`Nº Laudo: ${report.reportNumber}`, 15, yPos + 5)
   doc.text(`Emissão: ${new Date(report.createdAt).toLocaleDateString('pt-BR')}`, 15, yPos + 10)
   if (report.expiresAt) {
     doc.text(`Validade: ${new Date(report.expiresAt).toLocaleDateString('pt-BR')}`, 15, yPos + 15)
@@ -137,14 +137,96 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   yPos += 25
 
-  // Seção 1: Identificação do Aparelho
+  // Calcular resultado da avaliação
+  const functionalTestsResults = [
+    report.touchWorking, report.faceIdWorking, report.wifiWorking, 
+    report.bluetoothWorking, report.speakersWorking, report.microphoneWorking,
+    report.vibrationWorking, report.buttonsWorking
+  ]
+  const conformeCount = functionalTestsResults.filter(t => t).length
+  const naoConformeCount = functionalTestsResults.filter(t => !t).length
+  const totalItems = functionalTestsResults.length + 3 // + condições físicas
+  
+  // Adicionar condições físicas ao cálculo
+  const physicalConditions = [
+    report.screenCondition !== 'TRINCADO' && report.screenCondition !== 'QUEBRADO' && report.screenCondition !== 'DANIFICADO',
+    report.bodyCondition !== 'DANIFICADO',
+    report.cameraCondition !== 'DANIFICADO'
+  ]
+  const physicalConformeCount = physicalConditions.filter(c => c).length
+  const physicalNaoConformeCount = physicalConditions.filter(c => !c).length
+  
+  const totalConforme = conformeCount + physicalConformeCount
+  const totalNaoConforme = naoConformeCount + physicalNaoConformeCount
+  const totalVerificado = totalConforme + totalNaoConforme
+  
+  // Determinar parecer
+  let parecerTexto = ''
+  let parecerColor: [number, number, number] = [34, 197, 94]
+  let parecerIcon = '✓'
+  
+  if (totalNaoConforme === 0 && report.batteryHealthPercent >= 80 && report.icloudFree && !report.hasWaterDamage) {
+    parecerTexto = 'CONFORME'
+    parecerColor = [34, 197, 94]
+    parecerIcon = '✓'
+  } else if (totalNaoConforme <= 2 && report.batteryHealthPercent >= 50 && report.icloudFree) {
+    parecerTexto = 'CONFORME COM OBSERVAÇÃO'
+    parecerColor = [234, 179, 8]
+    parecerIcon = '⚠'
+  } else {
+    parecerTexto = 'NÃO CONFORME'
+    parecerColor = [239, 68, 68]
+    parecerIcon = '✗'
+  }
+
+  // Box de PARECER FINAL (topo direito, ao lado do QR code)
+  const parecerBoxX = pageWidth - 95
+  const parecerBoxY = 45
+  const parecerBoxWidth = 60
+  const parecerBoxHeight = 40
+  
+  // Box branco com borda
+  doc.setFillColor(255, 255, 255)
+  doc.setDrawColor(200, 200, 200)
+  doc.setLineWidth(0.5)
+  doc.rect(parecerBoxX, parecerBoxY, parecerBoxWidth, parecerBoxHeight, 'FD')
+  
+  // Título
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(0, 0, 0)
+  doc.text('PARECER FINAL', parecerBoxX + parecerBoxWidth/2, parecerBoxY + 6, { align: 'center' })
+  
+  // Ícone e status
+  doc.setFillColor(...parecerColor)
+  const iconSize = 18
+  const iconX = parecerBoxX + (parecerBoxWidth - iconSize) / 2
+  const iconY = parecerBoxY + 10
+  doc.circle(iconX + iconSize/2, iconY + iconSize/2, iconSize/2, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(14)
+  doc.setFont('helvetica', 'bold')
+  doc.text(parecerIcon, iconX + iconSize/2, iconY + iconSize/2 + 1, { align: 'center', baseline: 'middle' })
+  
+  // Texto do parecer
+  doc.setTextColor(...parecerColor)
+  doc.setFontSize(7)
+  doc.setFont('helvetica', 'bold')
+  const parecerLines = doc.splitTextToSize(parecerTexto, parecerBoxWidth - 4)
+  doc.text(parecerLines, parecerBoxX + parecerBoxWidth/2, iconY + iconSize + 4, { align: 'center' })
+
+  // Seção 1: DADOS DO APARELHO (esquerda) + SITUAÇÃO GERAL (direita)
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFontSize(12)
   doc.setFont('helvetica', 'bold')
-  doc.text('1. IDENTIFICAÇÃO DO APARELHO', 17, yPos + 5)
+  doc.setTextColor(0, 0, 0)
+  doc.text('DADOS DO APARELHO', 17, yPos + 5)
   yPos += 12
 
+  // Tabela de identificação (lado esquerdo, 60% da largura)
+  const tableWidth = (pageWidth - 30) * 0.55
+  
   autoTable(doc, {
     startY: yPos,
     head: [['Campo', 'Informação']],
@@ -157,13 +239,119 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
       ['Número de Série', report.serialNumber || 'Não informado']
     ],
     theme: 'striped',
-    headStyles: { fillColor: [37, 99, 235] },
-    margin: { left: 15, right: 15 }
+    headStyles: { fillColor: [37, 99, 235], fontSize: 9 },
+    bodyStyles: { fontSize: 9 },
+    margin: { left: 15, right: pageWidth - 15 - tableWidth },
+    tableWidth: tableWidth
   })
 
-  yPos = (doc as any).lastAutoTable.finalY + 10
+  const tableEndY = (doc as any).lastAutoTable.finalY
 
-  // Seção 1.5: Fotos do Dispositivo
+  // Box SITUAÇÃO GERAL (lado direito)
+  const situacaoBoxX = 15 + tableWidth + 5
+  const situacaoBoxY = yPos
+  const situacaoBoxWidth = pageWidth - 30 - tableWidth - 5
+  const situacaoBoxHeight = tableEndY - yPos
+  
+  doc.setFillColor(249, 250, 251)
+  doc.setDrawColor(200, 200, 200)
+  doc.setLineWidth(0.5)
+  doc.rect(situacaoBoxX, situacaoBoxY, situacaoBoxWidth, situacaoBoxHeight, 'FD')
+  
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(0, 0, 0)
+  doc.text('SITUAÇÃO GERAL', situacaoBoxX + situacaoBoxWidth/2, situacaoBoxY + 6, { align: 'center' })
+  
+  // Gráfico de pizza simplificado
+  const chartCenterX = situacaoBoxX + situacaoBoxWidth / 2
+  const chartCenterY = situacaoBoxY + situacaoBoxHeight / 2 + 2
+  const chartRadius = 20
+  
+  // Calcular ângulos
+  const conformeAngle = (totalConforme / totalVerificado) * 360
+  const naoConformeAngle = (totalNaoConforme / totalVerificado) * 360
+  
+  // Desenhar pizza
+  doc.setFillColor(34, 197, 94) // verde
+  doc.circle(chartCenterX, chartCenterY, chartRadius, 'F')
+  
+  if (totalNaoConforme > 0) {
+    doc.setFillColor(239, 68, 68) // vermelho
+    // Desenhar fatia de não conforme
+    const startAngle = -90
+    const endAngle = startAngle + naoConformeAngle
+    
+    // Aproximação simples com polígono
+    const points: [number, number][] = [[chartCenterX, chartCenterY]]
+    for (let angle = startAngle; angle <= endAngle; angle += 10) {
+      const rad = (angle * Math.PI) / 180
+      points.push([
+        chartCenterX + chartRadius * Math.cos(rad),
+        chartCenterY + chartRadius * Math.sin(rad)
+      ])
+    }
+    
+    if (points.length > 2) {
+      doc.setFillColor(239, 68, 68)
+      const pathData = points.map((p, i) => (i === 0 ? `M ${p[0]} ${p[1]}` : `L ${p[0]} ${p[1]}`)).join(' ') + ' Z'
+      // Fallback: usar retângulo se não conforme > 50%
+      if (totalNaoConforme > totalConforme) {
+        doc.circle(chartCenterX + chartRadius/2, chartCenterY, chartRadius/2, 'F')
+      }
+    }
+  }
+  
+  // Número no centro
+  doc.setFontSize(16)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(255, 255, 255)
+  doc.text(totalVerificado.toString(), chartCenterX, chartCenterY + 1, { align: 'center', baseline: 'middle' })
+  
+  doc.setFontSize(7)
+  doc.setTextColor(100, 100, 100)
+  doc.text('ITENS', chartCenterX, chartCenterY + 7, { align: 'center' })
+  doc.text('VERIFICADOS', chartCenterX, chartCenterY + 11, { align: 'center' })
+  
+  // Legenda
+  const legendY = chartCenterY + chartRadius + 8
+  doc.setFontSize(8)
+  
+  // Conforme
+  doc.setFillColor(34, 197, 94)
+  doc.circle(situacaoBoxX + 8, legendY, 2, 'F')
+  doc.setTextColor(0, 0, 0)
+  doc.setFont('helvetica', 'normal')
+  doc.text(`CONFORME`, situacaoBoxX + 12, legendY + 1)
+  doc.setFont('helvetica', 'bold')
+  doc.text(`${totalConforme} ITENS`, situacaoBoxX + situacaoBoxWidth - 5, legendY + 1, { align: 'right' })
+  
+  // Com Observação (se houver)
+  if (totalNaoConforme > 0 && totalNaoConforme <= 2) {
+    doc.setFillColor(234, 179, 8)
+    doc.circle(situacaoBoxX + 8, legendY + 5, 2, 'F')
+    doc.setTextColor(0, 0, 0)
+    doc.setFont('helvetica', 'normal')
+    doc.text(`C/ OBSERVAÇÃO`, situacaoBoxX + 12, legendY + 6)
+    doc.setFont('helvetica', 'bold')
+    doc.text(`${totalNaoConforme} ITENS`, situacaoBoxX + situacaoBoxWidth - 5, legendY + 6, { align: 'right' })
+  }
+  
+  // Não Conforme
+  if (totalNaoConforme > 0) {
+    const ncLegendY = totalNaoConforme <= 2 ? legendY + 10 : legendY + 5
+    doc.setFillColor(239, 68, 68)
+    doc.circle(situacaoBoxX + 8, ncLegendY, 2, 'F')
+    doc.setTextColor(0, 0, 0)
+    doc.setFont('helvetica', 'normal')
+    doc.text(`NÃO CONFORME`, situacaoBoxX + 12, ncLegendY + 1)
+    doc.setFont('helvetica', 'bold')
+    doc.text(`0 ITENS`, situacaoBoxX + situacaoBoxWidth - 5, ncLegendY + 1, { align: 'right' })
+  }
+
+  yPos = tableEndY + 10
+
+  // Seção 2: Fotos do Dispositivo
   if (yPos > pageHeight - 100) {
     doc.addPage()
     yPos = 20
@@ -173,7 +361,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('FOTOS DO DISPOSITIVO', 17, yPos + 5)
+  doc.text('2. FOTOS DO DISPOSITIVO', 17, yPos + 5)
   yPos += 15
 
   // Carregar e adicionar fotos principais
@@ -244,11 +432,11 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     }
   }
 
-  // Seção 2: Condição Física
+  // Seção 3: Condição Física
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
-  doc.text('2. CONDIÇÃO FÍSICA', 17, yPos + 5)
+  doc.text('3. CONDIÇÃO FÍSICA', 17, yPos + 5)
   yPos += 12
 
   autoTable(doc, {
@@ -266,11 +454,11 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   yPos = (doc as any).lastAutoTable.finalY + 10
 
-  // Seção 3: Bateria
+  // Seção 4: Bateria
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
-  doc.text('3. SAÚDE DA BATERIA', 17, yPos + 5)
+  doc.text('4. SAÚDE DA BATERIA', 17, yPos + 5)
   yPos += 12
 
   const batteryColor: [number, number, number] = report.batteryHealthPercent >= 80 ? [34, 197, 94] : 
@@ -311,7 +499,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   yPos += 5
 
-  // Seção 4: Testes Funcionais
+  // Seção 5: Testes Funcionais
   if (yPos > pageHeight - 60) {
     doc.addPage()
     yPos = 20
@@ -321,7 +509,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
-  doc.text('4. TESTES FUNCIONAIS', 17, yPos + 5)
+  doc.text('5. TESTES FUNCIONAIS', 17, yPos + 5)
   yPos += 12
 
   const functionalTests = [
@@ -356,7 +544,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   yPos = (doc as any).lastAutoTable.finalY + 10
 
-  // Seção 5: Status e Bloqueios
+  // Seção 6: Status e Bloqueios
   if (yPos > pageHeight - 60) {
     doc.addPage()
     yPos = 20
@@ -365,7 +553,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
-  doc.text('5. STATUS E BLOQUEIOS', 17, yPos + 5)
+  doc.text('6. STATUS E BLOQUEIOS', 17, yPos + 5)
   yPos += 12
 
   autoTable(doc, {
@@ -394,7 +582,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   yPos = (doc as any).lastAutoTable.finalY + 10
 
-  // Seção 6: Acessórios
+  // Seção 7: Acessórios
   if (yPos > pageHeight - 40) {
     doc.addPage()
     yPos = 20
@@ -403,7 +591,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
-  doc.text('6. ACESSÓRIOS INCLUSOS', 17, yPos + 5)
+  doc.text('7. ACESSÓRIOS INCLUSOS', 17, yPos + 5)
   yPos += 12
 
   const accessories = [
@@ -430,7 +618,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   yPos = (doc as any).lastAutoTable.finalY + 15
 
-  // Seção 7: Documentação e Evidências Fotográficas
+  // Seção 8: Documentação e Evidências Fotográficas
   if (report.imeiPhoto || report.boxPhoto || report.invoicePhoto || (report.accessoriesPhotos && report.accessoriesPhotos !== '[]')) {
     if (yPos > pageHeight - 80) {
       doc.addPage()
@@ -441,7 +629,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     doc.rect(15, yPos, pageWidth - 30, 8, 'F')
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(12)
-    doc.text('7. DOCUMENTAÇÃO E EVIDÊNCIAS', 17, yPos + 5)
+    doc.text('8. DOCUMENTAÇÃO E EVIDÊNCIAS', 17, yPos + 5)
     yPos += 15
 
     const docPhotoSize = 50
