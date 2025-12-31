@@ -727,8 +727,12 @@ function CriarLaudoContent() {
                     onChange={(e) => setReportData({ ...reportData, imei: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     placeholder="000000000000000"
+                    maxLength={15}
+                    pattern="[0-9]{15}"
+                    title="IMEI deve conter exatamente 15 dígitos"
                     required
                   />
+                  <p className="text-xs text-gray-500 mt-1">15 dígitos numéricos</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -737,10 +741,14 @@ function CriarLaudoContent() {
                   <input
                     type="text"
                     value={reportData.serialNumber}
-                    onChange={(e) => setReportData({ ...reportData, serialNumber: e.target.value })}
+                    onChange={(e) => setReportData({ ...reportData, serialNumber: e.target.value.toUpperCase() })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     placeholder="XXXXXXXXXXXX"
+                    maxLength={12}
+                    pattern="[A-Z0-9]{12}"
+                    title="Número de série deve conter 12 caracteres alfanuméricos"
                   />
+                  <p className="text-xs text-gray-500 mt-1">12 caracteres alfanuméricos</p>
                 </div>
               </div>
 
