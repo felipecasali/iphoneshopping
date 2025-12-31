@@ -432,48 +432,102 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   }
 
   // Seção 3: Condição Física
+  if (yPos > pageHeight - 100) {
+    doc.addPage()
+    yPos = 20
+  }
+
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
-  doc.text('3. CONDIÇÃO FÍSICA', 17, yPos + 5)
-  yPos += 12
+  doc.setFontSize(12)
+  doc.text('3. AVALIAÇÃO DE CONDIÇÃO', 17, yPos + 5)
+  yPos += 15
 
-  autoTable(doc, {
-    startY: yPos,
-    head: [['Componente', 'Condição', 'Observações']],
-    body: [
-      ['Tela', CONDITION_LABELS[report.screenCondition] || report.screenCondition, report.screenConditionNotes || '-'],
-      ['Carcaça', CONDITION_LABELS[report.bodyCondition] || report.bodyCondition, report.bodyConditionNotes || '-'],
-      ['Câmeras', CONDITION_LABELS[report.cameraCondition] || report.cameraCondition, report.cameraConditionNotes || '-']
-    ],
-    theme: 'striped',
-    headStyles: { fillColor: [37, 99, 235] },
-    margin: { left: 15, right: 15 }
+  // Cards de condição em formato moderno
+  const conditions = [
+    { label: 'Tela', value: report.screenCondition, notes: report.screenConditionNotes },
+    { label: 'Corpo/Chassi', value: report.bodyCondition, notes: report.bodyConditionNotes },
+    { label: 'Câmera', value: report.cameraCondition, notes: report.cameraConditionNotes }
+  ]
+
+  conditions.forEach((cond) => {
+    // Card background
+    doc.setFillColor(249, 250, 251)
+    doc.setDrawColor(229, 231, 235)
+    doc.setLineWidth(0.5)
+    doc.rect(15, yPos, pageWidth - 30, 18, 'FD')
+    
+    // Label
+    doc.setTextColor(75, 85, 99)
+    doc.setFontSize(9)
+    doc.setFont('helvetica', 'normal')
+    doc.text(cond.label, 20, yPos + 7)
+    
+    // Valor com cor baseada na condição
+    const conditionText = CONDITION_LABELS[cond.value] || cond.value
+    let valueColor: [number, number, number] = [37, 99, 235]
+    
+    if (cond.value === 'PERFEITO') valueColor = [34, 197, 94]
+    else if (cond.value.includes('LEVE')) valueColor = [59, 130, 246]
+    else if (cond.value.includes('TRINCA') || cond.value.includes('QUEBRADO') || cond.value.includes('DANIFICADO')) valueColor = [239, 68, 68]
+    else if (cond.value.includes('VISIVE') || cond.value.includes('AMASSADO')) valueColor = [234, 179, 8]
+    
+    doc.setTextColor(...valueColor)
+    doc.setFontSize(11)
+    doc.setFont('helvetica', 'bold')
+    doc.text(conditionText, pageWidth - 20, yPos + 7, { align: 'right' })
+    
+    // Notas se houver
+    if (cond.notes && cond.notes !== '-') {
+      doc.setTextColor(107, 114, 128)
+      doc.setFontSize(8)
+      doc.setFont('helvetica', 'normal')
+      const notesText = doc.splitTextToSize(cond.notes, pageWidth - 50)
+      doc.text(notesText, 20, yPos + 13)
+    }
+    
+    yPos += 20
   })
 
-  yPos = (doc as any).lastAutoTable.finalY + 10
+  yPos += 5
 
   // Seção 4: Bateria
+  if (yPos > pageHeight - 80) {
+    doc.addPage()
+    yPos = 20
+  }
+
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
+  doc.setFontSize(12)
   doc.text('4. SAÚDE DA BATERIA', 17, yPos + 5)
-  yPos += 12
+  yPos += 15
 
-  const batteryColor: [number, number, number] = report.batteryHealthPercent >= 80 ? [34, 197, 94] : 
-                       report.batteryHealthPercent >= 50 ? [234, 179, 8] : [239, 68, 68]
-  
-  doc.setFontSize(10)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Capacidade Máxima:', 17, yPos)
-  doc.setFillColor(...batteryColor)
-  doc.rect(70, yPos - 4, 50, 6, 'F')
-  doc.setTextColor(255, 255, 255)
-  doc.setFont('helvetica', 'bold')
+  // Card de bateria
   const batteryPercent = report.batteryHealthPercent || 0
-  doc.text(`${batteryPercent}%`, 95, yPos, { align: 'center' })
-
-  yPos += 10
+  const batteryColor: [number, number, number] = batteryPercent >= 80 ? [34, 197, 94] : 
+                       batteryPercent >= 50 ? [234, 179, 8] : [239, 68, 68]
+  
+  doc.setFillColor(249, 250, 251)
+  doc.setDrawColor(229, 231, 235)
+  doc.setLineWidth(0.5)
+  doc.rect(15, yPos, pageWidth - 30, 18, 'FD')
+  
+  // Label
+  doc.setTextColor(75, 85, 99)
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'normal')
+  doc.text('Saúde da Bateria', 20, yPos + 11)
+  
+  // Percentual com destaque
+  doc.setTextColor(...batteryColor)
+  doc.setFontSize(16)
+  doc.setFont('helvetica', 'bold')
+  doc.text(`${batteryPercent}%`, pageWidth - 20, yPos + 12, { align: 'right' })
+  
+  yPos += 23
 
   // Adicionar foto da saúde da bateria
   if (report.batteryHealthPhoto) {
@@ -508,8 +562,9 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(240, 240, 240)
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
-  doc.text('5. TESTES FUNCIONAIS', 17, yPos + 5)
-  yPos += 12
+  doc.setFontSize(12)
+  doc.text('5. TESTES DE FUNCIONALIDADE', 17, yPos + 5)
+  yPos += 15
 
   const functionalTests = [
     { label: 'Touch Screen', value: report.touchWorking },
@@ -522,26 +577,43 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     { label: 'Botões Físicos', value: report.buttonsWorking }
   ]
 
-  autoTable(doc, {
-    startY: yPos,
-    head: [['Funcionalidade', 'Status']],
-    body: functionalTests.map(test => [
-      test.label,
-      test.value ? '✓ Funcionando' : '✗ Com Problema'
-    ]),
-    theme: 'striped',
-    headStyles: { fillColor: [37, 99, 235] },
-    margin: { left: 15, right: 15 },
-    columnStyles: {
-      0: { cellWidth: 100 },
-      1: { 
-        cellWidth: 60,
-        halign: 'left'
-      }
+  // Grid de testes - 3 colunas
+  const itemWidth = (pageWidth - 40) / 3
+  const itemHeight = 12
+  let testX = 15
+  let testY = yPos
+  let col = 0
+
+  functionalTests.forEach((test, index) => {
+    // Check icon
+    const checkColor: [number, number, number] = test.value ? [34, 197, 94] : [239, 68, 68]
+    doc.setFillColor(...checkColor)
+    doc.circle(testX + 3, testY + 4, 2.5, 'F')
+    
+    // Icon
+    doc.setTextColor(255, 255, 255)
+    doc.setFontSize(8)
+    doc.setFont('helvetica', 'bold')
+    const icon = test.value ? '✓' : '✗'
+    doc.text(icon, testX + 3, testY + 4.5, { align: 'center', baseline: 'middle' })
+    
+    // Label
+    doc.setTextColor(75, 85, 99)
+    doc.setFontSize(8)
+    doc.setFont('helvetica', 'normal')
+    doc.text(test.label, testX + 8, testY + 5)
+    
+    col++
+    if (col === 3) {
+      col = 0
+      testX = 15
+      testY += itemHeight
+    } else {
+      testX += itemWidth
     }
   })
 
-  yPos = (doc as any).lastAutoTable.finalY + 10
+  yPos = testY + (col > 0 ? itemHeight : 0) + 5
 
   // Seção 6: Status e Bloqueios
   if (yPos > pageHeight - 60) {
