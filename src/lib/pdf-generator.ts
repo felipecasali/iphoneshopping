@@ -536,7 +536,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
       0: { cellWidth: 100 },
       1: { 
         cellWidth: 60,
-        halign: 'center'
+        halign: 'left'
       }
     }
   })
@@ -591,31 +591,64 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.rect(15, yPos, pageWidth - 30, 8, 'F')
   doc.setFont('helvetica', 'bold')
   doc.text('7. ACESSÓRIOS INCLUSOS', 17, yPos + 5)
-  yPos += 12
+  yPos += 15
 
   const accessories = [
-    { label: 'Caixa Original', value: report.hasBox },
-    { label: 'Carregador', value: report.hasCharger },
-    { label: 'Cabo', value: report.hasCable },
-    { label: 'Fones de Ouvido', value: report.hasEarphones },
-    { label: 'Nota Fiscal', value: report.hasInvoice }
+    { label: 'Caixa Original', value: report.hasBox, icon: '📦' },
+    { label: 'Carregador', value: report.hasCharger, icon: '🔌' },
+    { label: 'Cabo', value: report.hasCable, icon: '🔌' },
+    { label: 'Fones de Ouvido', value: report.hasEarphones, icon: '🎧' },
+    { label: 'Nota Fiscal', value: report.hasInvoice, icon: '🧾' }
   ]
 
-  autoTable(doc, {
-    startY: yPos,
-    body: accessories.map(acc => [
-      acc.label,
-      acc.value ? '✓ Sim' : '✗ Não'
-    ]),
-    theme: 'plain',
-    margin: { left: 15, right: 15 },
-    columnStyles: {
-      0: { cellWidth: 100 },
-      1: { cellWidth: 30, halign: 'center' }
+  // Desenhar blocos de acessórios em grid 3x2
+  const boxWidth = 58
+  const boxHeight = 20
+  const boxSpacing = 5
+  const boxesPerRow = 3
+  let boxX = 15
+  let boxY = yPos
+  
+  accessories.forEach((acc, index) => {
+    if (index > 0 && index % boxesPerRow === 0) {
+      boxX = 15
+      boxY += boxHeight + boxSpacing
     }
+    
+    // Box de fundo
+    const bgColor: [number, number, number] = acc.value ? [240, 253, 244] : [254, 242, 242]
+    const borderColor: [number, number, number] = acc.value ? [34, 197, 94] : [239, 68, 68]
+    
+    doc.setFillColor(...bgColor)
+    doc.setDrawColor(...borderColor)
+    doc.setLineWidth(0.5)
+    doc.rect(boxX, boxY, boxWidth, boxHeight, 'FD')
+    
+    // Ícone de status
+    const statusIcon = acc.value ? '✓' : '✗'
+    const statusColor: [number, number, number] = acc.value ? [34, 197, 94] : [239, 68, 68]
+    doc.setTextColor(...statusColor)
+    doc.setFontSize(12)
+    doc.setFont('helvetica', 'bold')
+    doc.text(statusIcon, boxX + 4, boxY + 8)
+    
+    // Label do acessório
+    doc.setTextColor(0, 0, 0)
+    doc.setFontSize(9)
+    doc.setFont('helvetica', 'normal')
+    doc.text(acc.label, boxX + 10, boxY + 8)
+    
+    // Status text
+    doc.setTextColor(...statusColor)
+    doc.setFontSize(7)
+    doc.setFont('helvetica', 'bold')
+    const statusText = acc.value ? 'INCLUÍDO' : 'NÃO INCLUÍDO'
+    doc.text(statusText, boxX + 10, boxY + 14)
+    
+    boxX += boxWidth + boxSpacing
   })
 
-  yPos = (doc as any).lastAutoTable.finalY + 15
+  yPos = boxY + boxHeight + 10
 
   // Seção 8: Documentação e Evidências Fotográficas
   if (report.imeiPhoto || report.boxPhoto || report.invoicePhoto || (report.accessoriesPhotos && report.accessoriesPhotos !== '[]')) {
