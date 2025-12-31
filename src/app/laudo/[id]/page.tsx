@@ -65,6 +65,7 @@ export default function LaudoPage() {
   const [report, setReport] = useState<TechnicalReport | null>(null)
   const [loading, setLoading] = useState(true)
   const [downloading, setDownloading] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     fetchReport()
@@ -97,6 +98,19 @@ export default function LaudoPage() {
       alert('Erro ao gerar PDF. Tente novamente.')
     } finally {
       setDownloading(false)
+    }
+  }
+
+  const handleShareReport = async () => {
+    const reportUrl = `${window.location.origin}/laudo/${params.id}`
+    
+    try {
+      await navigator.clipboard.writeText(reportUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (error) {
+      console.error('Erro ao copiar link:', error)
+      alert('Erro ao copiar link. Tente novamente.')
     }
   }
 
@@ -154,9 +168,12 @@ export default function LaudoPage() {
               <Download className="h-4 w-4" />
               <span>{downloading ? 'Gerando PDF...' : 'Baixar PDF'}</span>
             </button>
-            <button className="flex items-center space-x-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
+            <button 
+              onClick={handleShareReport}
+              className="flex items-center space-x-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+            >
               <Share2 className="h-4 w-4" />
-              <span>Compartilhar</span>
+              <span>{copied ? '✓ Link Copiado!' : 'Compartilhar'}</span>
             </button>
           </div>
           
