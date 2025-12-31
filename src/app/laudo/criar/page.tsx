@@ -127,6 +127,11 @@ function CriarLaudoContent() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null)
+
+  // Scroll ao topo quando mudar de step
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [step])
   const [selectedType, setSelectedType] = useState<string>('')
   const [photos, setPhotos] = useState<PhotoUpload[]>([])
   const [reportData, setReportData] = useState<ReportData>({

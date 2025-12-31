@@ -122,22 +122,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   const qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, { width: 76, margin: 0 })
   doc.addImage(qrCodeDataUrl, 'PNG', pageWidth - 34, 5, 28.5, 28.5)
 
-  yPos = 45
-
-  // Tipo de Laudo e Número
-  doc.setTextColor(0, 0, 0)
-  doc.setFontSize(9)
-  doc.setFont('helvetica', 'normal')
-  doc.text(`Tipo: ${REPORT_TYPE_LABELS[report.reportType] || report.reportType}`, 15, yPos)
-  doc.text(`Nº Laudo: ${report.reportNumber}`, 15, yPos + 5)
-  doc.text(`Emissão: ${new Date(report.createdAt).toLocaleDateString('pt-BR')}`, 15, yPos + 10)
-  if (report.expiresAt) {
-    doc.text(`Validade: ${new Date(report.expiresAt).toLocaleDateString('pt-BR')}`, 15, yPos + 15)
-  }
-
-  yPos += 25
-
-  // Calcular resultado da avaliação
+  // Calcular resultado da avaliação ANTES de desenhar o parecer
   const functionalTestsResults = [
     report.touchWorking, report.faceIdWorking, report.wifiWorking, 
     report.bluetoothWorking, report.speakersWorking, report.microphoneWorking,
@@ -145,7 +130,6 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   ]
   const conformeCount = functionalTestsResults.filter(t => t).length
   const naoConformeCount = functionalTestsResults.filter(t => !t).length
-  const totalItems = functionalTestsResults.length + 3 // + condições físicas
   
   // Adicionar condições físicas ao cálculo
   const physicalConditions = [
@@ -179,11 +163,11 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     parecerIcon = '✗'
   }
 
-  // Box de PARECER FINAL (topo direito)
-  const parecerBoxX = pageWidth - 63
-  const parecerBoxY = 45
-  const parecerBoxWidth = 48
-  const parecerBoxHeight = 40
+  // Box de PARECER FINAL (ao lado do QR Code no topo)
+  const parecerBoxX = pageWidth - 95
+  const parecerBoxY = 5
+  const parecerBoxWidth = 58
+  const parecerBoxHeight = 28.5
   
   // Box branco com borda
   doc.setFillColor(255, 255, 255)
@@ -192,28 +176,43 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.rect(parecerBoxX, parecerBoxY, parecerBoxWidth, parecerBoxHeight, 'FD')
   
   // Título
-  doc.setFontSize(9)
+  doc.setFontSize(8)
   doc.setFont('helvetica', 'bold')
   doc.setTextColor(0, 0, 0)
-  doc.text('PARECER FINAL', parecerBoxX + parecerBoxWidth/2, parecerBoxY + 6, { align: 'center' })
+  doc.text('PARECER FINAL', parecerBoxX + parecerBoxWidth/2, parecerBoxY + 5, { align: 'center' })
   
   // Ícone e status
   doc.setFillColor(...parecerColor)
-  const iconSize = 18
+  const iconSize = 12
   const iconX = parecerBoxX + (parecerBoxWidth - iconSize) / 2
-  const iconY = parecerBoxY + 10
+  const iconY = parecerBoxY + 8
   doc.circle(iconX + iconSize/2, iconY + iconSize/2, iconSize/2, 'F')
   doc.setTextColor(255, 255, 255)
-  doc.setFontSize(14)
+  doc.setFontSize(10)
   doc.setFont('helvetica', 'bold')
-  doc.text(parecerIcon, iconX + iconSize/2, iconY + iconSize/2 + 1, { align: 'center', baseline: 'middle' })
+  doc.text(parecerIcon, iconX + iconSize/2, iconY + iconSize/2 + 0.5, { align: 'center', baseline: 'middle' })
   
   // Texto do parecer
   doc.setTextColor(...parecerColor)
-  doc.setFontSize(7)
+  doc.setFontSize(6.5)
   doc.setFont('helvetica', 'bold')
   const parecerLines = doc.splitTextToSize(parecerTexto, parecerBoxWidth - 4)
-  doc.text(parecerLines, parecerBoxX + parecerBoxWidth/2, iconY + iconSize + 4, { align: 'center' })
+  doc.text(parecerLines, parecerBoxX + parecerBoxWidth/2, iconY + iconSize + 2, { align: 'center' })
+
+  yPos = 45
+
+  // Tipo de Laudo e Número
+  doc.setTextColor(0, 0, 0)
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'normal')
+  doc.text(`Tipo: ${REPORT_TYPE_LABELS[report.reportType] || report.reportType}`, 15, yPos)
+  doc.text(`Nº Laudo: ${report.reportNumber}`, 15, yPos + 5)
+  doc.text(`Emissão: ${new Date(report.createdAt).toLocaleDateString('pt-BR')}`, 15, yPos + 10)
+  if (report.expiresAt) {
+    doc.text(`Validade: ${new Date(report.expiresAt).toLocaleDateString('pt-BR')}`, 15, yPos + 15)
+  }
+
+  yPos += 25
 
   // Seção 1: DADOS DO APARELHO (esquerda) + SITUAÇÃO GERAL (direita)
   doc.setFillColor(240, 240, 240)
