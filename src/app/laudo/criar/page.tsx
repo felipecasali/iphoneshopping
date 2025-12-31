@@ -181,12 +181,33 @@ function CriarLaudoContent() {
       if (data.evaluation) {
         setEvaluation(data.evaluation)
         
+        // Mapeamento de valores da avaliação para o laudo
+        const mapScreenCondition = (value?: string) => {
+          const map: Record<string, string> = {
+            'PERFEITA': 'PERFEITO',
+            'LEVES_ARRANHOS': 'ARRANHOES_LEVES',
+            'ARRANHOS_VISIVEIS': 'ARRANHOES_VISIVEIS',
+            'TRINCADA': 'TRINCADO'
+          }
+          return value && map[value] ? map[value] : value || 'PERFEITO'
+        }
+
+        const mapBodyCondition = (value?: string) => {
+          const map: Record<string, string> = {
+            'PERFEITO': 'PERFEITO',
+            'LEVES_MARCAS': 'MARCAS_USO',
+            'MARCAS_VISIVEIS': 'ARRANHOES',
+            'AMASSADOS': 'AMASSADOS'
+          }
+          return value && map[value] ? map[value] : value || 'PERFEITO'
+        }
+        
         // Pré-preencher campos do reportData com dados da avaliação
         setReportData(prev => ({
           ...prev,
           batteryHealth: data.evaluation.batteryHealth || prev.batteryHealth,
-          screenCondition: data.evaluation.screenCondition || prev.screenCondition,
-          bodyCondition: data.evaluation.bodyCondition || prev.bodyCondition,
+          screenCondition: mapScreenCondition(data.evaluation.screenCondition),
+          bodyCondition: mapBodyCondition(data.evaluation.bodyCondition),
           icloudFree: data.evaluation.icloudFree ?? prev.icloudFree,
           hasWaterDamage: data.evaluation.hasWaterDamage ?? prev.hasWaterDamage,
           hasBox: data.evaluation.hasBox ?? prev.hasBox,
