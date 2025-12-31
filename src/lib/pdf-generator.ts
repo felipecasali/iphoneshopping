@@ -119,8 +119,8 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   // QR Code de verificação
   const qrCodeUrl = `https://www.iphoneshopping.com.br/laudo/${report.id}`
-  const qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, { width: 80, margin: 0 })
-  doc.addImage(qrCodeDataUrl, 'PNG', pageWidth - 35, 5, 30, 30)
+  const qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, { width: 76, margin: 0 })
+  doc.addImage(qrCodeDataUrl, 'PNG', pageWidth - 34, 5, 28.5, 28.5)
 
   yPos = 45
 
@@ -179,10 +179,10 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     parecerIcon = '✗'
   }
 
-  // Box de PARECER FINAL (topo direito, ao lado do QR code)
-  const parecerBoxX = pageWidth - 95
+  // Box de PARECER FINAL (topo direito)
+  const parecerBoxX = pageWidth - 63
   const parecerBoxY = 45
-  const parecerBoxWidth = 60
+  const parecerBoxWidth = 48
   const parecerBoxHeight = 40
   
   // Box branco com borda
@@ -722,16 +722,6 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.text(`Verificação de autenticidade: ${qrCodeUrl}`, 17, yPos)
   yPos += 4
   doc.text(`ID do Laudo: ${report.id}`, 17, yPos)
-  yPos += 8
-
-  if (report.reportType !== 'BASIC') {
-    doc.setFillColor(34, 197, 94)
-    doc.rect(15, yPos, pageWidth - 30, 12, 'F')
-    doc.setTextColor(255, 255, 255)
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(10)
-    doc.text('✓ LAUDO VERIFICADO E CERTIFICADO', pageWidth / 2, yPos + 7, { align: 'center' })
-  }
 
   return doc.output('blob')
 }
