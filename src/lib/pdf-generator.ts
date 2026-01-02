@@ -672,27 +672,27 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(249, 250, 251)
   doc.setDrawColor(229, 231, 235)
   doc.setLineWidth(0.5)
-  doc.roundedRect(15, yPos, pageWidth - 30, 15, 3, 3, 'FD')
+  doc.roundedRect(15, yPos, pageWidth - 30, 18, 3, 3, 'FD')
   
   // Ícone e label
   doc.setTextColor(75, 85, 99)
   doc.setFontSize(10)
   doc.setFont('helvetica', 'bold')
-  doc.text('PONTUACAO GERAL', 20, yPos + 7)
+  doc.text('PONTUACAO GERAL', 20, yPos + 8)
   
   // Score badge
   doc.setFillColor(...scoreColor)
-  doc.roundedRect(pageWidth - 55, yPos + 2.5, 40, 10, 2, 2, 'F')
+  doc.roundedRect(pageWidth - 55, yPos + 3, 40, 12, 2, 2, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(12)
   doc.setFont('helvetica', 'bold')
-  doc.text(`${passedTests}/${totalTests}`, pageWidth - 35, yPos + 9, { align: 'center' })
+  doc.text(`${passedTests}/${totalTests}`, pageWidth - 35, yPos + 10, { align: 'center' })
   
   doc.setFontSize(7)
   doc.setFont('helvetica', 'normal')
-  doc.text(`${scorePercent}% aprovado`, pageWidth - 35, yPos + 12.5, { align: 'center' })
+  doc.text(`${scorePercent}% aprovado`, pageWidth - 35, yPos + 14, { align: 'center' })
   
-  yPos += 20
+  yPos += 23
 
   // Grid de testes - 3 colunas
   const itemWidth = (pageWidth - 40) / 3
@@ -1116,10 +1116,10 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.text(`Gerado em: ${new Date(report.createdAt).toLocaleString('pt-BR')}`, footerInfoX, yPos + 27)
 
   // Informações de contato e suporte
-  yPos += footerQrSize + 8
+  yPos += footerQrSize + 5
   
   doc.setFillColor(249, 250, 251)
-  doc.roundedRect(15, yPos, pageWidth - 30, 15, 2, 2, 'F')
+  doc.roundedRect(15, yPos, pageWidth - 30, 18, 2, 2, 'F')
   
   doc.setTextColor(37, 99, 235)
   doc.setFontSize(8)
@@ -1136,7 +1136,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(75, 85, 99)
   doc.setFontSize(7)
   doc.setFont('helvetica', 'italic')
-  doc.text('Este laudo técnico certificado foi gerado pela plataforma iPhoneShopping', pageWidth / 2, yPos + 12, { align: 'center' })
+  doc.text('Este laudo técnico certificado foi gerado pela plataforma iPhoneShopping', pageWidth / 2, yPos + 15, { align: 'center' })
 
   return doc.output('blob')
 }
