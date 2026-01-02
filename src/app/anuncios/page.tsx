@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Smartphone, MapPin, Search, Filter, SlidersHorizontal, CheckCircle } from 'lucide-react'
@@ -14,11 +15,12 @@ interface Listing {
   condition: string
   negotiable: boolean
   acceptsTrade: boolean
-  technicalReport?: {
+  technicalReports?: Array<{
     id: string
     reportNumber: string
     reportType: string
-  }
+    status: string
+  }>
   device: {
     model: string
     storage: number
@@ -30,6 +32,7 @@ interface Listing {
 }
 
 export default function AnunciosPage() {
+  const { data: session } = useSession()
   const [listings, setListings] = useState<Listing[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -86,12 +89,21 @@ export default function AnunciosPage() {
               >
                 Anunciar Grátis
               </Link>
-              <Link
-                href="/login"
-                className="text-gray-700 hover:text-gray-900 text-sm font-medium"
-              >
-                Entrar
-              </Link>
+              {session ? (
+                <Link
+                  href="/dashboard"
+                  className="text-gray-700 hover:text-gray-900 text-sm font-medium"
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="text-gray-700 hover:text-gray-900 text-sm font-medium"
+                >
+                  Entrar
+                </Link>
+              )}
             </div>
           </div>
         </nav>
@@ -219,7 +231,7 @@ export default function AnunciosPage() {
                       </div>
                     )}
                     <div className="absolute top-2 left-2 flex flex-col gap-2">
-                      {listing.technicalReport && (
+                      {listing.technicalReports && listing.technicalReports.length > 0 && (
                         <span className="bg-green-500 text-white text-xs px-2 py-1 rounded flex items-center gap-1 font-semibold shadow-lg">
                           <CheckCircle className="h-3 w-3" />
                           Laudo Verificado
@@ -238,7 +250,7 @@ export default function AnunciosPage() {
                         )}
                       </div>
                     </div>
-                    {listing.technicalReport && (
+                    {listing.technicalReports && listing.technicalReports.length > 0 && (
                       <div className="absolute bottom-2 right-2">
                         <span className="bg-green-500 text-white text-xs px-2 py-1 rounded font-semibold shadow-md">
                           🔒 Laudo Técnico
