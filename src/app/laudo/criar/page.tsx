@@ -179,31 +179,88 @@ function CriarLaudoContent() {
   }, [status, router])
 
   useEffect(() => {
+    console.log('🎯 useEffect disparado - evaluationId:', evaluationId, 'listingId:', listingId, 'session:', !!session)
     if (evaluationId && session) {
+      console.log('🔄 Chamando fetchEvaluation...')
       fetchEvaluation()
     } else if (listingId && session) {
+      console.log('🔄 Chamando fetchListingEvaluation...')
       fetchListingEvaluation()
     }
   }, [evaluationId, listingId, session])
 
   const fetchListingEvaluation = async () => {
+    console.log('🔍 Iniciando fetchListingEvaluation com listingId:', listingId)
     try {
       // Buscar o listing primeiro
+      console.log('📡 Buscando listing na API...')
       const listingRes = await fetch(`/api/listings/${listingId}`)
+      console.log('📡 Response status:', listingRes.status)
       const listingData = await listingRes.json()
+      console.log('📦 Listing data:', listingData)
       
-      if (listingData.listing && listingData.listing.evaluationId) {
-        // Buscar a avaliação associada
-        const evalRes = await fetch(`/api/evaluate?id=${listingData.listing.evaluationId}`)
-        const evalData = await evalRes.json()
+      if (listingData.listing) {
+        const listing = listingData.listing
+        console.log('✅ Listing encontrado - deviceId:', listing.deviceId, 'userId:', listing.userId)
         
-        if (evalData.evaluation) {
-          setEvaluation(evalData.evaluation)
-          preencheDadosAvaliacao(evalData.evaluation)
+        // Buscar avaliações do usuário para encontrar a que corresponde a este device
+        console.log('📡 Buscando avaliações do usuário na API...')
+        const evalRes = await fetch('/api/evaluate/list')
+        console.log('📡 Evaluations list response status:', evalRes.status)
+        const evalData = await evalRes.json()
+        console.log('📦 Evaluations data:', evalData)
+        
+        if (evalData.evaluations && evalData.evaluations.length > 0) {
+          // Encontrar a avaliação que corresponde ao device do listing
+          // Procurar por modelo e storage do device
+          const deviceModel = listing.device.model
+          const deviceStorage = listing.device.storage
+          
+          console.log('🔍 Procurando avaliação com model:', deviceModel, 'storage:', deviceStorage)
+          
+          const matchingEval = evalData.evaluations.find((e: any) => 
+            e.deviceModel === deviceModel && e.storage === deviceStorage
+          )
+          
+          if (matchingEval) {
+            console.log('✅ Avaliação correspondente encontrada:', matchingEval.id)
+            setEvaluation(matchingEval)
+            preencheDadosAvaliacao(matchingEval)
+            console.log('✅ fetchListingEvaluation concluído com sucesso')
+          } else {
+            console.error('❌ Nenhuma avaliação correspondente encontrada para este device')
+            // Criar uma avaliação "fake" baseada nos dados do listing
+            const fakeEvaluation = {
+              id: 'temp-' + listing.id,
+              deviceType: listing.device.type,
+              deviceModel: listing.device.model,
+              storage: listing.device.storage,
+              color: 'Não especificado',
+              condition: listing.condition || 'BOM',
+              batteryHealth: listing.batteryHealth || 80,
+              screenCondition: listing.screenCondition || 'PERFEITO',
+              bodyCondition: listing.bodyCondition || 'PERFEITO',
+              icloudFree: listing.icloudFree || false,
+              hasWaterDamage: listing.hasWaterDamage || false,
+              hasBox: listing.hasBox || false,
+              hasCharger: listing.hasCharger || false,
+              hasCable: false,
+              hasInvoice: false,
+              estimatedValue: listing.price || 0,
+              createdAt: listing.createdAt
+            }
+            console.log('⚠️ Usando dados do listing como fallback:', fakeEvaluation)
+            setEvaluation(fakeEvaluation)
+            preencheDadosAvaliacao(fakeEvaluation)
+          }
+        } else {
+          console.error('❌ Nenhuma avaliação retornada pela API')
         }
+      } else {
+        console.error('❌ Listing não encontrado:', listingData)
       }
     } catch (error) {
-      console.error('Erro ao carregar avaliação do anúncio:', error)
+      console.error('💥 ERRO FATAL em fetchListingEvaluation:', error)
     }
   }
 
@@ -267,6 +324,7 @@ function CriarLaudoContent() {
   }
 
   if (status === 'loading') {
+    console.log('⏳ Status: loading (autenticação)')
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
@@ -275,6 +333,7 @@ function CriarLaudoContent() {
   }
 
   if (!evaluationId && !listingId) {
+    console.log('❌ Nem evaluationId nem listingId fornecidos')
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4">
@@ -298,12 +357,18 @@ function CriarLaudoContent() {
   }
 
   if (!evaluation) {
+    console.log('⏳ Aguardando evaluation ser carregado... (listingId:', listingId, ', evaluationId:', evaluationId, ')')
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando dados do aparelho...</p>
+        </div>
       </div>
     )
   }
+
+  console.log('✅ Evaluation carregado, renderizando formulário:', evaluation)
 
   const totalSteps = selectedType === 'BASIC' ? 4 : selectedType === 'STANDARD' ? 5 : 6
 

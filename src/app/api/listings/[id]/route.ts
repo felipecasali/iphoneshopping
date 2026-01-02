@@ -24,8 +24,27 @@ export async function GET(
     
     const listing = await prisma.listing.findUnique({
       where: { id: params.id },
-      include: {
-        device: true,
+      select: {
+        id: true,
+        price: true,
+        location: true,
+        images: true,
+        status: true,
+        views: true,
+        createdAt: true,
+        negotiable: true,
+        acceptsTrade: true,
+        description: true,
+        deviceId: true, // Para buscar avaliação relacionada
+        userId: true,
+        device: {
+          select: {
+            id: true,
+            model: true,
+            storage: true,
+            type: true,
+          },
+        },
         user: {
           select: {
             id: true,
