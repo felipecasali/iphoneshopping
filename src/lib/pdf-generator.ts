@@ -104,23 +104,63 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     })
   }
 
-  // Header com logo (placeholder)
+  // Header com gradiente e logo
+  // Fundo com gradiente simulado (azul para verde)
   doc.setFillColor(37, 99, 235) // primary-600
-  doc.rect(0, 0, pageWidth, 35, 'F')
+  doc.rect(0, 0, pageWidth, 15, 'F')
+  doc.setFillColor(45, 110, 230)
+  doc.rect(0, 15, pageWidth, 10, 'F')
+  doc.setFillColor(52, 121, 225)
+  doc.rect(0, 25, pageWidth, 10, 'F')
   
+  // Logo e Título
   doc.setTextColor(255, 255, 255)
-  doc.setFontSize(24)
+  doc.setFontSize(28)
   doc.setFont('helvetica', 'bold')
-  doc.text('iPhoneShopping', 15, 18)
+  doc.text('iPhoneShopping', 15, 22)
   
-  doc.setFontSize(12)
+  doc.setFontSize(11)
   doc.setFont('helvetica', 'normal')
-  doc.text('Laudo Técnico Profissional', 15, 26)
+  doc.text('Laudo Técnico Certificado', 15, 29)
+  
+  // Badge do tipo de laudo no canto
+  const badgeX = pageWidth - 70
+  const badgeY = 8
+  let badgeColor: [number, number, number] = [107, 114, 128] // gray
+  if (report.reportType === 'PREMIUM') badgeColor = [147, 51, 234] // purple
+  else if (report.reportType === 'STANDARD') badgeColor = [37, 99, 235] // blue
+  
+  doc.setFillColor(...badgeColor)
+  doc.roundedRect(badgeX, badgeY, 55, 8, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'bold')
+  doc.text(REPORT_TYPE_LABELS[report.reportType] || report.reportType, badgeX + 27.5, badgeY + 5.5, { align: 'center' })
+  
+  // Número do laudo em destaque
+  doc.setFontSize(8)
+  doc.setFont('helvetica', 'normal')
+  doc.text(`Nº ${report.reportNumber}`, badgeX + 27.5, badgeY + 13, { align: 'center' })
 
-  // QR Code de verificação
+  // QR Code de verificação (maior e mais visível)
+  const qrSize = 32
+  const qrX = pageWidth - qrSize - 13
+  const qrY = 40
+  
+  // Fundo branco para o QR code
+  doc.setFillColor(255, 255, 255)
+  doc.roundedRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6, 2, 2, 'F')
+  
   const qrCodeUrl = `https://www.iphoneshopping.com.br/laudo/${report.id}`
-  const qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, { width: 76, margin: 0 })
-  doc.addImage(qrCodeDataUrl, 'PNG', pageWidth - 34, 5, 28.5, 28.5)
+  const qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, { width: 256, margin: 1 })
+  doc.addImage(qrCodeDataUrl, 'PNG', qrX, qrY, qrSize, qrSize)
+  
+  // Texto "Verificar Autenticidade"
+  doc.setTextColor(75, 85, 99)
+  doc.setFontSize(7)
+  doc.setFont('helvetica', 'normal')
+  doc.text('Verificar', qrX + qrSize / 2, qrY + qrSize + 5, { align: 'center' })
+  doc.text('Autenticidade', qrX + qrSize / 2, qrY + qrSize + 8.5, { align: 'center' })
 
   // Calcular resultado da avaliação ANTES de desenhar o parecer
   const functionalTestsResults = [
@@ -163,53 +203,78 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     parecerIcon = '✗'
   }
 
-  // Box de PARECER FINAL (ao lado do QR Code no topo)
-  const parecerBoxX = pageWidth - 95
-  const parecerBoxY = 5
-  const parecerBoxWidth = 58
-  const parecerBoxHeight = 28.5
+  // Box de PARECER FINAL (ao lado do QR Code no topo) - Estilo selo profissional
+  const parecerBoxX = pageWidth - 100
+  const parecerBoxY = 40
+  const parecerBoxWidth = 60
+  const parecerBoxHeight = 34
   
-  // Box branco com borda e cantos arredondados
-  doc.setFillColor(255, 255, 255)
-  doc.setDrawColor(200, 200, 200)
-  doc.setLineWidth(0.5)
-  doc.roundedRect(parecerBoxX, parecerBoxY, parecerBoxWidth, parecerBoxHeight, 3, 3, 'FD')
+  // Fundo do box com cor baseada no parecer (com transparência simulada)
+  if (parecerTexto === 'CONFORME') {
+    doc.setFillColor(220, 252, 231) // green-100
+  } else if (parecerTexto === 'CONFORME COM OBSERVAÇÃO') {
+    doc.setFillColor(254, 249, 195) // yellow-100
+  } else {
+    doc.setFillColor(254, 226, 226) // red-100
+  }
+  doc.roundedRect(parecerBoxX, parecerBoxY, parecerBoxWidth, parecerBoxHeight, 3, 3, 'F')
+  
+  // Borda colorida
+  doc.setDrawColor(...parecerColor)
+  doc.setLineWidth(1.5)
+  doc.roundedRect(parecerBoxX, parecerBoxY, parecerBoxWidth, parecerBoxHeight, 3, 3, 'D')
   
   // Título
-  doc.setFontSize(8)
+  doc.setFontSize(7)
   doc.setFont('helvetica', 'bold')
-  doc.setTextColor(0, 0, 0)
+  doc.setTextColor(75, 85, 99)
   doc.text('PARECER FINAL', parecerBoxX + parecerBoxWidth/2, parecerBoxY + 5, { align: 'center' })
   
-  // Texto do parecer em destaque (sem círculo)
+  // Ícone grande
   doc.setTextColor(...parecerColor)
-  doc.setFontSize(10)
+  doc.setFontSize(18)
+  doc.text(parecerIcon, parecerBoxX + parecerBoxWidth/2, parecerBoxY + 15, { align: 'center' })
+  
+  // Texto do parecer em destaque
+  doc.setTextColor(...parecerColor)
+  doc.setFontSize(8)
   doc.setFont('helvetica', 'bold')
-  const parecerLines = doc.splitTextToSize(parecerTexto, parecerBoxWidth - 8)
-  doc.text(parecerLines, parecerBoxX + parecerBoxWidth/2, parecerBoxY + 17, { align: 'center' })
+  const parecerLines = doc.splitTextToSize(parecerTexto, parecerBoxWidth - 6)
+  const parecerYStart = parecerBoxY + 22
+  parecerLines.forEach((line: string, index: number) => {
+    doc.text(line, parecerBoxX + parecerBoxWidth/2, parecerYStart + (index * 3.5), { align: 'center' })
+  })
 
-  yPos = 45
+  yPos = 80
 
-  // Tipo de Laudo e Número
+  // Card de Informações Básicas
+  doc.setFillColor(249, 250, 251) // gray-50
+  doc.roundedRect(15, yPos, pageWidth - 30, 22, 2, 2, 'F')
+  
   doc.setTextColor(0, 0, 0)
   doc.setFontSize(9)
+  doc.setFont('helvetica', 'bold')
+  doc.text('📄 INFORMAÇÕES DO LAUDO', 17, yPos + 5)
+  
   doc.setFont('helvetica', 'normal')
-  doc.text(`Tipo: ${REPORT_TYPE_LABELS[report.reportType] || report.reportType}`, 15, yPos)
-  doc.text(`Nº Laudo: ${report.reportNumber}`, 15, yPos + 5)
-  doc.text(`Emissão: ${new Date(report.createdAt).toLocaleDateString('pt-BR')}`, 15, yPos + 10)
+  doc.setFontSize(8.5)
+  doc.text(`Tipo: ${REPORT_TYPE_LABELS[report.reportType] || report.reportType}`, 17, yPos + 11)
+  doc.text(`Nº Laudo: ${report.reportNumber}`, 17, yPos + 16)
+  
+  doc.text(`Emissão: ${new Date(report.createdAt).toLocaleDateString('pt-BR')}`, pageWidth/2 + 10, yPos + 11)
   if (report.expiresAt) {
-    doc.text(`Validade: ${new Date(report.expiresAt).toLocaleDateString('pt-BR')}`, 15, yPos + 15)
+    doc.text(`Validade: ${new Date(report.expiresAt).toLocaleDateString('pt-BR')}`, pageWidth/2 + 10, yPos + 16)
   }
 
-  yPos += 25
+  yPos += 28
 
   // Seção 1: DADOS DO APARELHO (esquerda) + SITUAÇÃO GERAL (direita)
-  doc.setFillColor(240, 240, 240)
-  doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+  doc.setFillColor(37, 99, 235)
+  doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
   doc.setFontSize(12)
   doc.setFont('helvetica', 'bold')
-  doc.setTextColor(0, 0, 0)
-  doc.text('DADOS DO APARELHO', 17, yPos + 5)
+  doc.text('📱 1. IDENTIFICAÇÃO DO DISPOSITIVO', 18, yPos + 7)
   yPos += 12
 
   // Tabela de identificação (lado esquerdo, 60% da largura)
@@ -334,11 +399,12 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(240, 240, 240)
-  doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+  doc.setFillColor(37, 99, 235)
+  doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('2. FOTOS DO DISPOSITIVO', 17, yPos + 5)
+  doc.text('📸 2. FOTOS DO DISPOSITIVO', 18, yPos + 7)
   yPos += 15
 
   // Carregar e adicionar fotos principais
@@ -415,11 +481,12 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(240, 240, 240)
-  doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+  doc.setFillColor(37, 99, 235)
+  doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('3. AVALIAÇÃO DE CONDIÇÃO', 17, yPos + 5)
+  doc.text('🔍 3. AVALIAÇÃO DE CONDIÇÃO FÍSICA', 18, yPos + 7)
   yPos += 15
 
   // Cards de condição em formato moderno
@@ -476,14 +543,15 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(240, 240, 240)
-  doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+  doc.setFillColor(37, 99, 235)
+  doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('4. SAÚDE DA BATERIA', 17, yPos + 5)
+  doc.text('🔋 4. SAÚDE DA BATERIA', 18, yPos + 7)
   yPos += 15
 
-  // Card de bateria
+  // Card de bateria com gauge visual
   const batteryPercent = report.batteryHealthPercent || 0
   const batteryColor: [number, number, number] = batteryPercent >= 80 ? [34, 197, 94] : 
                        batteryPercent >= 50 ? [234, 179, 8] : [239, 68, 68]
@@ -491,21 +559,83 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(249, 250, 251)
   doc.setDrawColor(229, 231, 235)
   doc.setLineWidth(0.5)
-  doc.roundedRect(15, yPos, pageWidth - 30, 18, 3, 3, 'FD')
+  doc.roundedRect(15, yPos, pageWidth - 30, 45, 3, 3, 'FD')
   
-  // Label
-  doc.setTextColor(75, 85, 99)
-  doc.setFontSize(9)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Saúde da Bateria', 20, yPos + 11)
+  // Gauge circular da esquerda
+  const gaugeX = 35
+  const gaugeY = yPos + 22
+  const gaugeRadius = 15
   
-  // Percentual com destaque
+  // Background circle (cinza claro)
+  doc.setFillColor(229, 231, 235)
+  doc.circle(gaugeX, gaugeY, gaugeRadius, 'F')
+  
+  // Progress circle (colorido baseado no percentual)
+  doc.setFillColor(...batteryColor)
+  const angle = (batteryPercent / 100) * 360
+  if (angle > 0) {
+    // Desenhar segmento circular
+    const startAngle = -90
+    const endAngle = startAngle + angle
+    
+    // Simular preenchimento com múltiplos arcos pequenos
+    for (let a = startAngle; a < endAngle; a += 5) {
+      const rad1 = (a * Math.PI) / 180
+      const rad2 = ((a + 5) * Math.PI) / 180
+      const x1 = gaugeX + Math.cos(rad1) * gaugeRadius * 0.6
+      const y1 = gaugeY + Math.sin(rad1) * gaugeRadius * 0.6
+      const x2 = gaugeX + Math.cos(rad1) * gaugeRadius
+      const y2 = gaugeY + Math.sin(rad1) * gaugeRadius
+      const x3 = gaugeX + Math.cos(rad2) * gaugeRadius
+      const y3 = gaugeY + Math.sin(rad2) * gaugeRadius
+      const x4 = gaugeX + Math.cos(rad2) * gaugeRadius * 0.6
+      const y4 = gaugeY + Math.sin(rad2) * gaugeRadius * 0.6
+      
+      doc.setFillColor(...batteryColor)
+      doc.circle(gaugeX + Math.cos(rad1) * gaugeRadius * 0.8, gaugeY + Math.sin(rad1) * gaugeRadius * 0.8, 3, 'F')
+    }
+  }
+  
+  // Center white circle
+  doc.setFillColor(255, 255, 255)
+  doc.circle(gaugeX, gaugeY, gaugeRadius * 0.6, 'F')
+  
+  // Percentual no centro do gauge
   doc.setTextColor(...batteryColor)
-  doc.setFontSize(16)
+  doc.setFontSize(14)
   doc.setFont('helvetica', 'bold')
-  doc.text(`${batteryPercent}%`, pageWidth - 20, yPos + 12, { align: 'right' })
+  doc.text(`${batteryPercent}%`, gaugeX, gaugeY + 2, { align: 'center' })
   
-  yPos += 23
+  // Informações à direita
+  const batteryInfoX = 65
+  doc.setTextColor(0, 0, 0)
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'bold')
+  doc.text('Saúde da Bateria', batteryInfoX, yPos + 12)
+  
+  // Status textual
+  doc.setFontSize(8)
+  doc.setFont('helvetica', 'normal')
+  doc.setTextColor(75, 85, 99)
+  let statusText = ''
+  if (batteryPercent >= 80) {
+    statusText = '✓ Excelente estado - Bateria saudável'
+  } else if (batteryPercent >= 50) {
+    statusText = '⚠ Boa condição - Considerar troca em breve'
+  } else {
+    statusText = '✗ Requer atenção - Recomendada substituição'
+  }
+  doc.text(statusText, batteryInfoX, yPos + 20)
+  
+  // Dados técnicos
+  doc.setTextColor(107, 114, 128)
+  doc.setFontSize(7.5)
+  if (report.batteryHealthPhoto) {
+    doc.text('✓ Verificado com screenshot das configurações', batteryInfoX, yPos + 28)
+  }
+  doc.text(`Ciclos estimados: ${Math.round((100 - batteryPercent) * 5)}`, batteryInfoX, yPos + 35)
+  
+  yPos += 50
 
   // Adicionar foto da saúde da bateria
   if (report.batteryHealthPhoto) {
@@ -536,14 +666,15 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setTextColor(0, 0, 0)
-  doc.setFillColor(240, 240, 240)
-  doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+  doc.setFillColor(37, 99, 235)
+  doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('5. TESTES DE FUNCIONALIDADE', 17, yPos + 5)
+  doc.text('⚙️ 5. TESTES DE FUNCIONALIDADE', 18, yPos + 7)
   yPos += 15
-
+  
+  // Definir testes funcionais primeiro
   const functionalTests = [
     { label: 'Touch Screen', value: report.touchWorking },
     { label: 'Face ID / Touch ID', value: report.faceIdWorking },
@@ -554,6 +685,40 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     { label: 'Vibração', value: report.vibrationWorking },
     { label: 'Botões Físicos', value: report.buttonsWorking }
   ]
+  
+  // Calcular pontuação
+  const totalTests = functionalTests.length
+  const passedTests = functionalTests.filter(t => t.value).length
+  const scorePercent = Math.round((passedTests / totalTests) * 100)
+  const scoreColor: [number, number, number] = scorePercent === 100 ? [34, 197, 94] :
+                                                scorePercent >= 75 ? [59, 130, 246] :
+                                                scorePercent >= 50 ? [234, 179, 8] : [239, 68, 68]
+  
+  // Card de pontuação
+  doc.setFillColor(249, 250, 251)
+  doc.setDrawColor(229, 231, 235)
+  doc.setLineWidth(0.5)
+  doc.roundedRect(15, yPos, pageWidth - 30, 15, 3, 3, 'FD')
+  
+  // Ícone e label
+  doc.setTextColor(75, 85, 99)
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'bold')
+  doc.text('📊 PONTUAÇÃO GERAL', 20, yPos + 7)
+  
+  // Score badge
+  doc.setFillColor(...scoreColor)
+  doc.roundedRect(pageWidth - 55, yPos + 2.5, 40, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(12)
+  doc.setFont('helvetica', 'bold')
+  doc.text(`${passedTests}/${totalTests}`, pageWidth - 35, yPos + 9, { align: 'center' })
+  
+  doc.setFontSize(7)
+  doc.setFont('helvetica', 'normal')
+  doc.text(`${scorePercent}% aprovado`, pageWidth - 35, yPos + 12.5, { align: 'center' })
+  
+  yPos += 20
 
   // Grid de testes - 3 colunas
   const itemWidth = (pageWidth - 40) / 3
@@ -599,10 +764,12 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(240, 240, 240)
-  doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+  doc.setFillColor(37, 99, 235)
+  doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
-  doc.text('6. STATUS E BLOQUEIOS', 17, yPos + 5)
+  doc.setFontSize(12)
+  doc.text('🔒 6. STATUS E BLOQUEIOS', 18, yPos + 7)
   yPos += 12
 
   const statusData = [
@@ -643,10 +810,12 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(240, 240, 240)
-  doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+  doc.setFillColor(37, 99, 235)
+  doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
-  doc.text('7. ACESSÓRIOS INCLUSOS', 17, yPos + 5)
+  doc.setFontSize(12)
+  doc.text('📦 7. ACESSÓRIOS INCLUSOS', 18, yPos + 7)
   yPos += 15
 
   const accessories = [
@@ -715,18 +884,147 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   yPos = boxY + boxHeight + 10
 
-  // Seção 8: Documentação e Evidências Fotográficas
+  // Seção NOVA: Avaliação Comercial
+  if (yPos > pageHeight - 70) {
+    doc.addPage()
+    yPos = 20
+  }
+
+  doc.setFillColor(37, 99, 235)
+  doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(12)
+  doc.text('💰 8. AVALIAÇÃO COMERCIAL', 18, yPos + 7)
+  yPos += 15
+
+  // Calcular valor estimado baseado em condições
+  let baseValue = 0
+  // Valor base estimado por modelo (simplificado)
+  if (report.deviceModel.includes('Pro Max')) baseValue = 6000
+  else if (report.deviceModel.includes('Pro')) baseValue = 5000
+  else if (report.deviceModel.includes('Plus')) baseValue = 4000
+  else baseValue = 3500
+
+  // Ajustes por condição física
+  let conditionMultiplier = 1.0
+  if (report.screenCondition === 'PERFEITO' && report.bodyCondition === 'PERFEITO') {
+    conditionMultiplier = 0.95
+  } else if (report.screenCondition.includes('LEVE') || report.bodyCondition.includes('LEVE')) {
+    conditionMultiplier = 0.85
+  } else if (report.screenCondition.includes('VISIVE') || report.bodyCondition.includes('VISIVE')) {
+    conditionMultiplier = 0.70
+  } else if (report.screenCondition.includes('TRINCA') || report.bodyCondition.includes('DANIFICADO')) {
+    conditionMultiplier = 0.50
+  }
+
+  // Ajuste por bateria
+  let batteryMultiplier = 1.0
+  if (report.batteryHealthPercent >= 85) batteryMultiplier = 1.0
+  else if (report.batteryHealthPercent >= 80) batteryMultiplier = 0.95
+  else if (report.batteryHealthPercent >= 70) batteryMultiplier = 0.85
+  else if (report.batteryHealthPercent >= 50) batteryMultiplier = 0.70
+  else batteryMultiplier = 0.55
+
+  // Ajuste por funcionalidade
+  let functionalityMultiplier = passedTests / totalTests
+
+  // Ajuste por acessórios
+  let accessoryBonus = 0
+  if (report.hasBox) accessoryBonus += 200
+  if (report.hasCharger) accessoryBonus += 100
+  if (report.hasCable) accessoryBonus += 50
+  if (report.hasInvoice) accessoryBonus += 150
+  if (report.hasEarphones) accessoryBonus += 100
+
+  // Valor final estimado
+  const estimatedValue = Math.round(
+    (baseValue * conditionMultiplier * batteryMultiplier * functionalityMultiplier) + accessoryBonus
+  )
+
+  // Card principal de valor
+  doc.setFillColor(240, 253, 244) // green-50
+  doc.setDrawColor(34, 197, 94)
+  doc.setLineWidth(1)
+  doc.roundedRect(15, yPos, pageWidth - 30, 35, 3, 3, 'FD')
+
+  // Título
+  doc.setTextColor(75, 85, 99)
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'normal')
+  doc.text('VALOR ESTIMADO DE MERCADO', 20, yPos + 8)
+
+  // Valor principal
+  doc.setTextColor(34, 197, 94)
+  doc.setFontSize(24)
+  doc.setFont('helvetica', 'bold')
+  doc.text(`R$ ${estimatedValue.toLocaleString('pt-BR')}`, 20, yPos + 22)
+
+  // Informações adicionais
+  doc.setTextColor(107, 114, 128)
+  doc.setFontSize(7.5)
+  doc.setFont('helvetica', 'normal')
+  doc.text(`✓ Baseado em ${totalVerificado} verificações`, 20, yPos + 28)
+  doc.text(`✓ Validade: ${report.expiresAt ? new Date(report.expiresAt).toLocaleDateString('pt-BR') : '90 dias'}`, 20, yPos + 32)
+
+  // Pontuação geral no canto direito
+  const totalScore = Math.round((conditionMultiplier + batteryMultiplier + functionalityMultiplier) / 3 * 100)
+  doc.setFillColor(37, 99, 235)
+  doc.circle(pageWidth - 30, yPos + 17, 12, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(14)
+  doc.setFont('helvetica', 'bold')
+  doc.text(`${totalScore}`, pageWidth - 30, yPos + 19, { align: 'center' })
+  doc.setFontSize(6)
+  doc.text('PONTOS', pageWidth - 30, yPos + 24, { align: 'center' })
+
+  yPos += 40
+
+  // Recomendações personalizadas
+  doc.setFillColor(249, 250, 251)
+  doc.setDrawColor(229, 231, 235)
+  doc.setLineWidth(0.5)
+  doc.roundedRect(15, yPos, pageWidth - 30, 22, 3, 3, 'FD')
+
+  doc.setTextColor(0, 0, 0)
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'bold')
+  doc.text('💡 RECOMENDAÇÕES', 20, yPos + 7)
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8)
+  doc.setTextColor(75, 85, 99)
+
+  // Lógica de recomendações
+  let recommendation = ''
+  if (totalScore >= 85 && report.icloudFree && !report.hasWaterDamage) {
+    recommendation = '✓ Aparelho em excelente estado - Pronto para venda imediata com preço premium'
+  } else if (totalScore >= 70 && report.icloudFree) {
+    recommendation = '⚠ Boa condição geral - Considere destacar acessórios inclusos para agregar valor'
+  } else if (totalScore >= 50) {
+    recommendation = '⚠ Requer atenção - Recomendado reparos antes da venda para melhor valorização'
+  } else {
+    recommendation = '✗ Estado crítico - Venda como peças ou investimento significativo em reparos'
+  }
+
+  const recLines = doc.splitTextToSize(recommendation, pageWidth - 50)
+  doc.text(recLines, 20, yPos + 14)
+
+  yPos += 27
+
+  // Seção 9: Documentação e Evidências Fotográficas
   if (report.imeiPhoto || report.boxPhoto || report.invoicePhoto || (report.accessoriesPhotos && report.accessoriesPhotos !== '[]')) {
     if (yPos > pageHeight - 80) {
       doc.addPage()
       yPos = 20
     }
 
-    doc.setFillColor(240, 240, 240)
-    doc.rect(15, yPos, pageWidth - 30, 8, 'F')
+    doc.setFillColor(37, 99, 235)
+    doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
+    doc.setTextColor(255, 255, 255)
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(12)
-    doc.text('8. DOCUMENTAÇÃO E EVIDÊNCIAS', 17, yPos + 5)
+    doc.text('📄 9. DOCUMENTAÇÃO E EVIDÊNCIAS', 18, yPos + 7)
     yPos += 15
 
     const docPhotoSize = 50
@@ -801,24 +1099,70 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos += 5
   }
 
-  // Footer com assinatura digital
-  if (yPos > pageHeight - 40) {
+  // Footer aprimorado com QR code e informações de verificação
+  if (yPos > pageHeight - 50) {
     doc.addPage()
     yPos = 20
   }
 
-  doc.setDrawColor(200, 200, 200)
+  // Linha separadora
+  doc.setDrawColor(229, 231, 235)
+  doc.setLineWidth(1)
   doc.line(15, yPos, pageWidth - 15, yPos)
-  yPos += 8
+  yPos += 10
 
+  // QR Code grande para verificação
+  const footerQrSize = 35
+  const footerQrX = 20
+  
+  // Fundo branco para QR
+  doc.setFillColor(255, 255, 255)
+  doc.roundedRect(footerQrX - 2, yPos - 2, footerQrSize + 4, footerQrSize + 4, 2, 2, 'F')
+  
+  const footerQrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, { width: 280, margin: 1 })
+  doc.addImage(footerQrCodeDataUrl, 'PNG', footerQrX, yPos, footerQrSize, footerQrSize)
+
+  // Informações de verificação ao lado do QR
+  const footerInfoX = footerQrX + footerQrSize + 10
+  
+  doc.setTextColor(0, 0, 0)
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'bold')
+  doc.text('Verificação de Autenticidade', footerInfoX, yPos + 5)
+  
   doc.setFontSize(8)
+  doc.setFont('helvetica', 'normal')
+  doc.setTextColor(75, 85, 99)
+  doc.text('Escaneie o QR Code para verificar este laudo online', footerInfoX, yPos + 11)
+  
+  doc.setFontSize(7.5)
+  doc.setTextColor(107, 114, 128)
+  doc.text(`URL: ${qrCodeUrl}`, footerInfoX, yPos + 17)
+  doc.text(`ID do Laudo: ${report.id}`, footerInfoX, yPos + 22)
+  doc.text(`Gerado em: ${new Date(report.createdAt).toLocaleString('pt-BR')}`, footerInfoX, yPos + 27)
+
+  // Informações de contato e suporte
+  yPos += footerQrSize + 8
+  
+  doc.setFillColor(249, 250, 251)
+  doc.roundedRect(15, yPos, pageWidth - 30, 15, 2, 2, 'F')
+  
+  doc.setTextColor(37, 99, 235)
+  doc.setFontSize(8)
+  doc.setFont('helvetica', 'bold')
+  doc.text('📧 Suporte:', 20, yPos + 5)
+  doc.setFont('helvetica', 'normal')
+  doc.text('contato@iphoneshopping.com.br', 38, yPos + 5)
+  
+  doc.setFont('helvetica', 'bold')
+  doc.text('🌐 Website:', 20, yPos + 10)
+  doc.setFont('helvetica', 'normal')
+  doc.text('www.iphoneshopping.com.br', 38, yPos + 10)
+  
+  doc.setTextColor(75, 85, 99)
+  doc.setFontSize(7)
   doc.setFont('helvetica', 'italic')
-  doc.setTextColor(100, 100, 100)
-  doc.text('Este laudo foi gerado digitalmente pela plataforma iPhoneShopping.', 17, yPos)
-  yPos += 4
-  doc.text(`Verificação de autenticidade: ${qrCodeUrl}`, 17, yPos)
-  yPos += 4
-  doc.text(`ID do Laudo: ${report.id}`, 17, yPos)
+  doc.text('Este laudo técnico certificado foi gerado pela plataforma iPhoneShopping', pageWidth / 2, yPos + 12, { align: 'center' })
 
   return doc.output('blob')
 }
