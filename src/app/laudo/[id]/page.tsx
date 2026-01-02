@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FileText, Download, Share2, CheckCircle, XCircle, Award, Calendar, Shield, Smartphone } from 'lucide-react'
+import { FileText, Download, Share2, CheckCircle, XCircle, Award, Calendar, Shield, Smartphone, ArrowLeft } from 'lucide-react'
 import { generateTechnicalReportPDF, downloadPDF } from '@/lib/pdf-generator'
 
 interface TechnicalReport {
@@ -158,36 +158,47 @@ export default function LaudoPage() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Actions */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <button 
-              onClick={handleDownloadPDF}
-              disabled={downloading}
-              className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <Link
+              href="/dashboard/anuncios"
+              className="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium transition-colors"
             >
-              <Download className="h-4 w-4" />
-              <span>{downloading ? 'Gerando PDF...' : 'Baixar PDF'}</span>
-            </button>
-            <button 
-              onClick={handleShareReport}
-              className="flex items-center space-x-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-            >
-              <Share2 className="h-4 w-4" />
-              <span>{copied ? '✓ Link Copiado!' : 'Compartilhar'}</span>
-            </button>
+              <ArrowLeft className="h-5 w-5" />
+              Voltar ao Dashboard
+            </Link>
           </div>
-          
-          {isExpired ? (
-            <div className="flex items-center text-red-600 text-sm">
-              <XCircle className="h-5 w-5 mr-2" />
-              Laudo Expirado
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <button 
+                onClick={handleDownloadPDF}
+                disabled={downloading}
+                className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="h-4 w-4" />
+                <span>{downloading ? 'Gerando PDF...' : 'Baixar PDF'}</span>
+              </button>
+              <button 
+                onClick={handleShareReport}
+                className="flex items-center space-x-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+              >
+                <Share2 className="h-4 w-4" />
+                <span>{copied ? '✓ Link Copiado!' : 'Compartilhar'}</span>
+              </button>
             </div>
-          ) : (
-            <div className="flex items-center text-green-600 text-sm">
-              <CheckCircle className="h-5 w-5 mr-2" />
-              Laudo Válido
-            </div>
-          )}
+            
+            {isExpired ? (
+              <div className="flex items-center text-red-600 text-sm">
+                <XCircle className="h-5 w-5 mr-2" />
+                Laudo Expirado
+              </div>
+            ) : (
+              <div className="flex items-center text-green-600 text-sm">
+                <CheckCircle className="h-5 w-5 mr-2" />
+                Laudo Válido
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Main Report */}

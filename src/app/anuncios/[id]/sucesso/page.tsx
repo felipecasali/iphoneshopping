@@ -11,7 +11,8 @@ import {
   MessageCircle,
   Instagram,
   Eye,
-  Smartphone
+  Smartphone,
+  FileText
 } from 'lucide-react'
 
 interface Listing {
@@ -266,6 +267,45 @@ export default function AnuncioCriadoSucessoPage() {
               <span>Acompanhe as visualizações no seu dashboard</span>
             </li>
           </ul>
+        </div>
+
+        {/* CTA: Criar Laudo Técnico */}
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-lg p-6 mb-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+              <FileText className="h-6 w-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-green-900 mb-2">
+                🔒 Destaque seu Anúncio com Laudo Técnico!
+              </h3>
+              <p className="text-green-800 mb-4">
+                Anúncios com laudo técnico verificado recebem <strong>até 3x mais visualizações</strong> e 
+                vendem mais rápido! Compradores confiam mais em produtos certificados.
+              </p>
+              <ul className="space-y-2 text-sm text-green-800 mb-4">
+                <li className="flex items-center">
+                  <span className="mr-2">✓</span>
+                  <span>Badge verde de "Laudo Verificado" no seu anúncio</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2">✓</span>
+                  <span>Relatório profissional em PDF para compartilhar</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2">✓</span>
+                  <span>Maior credibilidade e confiança dos compradores</span>
+                </li>
+              </ul>
+              <Link
+                href={`/laudo/criar?listingId=${params.id}`}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-md hover:shadow-lg"
+              >
+                <FileText className="h-5 w-5" />
+                Criar Laudo Técnico Agora
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* Actions */}

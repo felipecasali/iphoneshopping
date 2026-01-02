@@ -195,6 +195,7 @@ export default function MeusAnunciosPage() {
         {!loading && listings.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {listings.map((listing) => {
+              console.log('Listing:', listing.id, 'technicalReports:', listing.technicalReports)
               const images = typeof listing.images === 'string' 
                 ? JSON.parse(listing.images) 
                 : listing.images

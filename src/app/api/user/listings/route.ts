@@ -57,6 +57,7 @@ export async function GET() {
     })
 
     console.log('Listings found:', listings.length)
+    console.log('First listing technicalReports:', listings[0]?.technicalReports)
 
     // Converter images de JSON string para array
     const listingsWithImages = listings.map((listing: any) => ({
