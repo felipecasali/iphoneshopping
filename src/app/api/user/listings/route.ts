@@ -39,14 +39,18 @@ export async function GET() {
       include: {
         device: true,
         technicalReports: {
-          where: {
-            status: 'VALIDATED',
-          },
           select: {
             id: true,
             reportNumber: true,
             reportType: true,
             status: true,
+            createdAt: true,
+            deviceModel: true,
+            batteryHealthPercent: true,
+            estimatedPrice: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
           take: 1,
         },
@@ -58,6 +62,11 @@ export async function GET() {
 
     console.log('Listings found:', listings.length)
     console.log('First listing technicalReports:', listings[0]?.technicalReports)
+    console.log('All listings with reports:', listings.map(l => ({ 
+      id: l.id, 
+      model: l.device.model, 
+      reportsCount: l.technicalReports.length 
+    })))
 
     // Converter images de JSON string para array
     const listingsWithImages = listings.map((listing: any) => ({

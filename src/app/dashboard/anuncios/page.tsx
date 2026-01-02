@@ -27,6 +27,10 @@ interface Listing {
     reportNumber: string
     reportType: string
     status: string
+    createdAt: string
+    deviceModel: string
+    batteryHealthPercent: number
+    estimatedPrice: number
   }>
 }
 
@@ -279,23 +283,68 @@ export default function MeusAnunciosPage() {
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
-                      {listing.technicalReports && listing.technicalReports.length > 0 ? (
-                        <Link
-                          href={`/laudo/${listing.technicalReports[0].id}`}
-                          className="w-full flex items-center justify-center px-3 py-2 bg-primary-50 border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-100 text-sm font-medium transition-colors"
-                        >
-                          <FileText className="h-4 w-4 mr-1" />
-                          Visualizar Laudo
-                        </Link>
-                      ) : (
-                        <button
-                          onClick={() => handleCreateReport(listing)}
-                          className="w-full flex items-center justify-center px-3 py-2 bg-green-50 border border-green-300 text-green-700 rounded-lg hover:bg-green-100 text-sm font-medium transition-colors"
-                        >
-                          <FileText className="h-4 w-4 mr-1" />
-                          Criar Laudo Técnico
-                        </button>
-                      )}
+                      {(() => {
+                        const hasReport = listing.technicalReports && listing.technicalReports.length > 0
+                        const report = hasReport ? listing.technicalReports![0] : null
+                        console.log('Listing:', listing.id, 'hasReport:', hasReport, 'report:', report)
+                        
+                        return hasReport && report ? (
+                          <div className="relative group">
+                            <Link
+                              href={`/laudo/${report.id}`}
+                              className="w-full flex items-center justify-center px-3 py-2 bg-primary-50 border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-100 text-sm font-medium transition-colors"
+                            >
+                              <FileText className="h-4 w-4 mr-1" />
+                              Visualizar Laudo
+                            </Link>
+                            {/* Tooltip com informações do laudo */}
+                            <div className="absolute bottom-full left-0 right-0 mb-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                              <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-xl">
+                                <div className="space-y-1">
+                                  <div className="flex justify-between items-center border-b border-gray-700 pb-1 mb-1">
+                                    <span className="font-semibold">{report.reportNumber}</span>
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                                      report.reportType === 'PREMIUM' ? 'bg-purple-500' :
+                                      report.reportType === 'STANDARD' ? 'bg-blue-500' : 'bg-gray-500'
+                                    }`}>{report.reportType}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-400">Status:</span>
+                                    <span className={`font-medium ${
+                                      report.status === 'VALIDATED' ? 'text-green-400' :
+                                      report.status === 'PENDING' ? 'text-yellow-400' : 'text-gray-400'
+                                    }`}>{report.status}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-400">Bateria:</span>
+                                    <span className="font-medium">{report.batteryHealthPercent}%</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-400">Valor estimado:</span>
+                                    <span className="font-medium">R$ {report.estimatedPrice?.toLocaleString('pt-BR') || '-'}</span>
+                                  </div>
+                                  <div className="flex justify-between text-[10px] text-gray-500">
+                                    <span>Criado:</span>
+                                    <span>{new Date(report.createdAt).toLocaleDateString('pt-BR')}</span>
+                                  </div>
+                                </div>
+                                {/* Seta do tooltip */}
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1">
+                                  <div className="w-2 h-2 bg-gray-900 transform rotate-45"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handleCreateReport(listing)}
+                            className="w-full flex items-center justify-center px-3 py-2 bg-green-50 border border-green-300 text-green-700 rounded-lg hover:bg-green-100 text-sm font-medium transition-colors"
+                          >
+                            <FileText className="h-4 w-4 mr-1" />
+                            Criar Laudo Técnico
+                          </button>
+                        )
+                      })()}
                     </div>
                   </div>
                 </div>
