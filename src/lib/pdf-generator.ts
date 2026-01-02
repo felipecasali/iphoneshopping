@@ -204,9 +204,9 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   }
 
   // Box de PARECER FINAL (ao lado do QR Code no topo) - Estilo selo profissional
-  const parecerBoxX = pageWidth - 100
+  const parecerBoxX = pageWidth - 110
   const parecerBoxY = 40
-  const parecerBoxWidth = 60
+  const parecerBoxWidth = 55
   const parecerBoxHeight = 34
   
   // Fundo do box com cor baseada no parecer (com transparência simulada)
@@ -254,7 +254,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(0, 0, 0)
   doc.setFontSize(9)
   doc.setFont('helvetica', 'bold')
-  doc.text('📄 INFORMAÇÕES DO LAUDO', 17, yPos + 5)
+  doc.text('INFORMACOES DO LAUDO', 17, yPos + 5)
   
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(8.5)
@@ -274,7 +274,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(12)
   doc.setFont('helvetica', 'bold')
-  doc.text('📱 1. IDENTIFICAÇÃO DO DISPOSITIVO', 18, yPos + 7)
+  doc.text('1. IDENTIFICACAO DO DISPOSITIVO', 18, yPos + 7)
   yPos += 12
 
   // Tabela de identificação (lado esquerdo, 60% da largura)
@@ -319,35 +319,9 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   // Gráfico de pizza simplificado
   const chartCenterX = situacaoBoxX + situacaoBoxWidth / 2
   const chartCenterY = situacaoBoxY + situacaoBoxHeight / 2 + 2
-  const chartRadius = 18
   
-  // Ícone do dispositivo com cor baseada na avaliação (acima do gráfico)
-  const deviceIconY = chartCenterY - chartRadius - 20
-  const deviceColor: [number, number, number] = totalNaoConforme === 0 ? [34, 197, 94] : // Verde - tudo conforme
-                                                  totalNaoConforme <= 2 ? [234, 179, 8] : // Amarelo - poucos problemas
-                                                  [239, 68, 68] // Vermelho - muitos problemas
-  
-  // Desenhar dispositivo (iPhone ou iPad)
-  const isIPad = report.deviceType === 'IPAD'
-  const deviceWidth = isIPad ? 20 : 12
-  const deviceHeight = isIPad ? 16 : 20
-  const deviceX = chartCenterX - deviceWidth/2
-  
-  doc.setFillColor(...deviceColor)
-  doc.roundedRect(deviceX, deviceIconY, deviceWidth, deviceHeight, 2, 2, 'F')
-  
-  // Tela (parte clara)
-  doc.setFillColor(255, 255, 255)
-  doc.roundedRect(deviceX + 1, deviceIconY + 1, deviceWidth - 2, deviceHeight - 2, 1, 1, 'F')
-  
-  // Botão home (se iPhone)
-  if (!isIPad) {
-    doc.setFillColor(...deviceColor)
-    doc.circle(deviceX + deviceWidth/2, deviceIconY + deviceHeight - 2, 1, 'F')
-  }
-  
-  // Informações dentro do quadro (sem gráfico circular)
-  const infoY = deviceIconY + deviceHeight + 8
+  // Informações dentro do quadro
+  const infoY = chartCenterY - 15
   doc.setFontSize(8)
   
   // Total de itens
@@ -404,7 +378,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('📸 2. FOTOS DO DISPOSITIVO', 18, yPos + 7)
+  doc.text('2. FOTOS DO DISPOSITIVO', 18, yPos + 7)
   yPos += 15
 
   // Carregar e adicionar fotos principais
@@ -486,7 +460,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('🔍 3. AVALIAÇÃO DE CONDIÇÃO FÍSICA', 18, yPos + 7)
+  doc.text('3. AVALIACAO DE CONDICAO FISICA', 18, yPos + 7)
   yPos += 15
 
   // Cards de condição em formato moderno
@@ -548,7 +522,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('🔋 4. SAÚDE DA BATERIA', 18, yPos + 7)
+  doc.text('4. SAUDE DA BATERIA', 18, yPos + 7)
   yPos += 15
 
   // Card de bateria com gauge visual
@@ -671,7 +645,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('⚙️ 5. TESTES DE FUNCIONALIDADE', 18, yPos + 7)
+  doc.text('5. TESTES DE FUNCIONALIDADE', 18, yPos + 7)
   yPos += 15
   
   // Definir testes funcionais primeiro
@@ -704,7 +678,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(75, 85, 99)
   doc.setFontSize(10)
   doc.setFont('helvetica', 'bold')
-  doc.text('📊 PONTUAÇÃO GERAL', 20, yPos + 7)
+  doc.text('PONTUACAO GERAL', 20, yPos + 7)
   
   // Score badge
   doc.setFillColor(...scoreColor)
@@ -769,7 +743,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('🔒 6. STATUS E BLOQUEIOS', 18, yPos + 7)
+  doc.text('6. STATUS E BLOQUEIOS', 18, yPos + 7)
   yPos += 12
 
   const statusData = [
@@ -815,7 +789,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('📦 7. ACESSÓRIOS INCLUSOS', 18, yPos + 7)
+  doc.text('7. ACESSORIOS INCLUSOS', 18, yPos + 7)
   yPos += 15
 
   const accessories = [
@@ -895,7 +869,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(12)
-  doc.text('💰 8. AVALIAÇÃO COMERCIAL', 18, yPos + 7)
+  doc.text('8. AVALIACAO COMERCIAL', 18, yPos + 7)
   yPos += 15
 
   // Calcular valor estimado baseado em condições
@@ -989,7 +963,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(0, 0, 0)
   doc.setFontSize(9)
   doc.setFont('helvetica', 'bold')
-  doc.text('💡 RECOMENDAÇÕES', 20, yPos + 7)
+  doc.text('RECOMENDACOES', 20, yPos + 7)
 
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(8)
@@ -1024,7 +998,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     doc.setTextColor(255, 255, 255)
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(12)
-    doc.text('📄 9. DOCUMENTAÇÃO E EVIDÊNCIAS', 18, yPos + 7)
+    doc.text('9. DOCUMENTACAO E EVIDENCIAS', 18, yPos + 7)
     yPos += 15
 
     const docPhotoSize = 50
@@ -1150,12 +1124,12 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setTextColor(37, 99, 235)
   doc.setFontSize(8)
   doc.setFont('helvetica', 'bold')
-  doc.text('📧 Suporte:', 20, yPos + 5)
+  doc.text('Suporte:', 20, yPos + 5)
   doc.setFont('helvetica', 'normal')
   doc.text('contato@iphoneshopping.com.br', 38, yPos + 5)
   
   doc.setFont('helvetica', 'bold')
-  doc.text('🌐 Website:', 20, yPos + 10)
+  doc.text('Website:', 20, yPos + 10)
   doc.setFont('helvetica', 'normal')
   doc.text('www.iphoneshopping.com.br', 38, yPos + 10)
   
