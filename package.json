@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test:pdf": "tsx scripts/test-pdf-generation.ts",
+    "test:pdf:all": "tsx scripts/test-pdf-generation.ts todos"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

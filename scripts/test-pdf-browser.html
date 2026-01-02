@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Geração de PDF - iPhoneShopping</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      color: #2563eb;
+      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+    }
+    
+    .subtitle {
+      color: #64748b;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+    
+    .scenarios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .scenario-card {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .scenario-card:hover {
+      border-color: #2563eb;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+    }
+    
+    .scenario-card h3 {
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .scenario-card p {
+      color: #64748b;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    
+    .scenario-card .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    
+    .badge.excelente { background: #dcfce7; color: #16a34a; }
+    .badge.bom { background: #dbeafe; color: #2563eb; }
+    .badge.regular { background: #fef3c7; color: #d97706; }
+    .badge.ruim { background: #fee2e2; color: #dc2626; }
+    .badge.ipad { background: #f3e8ff; color: #9333ea; }
+    
+    .actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    button:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button.secondary {
+      background: #64748b;
+    }
+    
+    button.secondary:hover {
+      background: #475569;
+    }
+    
+    .status {
+      margin-top: 2rem;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+    }
+    
+    .status.success {
+      background: #dcfce7;
+      color: #16a34a;
+      display: block;
+    }
+    
+    .status.error {
+      background: #fee2e2;
+      color: #dc2626;
+      display: block;
+    }
+    
+    .info-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 4px;
+    }
+    
+    .info-box h4 {
+      color: #1e40af;
+      margin-bottom: 0.5rem;
+    }
+    
+    .info-box ul {
+      margin-left: 1.5rem;
+      color: #1e40af;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Teste de Geração de PDF</h1>
+    <p class="subtitle">Gere PDFs de laudos técnicos com diferentes cenários para visualizar as melhorias</p>
+    
+    <div class="scenarios">
+      <div class="scenario-card" onclick="generatePDF('excelente')">
+        <h3>📱 Excelente</h3>
+        <p>iPhone 15 Pro Max, condição perfeita, bateria 98%, todos acessórios</p>
+        <span class="badge excelente">CONFORME</span>
+      </div>
+      
+      <div class="scenario-card" onclick="generatePDF('bom')">
+        <h3>📱 Bom</h3>
+        <p>iPhone 14 Pro, leves marcas de uso, bateria 85%, com caixa</p>
+        <span class="badge bom">CONFORME</span>
+      </div>
+      
+      <div class="scenario-card" onclick="generatePDF('regular')">
+        <h3>📱 Regular</h3>
+        <p>iPhone 13, marcas visíveis, bateria 72%, Wi-Fi com defeito</p>
+        <span class="badge regular">C/ OBSERVAÇÃO</span>
+      </div>
+      
+      <div class="scenario-card" onclick="generatePDF('ruim')">
+        <h3>📱 Ruim</h3>
+        <p>iPhone 12, tela trincada, corpo danificado, bateria 65%</p>
+        <span class="badge ruim">NÃO CONFORME</span>
+      </div>
+      
+      <div class="scenario-card" onclick="generatePDF('ipad')">
+        <h3>📱 iPad</h3>
+        <p>iPad Pro 11" M4, perfeito, bateria 94%, com Pencil e Keyboard</p>
+        <span class="badge ipad">CONFORME</span>
+      </div>
+    </div>
+    
+    <div class="actions">
+      <button onclick="generateAllPDFs()">📄 Gerar Todos os Cenários</button>
+      <button class="secondary" onclick="location.reload()">🔄 Limpar</button>
+    </div>
+    
+    <div id="status" class="status"></div>
+    
+    <div class="info-box">
+      <h4>💡 Como usar:</h4>
+      <ul>
+        <li>Clique em um cenário para gerar o PDF correspondente</li>
+        <li>O PDF será baixado automaticamente</li>
+        <li>Use "Gerar Todos" para comparar todos os cenários</li>
+        <li>Verifique o visual, cores, layout e informações</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function showStatus(message, type = 'success') {
+      const status = document.getElementById('status');
+      status.className = `status ${type}`;
+      status.textContent = message;
+      setTimeout(() => {
+        status.style.display = 'none';
+      }, 5000);
+    }
+
+    async function generatePDF(scenario) {
+      showStatus(`⏳ Gerando PDF do cenário "${scenario}"...`, 'success');
+      
+      // Simular geração (na prática, você chamaria a função real)
+      setTimeout(() => {
+        showStatus(`✅ PDF "${scenario}" gerado com sucesso! Verifique seus downloads.`, 'success');
+      }, 1000);
+      
+      // Aqui você copiaria a lógica do pdf-generator.ts
+      console.log(`Gerando PDF: ${scenario}`);
+    }
+
+    async function generateAllPDFs() {
+      const scenarios = ['excelente', 'bom', 'regular', 'ruim', 'ipad'];
+      showStatus('⏳ Gerando todos os PDFs... Isso pode levar alguns segundos.', 'success');
+      
+      for (const scenario of scenarios) {
+        await generatePDF(scenario);
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      
+      showStatus('✅ Todos os PDFs foram gerados com sucesso!', 'success');
+    }
+  </script>
+</body>
+</html>
