@@ -129,6 +129,12 @@ model Listing {
   views       Int      @default(0)
   featured    Boolean  @default(false)
   
+  // Moderação administrativa
+  moderationStatus String @default("APPROVED") // "PENDING", "APPROVED", "REJECTED"
+  rejectionReason  String? // Motivo da rejeição se moderationStatus = "REJECTED"
+  moderatedAt      DateTime? // Data da última moderação
+  moderatedBy      String?   // ID do admin que moderou
+  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

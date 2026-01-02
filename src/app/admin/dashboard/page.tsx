@@ -137,7 +137,14 @@ export default function AdminDashboard() {
                 className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
               >
                 <Users className="h-4 w-4" />
-                Gerenciar Usuários
+                Usuários
+              </a>
+              <a
+                href="/admin/listings"
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              >
+                <ClipboardList className="h-4 w-4" />
+                Anúncios
               </a>
               <div className="flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-lg">
                 <Activity className="h-5 w-5" />
