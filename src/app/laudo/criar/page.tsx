@@ -82,6 +82,8 @@ interface Evaluation {
   hasBox: boolean
   hasCharger: boolean
   hasCable: boolean
+  hasPencil?: boolean
+  hasKeyboard?: boolean
   hasInvoice: boolean
 }
 
@@ -117,6 +119,8 @@ interface ReportData {
   hasBox: boolean
   hasCharger: boolean
   hasCable: boolean
+  hasPencil?: boolean
+  hasKeyboard?: boolean
   hasInvoice: boolean
 }
 
@@ -160,6 +164,8 @@ function CriarLaudoContent() {
     hasBox: false,
     hasCharger: false,
     hasCable: false,
+    hasPencil: false,
+    hasKeyboard: false,
     hasInvoice: false
   })
 
@@ -218,6 +224,15 @@ function CriarLaudoContent() {
           hasCable: data.evaluation.hasCable ?? prev.hasCable,
           hasInvoice: data.evaluation.hasInvoice ?? prev.hasInvoice,
         }))
+        
+        // Se for iPad, adicionar acessórios específicos
+        if (data.evaluation.deviceType === 'IPAD') {
+          setReportData(prev => ({
+            ...prev,
+            hasPencil: data.evaluation.hasPencil ?? prev.hasPencil,
+            hasKeyboard: data.evaluation.hasKeyboard ?? prev.hasKeyboard,
+          }))
+        }
       }
     } catch (error) {
       console.error('Erro ao carregar avaliação:', error)

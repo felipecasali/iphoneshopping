@@ -448,7 +448,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     
     if (cond.value === 'PERFEITO') valueColor = [34, 197, 94]
     else if (cond.value.includes('LEVE')) valueColor = [59, 130, 246]
-    else if (cond.value.includes('TRINCA') || cond.value.includes('QUEBRADO') || cond.value.includes('DANIFICADO')) valueColor = [239, 68, 68]
+    else if (cond.value.includes('TRINCA') || cond.value.includes('QUEBRADO') || cond.value.includes('DANIFICADO') || cond.value.includes('DEFEITO')) valueColor = [239, 68, 68]
     else if (cond.value.includes('VISIVE') || cond.value.includes('AMASSADO')) valueColor = [234, 179, 8]
     
     doc.setTextColor(...valueColor)
