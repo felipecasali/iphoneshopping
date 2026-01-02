@@ -232,8 +232,8 @@ export default function AnunciosPage() {
                     )}
                     <div className="absolute top-2 left-2 flex flex-col gap-2">
                       {listing.technicalReports && listing.technicalReports.length > 0 && (
-                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded flex items-center gap-1 font-semibold shadow-lg">
-                          <CheckCircle className="h-3 w-3" />
+                        <span className="bg-amber-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center gap-1 font-bold shadow-lg">
+                          <CheckCircle className="h-3.5 w-3.5" />
                           Laudo Verificado
                         </span>
                       )}
@@ -250,13 +250,6 @@ export default function AnunciosPage() {
                         )}
                       </div>
                     </div>
-                    {listing.technicalReports && listing.technicalReports.length > 0 && (
-                      <div className="absolute bottom-2 right-2">
-                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded font-semibold shadow-md">
-                          🔒 Laudo Técnico
-                        </span>
-                      </div>
-                    )}
                   </div>
 
                   {/* Content */}
