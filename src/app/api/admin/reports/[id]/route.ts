@@ -60,7 +60,16 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const currentUser = await requireAdmin()
+    await requireAdmin()
+    const currentUser = await getCurrentUser()
+    
+    if (!currentUser) {
+      return NextResponse.json(
+        { error: 'Usuário não encontrado' },
+        { status: 401 }
+      )
+    }
+    
     const body = await request.json()
     const { action, reason } = body
 
