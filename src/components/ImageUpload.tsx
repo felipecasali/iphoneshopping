@@ -115,9 +115,9 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
         </CldUploadWidget>
       )}
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm">
-        <p className="font-medium text-blue-900 mb-1">💡 Dicas para boas fotos:</p>
-        <ul className="text-blue-800 space-y-1 text-xs">
+      <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-4 text-sm">
+        <p className="font-medium text-cyan-900 mb-1">💡 Dicas para boas fotos:</p>
+        <ul className="text-cyan-800 space-y-1 text-xs">
           <li>• Use boa iluminação natural</li>
           <li>• Mostre diferentes ângulos do aparelho</li>
           <li>• Inclua foto da tela ligada</li>

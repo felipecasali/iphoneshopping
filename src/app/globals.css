@@ -6,6 +6,15 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
+  
+  /* Novo branding - iPhoneShopping */
+  --primary: #1F3A5F; /* Azul profundo */
+  --primary-dark: #0B3C5D;
+  --secondary: #4A4A4A; /* Cinza grafite */
+  --secondary-dark: #2E2E2E;
+  --accent-green: #2ECC71; /* Verde técnico */
+  --accent-cyan: #00B4D8; /* Ciano tecnológico */
+  --background: #F7F9FB; /* Off-white */
 }
 
 body {

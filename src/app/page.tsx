@@ -198,9 +198,9 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-blue-500">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Award className="h-8 w-8 text-blue-600" />
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-cyan-500">
+              <div className="bg-cyan-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Award className="h-8 w-8 text-cyan-600" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-center">Qualidade Premium</h3>
               <p className="text-gray-600 text-center">
@@ -306,8 +306,8 @@ export default function Home() {
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition">
                 <div className="flex items-start gap-4">
-                  <div className="bg-blue-100 p-3 rounded-lg flex-shrink-0">
-                    <CheckCircle className="h-6 w-6 text-blue-600" />
+                  <div className="bg-cyan-100 p-3 rounded-lg flex-shrink-0">
+                    <CheckCircle className="h-6 w-6 text-cyan-600" />
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-2">Mais Credibilidade</h4>

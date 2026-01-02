@@ -304,8 +304,8 @@ export default function CriarAnuncioPage() {
                     </div>
                   )}
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <p className="text-sm text-blue-900">
+                  <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-4">
+                    <p className="text-sm text-cyan-900">
                       <strong>🔒 Sua privacidade é importante!</strong><br />
                       Mostramos apenas a cidade/estado no anúncio. Nunca compartilhe seu endereço completo ou CEP publicamente.
                     </p>

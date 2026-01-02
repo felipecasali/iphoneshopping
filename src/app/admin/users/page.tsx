@@ -121,7 +121,7 @@ export default function AdminUsersPage() {
   const RoleBadge = ({ role }: { role: string }) => {
     const colors: any = {
       ADMIN: 'bg-purple-100 text-purple-700',
-      MODERATOR: 'bg-blue-100 text-blue-700',
+      MODERATOR: 'bg-cyan-100 text-cyan-700',
       USER: 'bg-gray-100 text-gray-700'
     }
     return (

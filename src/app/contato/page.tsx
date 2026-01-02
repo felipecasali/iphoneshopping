@@ -184,8 +184,8 @@ export default function ContatoPage() {
             {/* Card de FAQ */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
+                  <MessageSquare className="w-6 h-6 text-cyan-600" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Central de Ajuda</h3>
@@ -196,7 +196,7 @@ export default function ContatoPage() {
                 Antes de entrar em contato, confira nossa central de ajuda. 
                 Você pode encontrar a resposta para sua dúvida mais rápido!
               </p>
-              <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+              <button className="text-primary-600 hover:text-primary-700 font-medium text-sm">
                 Ver Perguntas Frequentes →
               </button>
             </div>

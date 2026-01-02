@@ -152,7 +152,7 @@ export default function MensagensPage() {
                   key={conversation.id}
                   href={`/dashboard/mensagens/${conversation.id}`}
                   className={`block p-4 hover:bg-gray-50 transition ${
-                    isUnread ? 'bg-blue-50/50' : ''
+                    isUnread ? 'bg-cyan-50/50' : ''
                   }`}
                 >
                   <div className="flex gap-4">

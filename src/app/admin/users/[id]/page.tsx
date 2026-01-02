@@ -156,7 +156,7 @@ export default function UserDetailPage() {
   const RoleBadge = ({ role }: { role: string }) => {
     const colors: any = {
       ADMIN: 'bg-purple-100 text-purple-700',
-      MODERATOR: 'bg-blue-100 text-blue-700',
+      MODERATOR: 'bg-cyan-100 text-cyan-700',
       USER: 'bg-gray-100 text-gray-700'
     }
     return (
@@ -340,7 +340,7 @@ export default function UserDetailPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <ShoppingBag className="h-5 w-5 text-blue-600" />
+                    <ShoppingBag className="h-5 w-5 text-cyan-600" />
                     <span className="text-gray-600">Anúncios</span>
                   </div>
                   <span className="font-semibold text-gray-900">{user._count.listings}</span>

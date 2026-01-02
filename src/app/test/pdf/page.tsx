@@ -105,7 +105,7 @@ export default function TestPDFPage() {
                 disabled={loading === scenario.id}
                 className={`
                   bg-gray-50 border-2 rounded-xl p-6 text-left transition-all
-                  hover:border-blue-500 hover:shadow-lg hover:-translate-y-1
+                  hover:border-primary-500 hover:shadow-lg hover:-translate-y-1
                   disabled:opacity-50 disabled:cursor-not-allowed
                   ${loading === scenario.id ? 'animate-pulse' : ''}
                 `}
@@ -119,7 +119,7 @@ export default function TestPDFPage() {
                 <span className={`
                   inline-block px-3 py-1 rounded-full text-xs font-semibold
                   ${scenario.color === 'green' ? 'bg-green-100 text-green-700' : ''}
-                  ${scenario.color === 'blue' ? 'bg-blue-100 text-blue-700' : ''}
+                  ${scenario.color === 'blue' ? 'bg-cyan-100 text-cyan-700' : ''}
                   ${scenario.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''}
                   ${scenario.color === 'red' ? 'bg-red-100 text-red-700' : ''}
                   ${scenario.color === 'purple' ? 'bg-purple-100 text-purple-700' : ''}
@@ -135,8 +135,8 @@ export default function TestPDFPage() {
               onClick={handleGenerateAll}
               disabled={loading !== null}
               className="
-                bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold
-                hover:bg-blue-700 transition-all hover:shadow-lg
+                bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold
+                hover:bg-primary-700 transition-all hover:shadow-lg
                 disabled:opacity-50 disabled:cursor-not-allowed
               "
             >
@@ -163,9 +163,9 @@ export default function TestPDFPage() {
             </div>
           )}
 
-          <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
-            <h4 className="font-bold text-blue-900 mb-3">💡 Como usar:</h4>
-            <ul className="space-y-2 text-blue-800">
+          <div className="bg-cyan-50 border-l-4 border-cyan-500 p-6 rounded-r-lg">
+            <h4 className="font-bold text-cyan-900 mb-3">💡 Como usar:</h4>
+            <ul className="space-y-2 text-cyan-800">
               <li>• Clique em um cenário para gerar o PDF correspondente</li>
               <li>• O PDF será baixado automaticamente no seu navegador</li>
               <li>• Use "Gerar Todos" para comparar todos os cenários de uma vez</li>

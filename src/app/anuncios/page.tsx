@@ -220,7 +220,7 @@ export default function AnunciosPage() {
                         </span>
                       )}
                       {listing.acceptsTrade && (
-                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                        <span className="bg-cyan-500 text-white text-xs px-2 py-1 rounded">
                           Aceita troca
                         </span>
                       )}

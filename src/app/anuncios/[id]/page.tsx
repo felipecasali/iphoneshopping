@@ -294,7 +294,7 @@ export default function AnuncioDetalhesPage() {
                   <p className="text-sm text-green-600 mt-1">Preço negociável</p>
                 )}
                 {listing.acceptsTrade && (
-                  <p className="text-sm text-blue-600">Aceita trocas</p>
+                  <p className="text-sm text-cyan-600">Aceita trocas</p>
                 )}
               </div>
 

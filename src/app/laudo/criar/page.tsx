@@ -509,7 +509,7 @@ function CriarLaudoContent() {
                   >
                     {type.popular && (
                       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                        <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-bold">
+                        <span className="bg-primary-600 text-white px-4 py-1 rounded-full text-sm font-bold">
                           Mais Popular
                         </span>
                       </div>
@@ -526,12 +526,12 @@ function CriarLaudoContent() {
                     <div className="p-8">
                       <div className={`inline-flex p-3 rounded-lg mb-4 ${
                         type.color === 'gray' ? 'bg-gray-100' :
-                        type.color === 'blue' ? 'bg-blue-100' :
+                        type.color === 'blue' ? 'bg-cyan-100' :
                         'bg-purple-100'
                       }`}>
                         <Icon className={`h-8 w-8 ${
                           type.color === 'gray' ? 'text-gray-600' :
-                          type.color === 'blue' ? 'text-blue-600' :
+                          type.color === 'blue' ? 'text-cyan-600' :
                           'text-purple-600'
                         }`} />
                       </div>
@@ -570,7 +570,7 @@ function CriarLaudoContent() {
                           <li key={idx} className="flex items-start">
                             <CheckCircle className={`h-5 w-5 mr-2 flex-shrink-0 ${
                               type.color === 'gray' ? 'text-gray-500' :
-                              type.color === 'blue' ? 'text-blue-600' :
+                              type.color === 'blue' ? 'text-cyan-600' :
                               'text-purple-600'
                             }`} />
                             <span className={`text-sm ${
@@ -590,7 +590,7 @@ function CriarLaudoContent() {
                             : type.color === 'gray'
                             ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             : type.color === 'blue'
-                            ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                            ? 'bg-cyan-100 text-cyan-700 hover:bg-cyan-200'
                             : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
                         }`}
                       >
@@ -720,10 +720,10 @@ function CriarLaudoContent() {
 
             {/* Banner informativo sobre dados pré-preenchidos */}
             {evaluation && (evaluation.batteryHealth || evaluation.screenCondition || evaluation.bodyCondition) && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-4 mb-6">
                 <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
-                  <div className="text-sm text-blue-800">
+                  <CheckCircle className="h-5 w-5 text-cyan-600 mt-0.5 mr-2 flex-shrink-0" />
+                  <div className="text-sm text-cyan-800">
                     <p className="font-medium">Dados da sua avaliação carregados</p>
                     <p className="mt-1">Alguns campos foram pré-preenchidos com as informações da sua avaliação. Você pode revisar e ajustar conforme necessário.</p>
                   </div>
@@ -970,10 +970,10 @@ function CriarLaudoContent() {
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="mt-6 p-4 bg-cyan-50 border border-cyan-200 rounded-lg">
                 <div className="flex items-start">
-                  <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
-                  <div className="text-sm text-blue-800">
+                  <AlertCircle className="h-5 w-5 text-cyan-600 mt-0.5 mr-2 flex-shrink-0" />
+                  <div className="text-sm text-cyan-800">
                     <p className="font-medium mb-1">Importante:</p>
                     <p>Testes funcionais incorretos podem invalidar o laudo. Seja honesto na avaliação.</p>
                   </div>
@@ -1015,10 +1015,10 @@ function CriarLaudoContent() {
 
             {/* Banner informativo sobre acessórios pré-preenchidos */}
             {evaluation && (evaluation.hasBox || evaluation.hasCharger || evaluation.hasCable || evaluation.hasInvoice) && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-4 mb-6">
                 <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
-                  <div className="text-sm text-blue-800">
+                  <CheckCircle className="h-5 w-5 text-cyan-600 mt-0.5 mr-2 flex-shrink-0" />
+                  <div className="text-sm text-cyan-800">
                     <p className="font-medium">Acessórios da avaliação carregados</p>
                     <p className="mt-1">Os acessórios que você informou na avaliação foram marcados automaticamente. Revise e ajuste se necessário.</p>
                   </div>
@@ -1151,7 +1151,7 @@ function CriarLaudoContent() {
               <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
                   {selectedType === 'STANDARD' ? (
-                    <Sparkles className="h-10 w-10 text-blue-600" />
+                    <Sparkles className="h-10 w-10 text-cyan-600" />
                   ) : (
                     <Crown className="h-10 w-10 text-purple-600" />
                   )}

@@ -165,7 +165,7 @@ export default function AdminReportsPage() {
   const ReportTypeBadge = ({ type }: { type: string }) => {
     const config: any = {
       BASIC: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Básico' },
-      STANDARD: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Padrão' },
+      STANDARD: { bg: 'bg-cyan-100', text: 'text-cyan-700', label: 'Padrão' },
       PREMIUM: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Premium' }
     }
     const c = config[type] || config.BASIC

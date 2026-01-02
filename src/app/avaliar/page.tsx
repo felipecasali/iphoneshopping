@@ -360,11 +360,11 @@ export default function AvaliarPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Saúde da Bateria: {evaluation.batteryHealth}%
                   </label>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
-                    <p className="text-sm text-blue-800">
+                  <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-3 mb-3">
+                    <p className="text-sm text-cyan-800">
                       <strong>📱 Como verificar:</strong>
                     </p>
-                    <p className="text-xs text-blue-700 mt-1">
+                    <p className="text-xs text-cyan-700 mt-1">
                       iPhone: Ajustes → Bateria → Saúde e Carregamento da Bateria → Capacidade Máxima
                     </p>
                   </div>

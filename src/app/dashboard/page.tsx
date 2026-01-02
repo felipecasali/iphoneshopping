@@ -161,8 +161,8 @@ export default function DashboardPage() {
 
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="bg-blue-100 p-3 rounded-lg">
-                <Eye className="h-6 w-6 text-blue-600" />
+              <div className="bg-cyan-100 p-3 rounded-lg">
+                <Eye className="h-6 w-6 text-cyan-600" />
               </div>
               <span className="text-sm text-gray-500">Total</span>
             </div>

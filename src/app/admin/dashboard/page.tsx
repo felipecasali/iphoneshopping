@@ -208,8 +208,8 @@ export default function AdminDashboard() {
             Últimos 30 Dias
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
-              <p className="text-blue-100 text-sm mb-2">Novos Usuários</p>
+            <div className="bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl shadow-lg p-6 text-white">
+              <p className="text-primary-100 text-sm mb-2">Novos Usuários</p>
               <p className="text-4xl font-bold">{stats.thisMonth.newUsers}</p>
             </div>
             <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
@@ -262,7 +262,7 @@ export default function AdminDashboard() {
           {/* Usuários Recentes */}
           <div className="bg-white rounded-xl shadow-lg p-6">
             <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Users className="h-5 w-5 text-blue-600" />
+              <Users className="h-5 w-5 text-cyan-600" />
               Usuários Recentes
             </h3>
             <div className="space-y-3">
