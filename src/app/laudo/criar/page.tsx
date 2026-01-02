@@ -293,6 +293,7 @@ function CriarLaudoContent() {
       screenCondition: mapScreenCondition(evaluationData.screenCondition),
       bodyCondition: mapBodyCondition(evaluationData.bodyCondition),
       icloudFree: evaluationData.icloudFree ?? prev.icloudFree,
+      carrierUnlocked: evaluationData.icloudFree ?? prev.carrierUnlocked,
       hasWaterDamage: evaluationData.hasWaterDamage ?? prev.hasWaterDamage,
       hasBox: evaluationData.hasBox ?? prev.hasBox,
       hasCharger: evaluationData.hasCharger ?? prev.hasCharger,

@@ -827,14 +827,13 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   yPos += 15
 
   const accessories = [
-    { label: 'Caixa Original', value: report.hasBox, symbol: '▣' },
-    { label: 'Carregador', value: report.hasCharger, symbol: '◎' },
-    { label: 'Cabo', value: report.hasCable, symbol: '〰' },
-    { label: 'Fones de Ouvido', value: report.hasEarphones, symbol: '♫' },
-    { label: 'Nota Fiscal', value: report.hasInvoice, symbol: '▤' }
+    { label: 'Caixa Original', value: report.hasBox, symbol: '□' },
+    { label: 'Carregador', value: report.hasCharger, symbol: '○' },
+    { label: 'Cabo', value: report.hasCable, symbol: '─' },
+    { label: 'Nota Fiscal', value: report.hasInvoice, symbol: '■' }
   ]
 
-  // Desenhar blocos de acessórios em grid 3x2
+  // Desenhar blocos de acessórios em grid 3 por linha
   const boxWidth = 58
   const boxHeight = 20
   const boxSpacing = 5
