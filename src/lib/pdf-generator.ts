@@ -39,6 +39,7 @@ interface TechnicalReport {
   hasInvoice: boolean
   createdAt: Date
   expiresAt?: Date
+  estimatedPrice?: number | null
   frontPhoto?: string
   backPhoto?: string
   sidesPhotos?: string
@@ -905,49 +906,48 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.text('8. AVALIACAO COMERCIAL', 18, yPos + 7)
   yPos += 15
 
-  // Calcular valor estimado baseado em condições
-  let baseValue = 0
-  // Valor base estimado por modelo (simplificado)
-  if (report.deviceModel.includes('Pro Max')) baseValue = 6000
-  else if (report.deviceModel.includes('Pro')) baseValue = 5000
-  else if (report.deviceModel.includes('Plus')) baseValue = 4000
-  else baseValue = 3500
+  // Usar valor estimado calculado pela API, ou calcular fallback
+  let estimatedValue = report.estimatedPrice || 0
+  
+  // Se não houver valor da API, calcular fallback básico
+  if (!estimatedValue) {
+    let baseValue = 0
+    if (report.deviceModel.includes('Pro Max')) baseValue = 6000
+    else if (report.deviceModel.includes('Pro')) baseValue = 5000
+    else if (report.deviceModel.includes('Plus')) baseValue = 4000
+    else baseValue = 3500
 
-  // Ajustes por condição física
-  let conditionMultiplier = 1.0
-  if (report.screenCondition === 'PERFEITO' && report.bodyCondition === 'PERFEITO') {
-    conditionMultiplier = 0.95
-  } else if (report.screenCondition.includes('LEVE') || report.bodyCondition.includes('LEVE')) {
-    conditionMultiplier = 0.85
-  } else if (report.screenCondition.includes('VISIVE') || report.bodyCondition.includes('VISIVE')) {
-    conditionMultiplier = 0.70
-  } else if (report.screenCondition.includes('TRINCA') || report.bodyCondition.includes('DANIFICADO')) {
-    conditionMultiplier = 0.50
+    let conditionMultiplier = 1.0
+    if (report.screenCondition === 'PERFEITO' && report.bodyCondition === 'PERFEITO') {
+      conditionMultiplier = 0.95
+    } else if (report.screenCondition.includes('LEVE') || report.bodyCondition.includes('LEVE')) {
+      conditionMultiplier = 0.85
+    } else if (report.screenCondition.includes('VISIVE') || report.bodyCondition.includes('VISIVE')) {
+      conditionMultiplier = 0.70
+    } else if (report.screenCondition.includes('TRINCA') || report.bodyCondition.includes('DANIFICADO')) {
+      conditionMultiplier = 0.50
+    }
+
+    let batteryMultiplier = 1.0
+    if (report.batteryHealthPercent >= 85) batteryMultiplier = 1.0
+    else if (report.batteryHealthPercent >= 80) batteryMultiplier = 0.95
+    else if (report.batteryHealthPercent >= 70) batteryMultiplier = 0.85
+    else if (report.batteryHealthPercent >= 50) batteryMultiplier = 0.70
+    else batteryMultiplier = 0.55
+
+    let functionalityMultiplier = passedTests / totalTests
+
+    let accessoryBonus = 0
+    if (report.hasBox) accessoryBonus += 200
+    if (report.hasCharger) accessoryBonus += 100
+    if (report.hasCable) accessoryBonus += 50
+    if (report.hasInvoice) accessoryBonus += 150
+    if (report.hasEarphones) accessoryBonus += 100
+
+    estimatedValue = Math.round(
+      (baseValue * conditionMultiplier * batteryMultiplier * functionalityMultiplier) + accessoryBonus
+    )
   }
-
-  // Ajuste por bateria
-  let batteryMultiplier = 1.0
-  if (report.batteryHealthPercent >= 85) batteryMultiplier = 1.0
-  else if (report.batteryHealthPercent >= 80) batteryMultiplier = 0.95
-  else if (report.batteryHealthPercent >= 70) batteryMultiplier = 0.85
-  else if (report.batteryHealthPercent >= 50) batteryMultiplier = 0.70
-  else batteryMultiplier = 0.55
-
-  // Ajuste por funcionalidade
-  let functionalityMultiplier = passedTests / totalTests
-
-  // Ajuste por acessórios
-  let accessoryBonus = 0
-  if (report.hasBox) accessoryBonus += 200
-  if (report.hasCharger) accessoryBonus += 100
-  if (report.hasCable) accessoryBonus += 50
-  if (report.hasInvoice) accessoryBonus += 150
-  if (report.hasEarphones) accessoryBonus += 100
-
-  // Valor final estimado
-  const estimatedValue = Math.round(
-    (baseValue * conditionMultiplier * batteryMultiplier * functionalityMultiplier) + accessoryBonus
-  )
 
   // Card principal de valor
   doc.setFillColor(240, 253, 244) // green-50
@@ -975,7 +975,12 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.text(`✓ Validade: ${report.expiresAt ? new Date(report.expiresAt).toLocaleDateString('pt-BR') : '90 dias'}`, 20, yPos + 32)
 
   // Pontuação geral no canto direito
-  const totalScore = Math.round((conditionMultiplier + batteryMultiplier + functionalityMultiplier) / 3 * 100)
+  const conditionScore = report.screenCondition === 'PERFEITO' && report.bodyCondition === 'PERFEITO' ? 95 : 
+                        report.screenCondition.includes('LEVE') ? 85 : 70
+  const batteryScore = report.batteryHealthPercent
+  const functionalityScore = Math.round((passedTests / totalTests) * 100)
+  const totalScore = Math.round((conditionScore + batteryScore + functionalityScore) / 3)
+  
   doc.setFillColor(...BRAND_COLORS.accent.cyan)
   doc.circle(pageWidth - 30, yPos + 17, 12, 'F')
   doc.setTextColor(255, 255, 255)

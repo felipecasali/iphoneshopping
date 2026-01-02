@@ -203,6 +203,22 @@ export async function GET(request: Request) {
               name: true,
               avatar: true,
             }
+          },
+          technicalReports: {
+            select: {
+              id: true,
+              reportNumber: true,
+              reportType: true,
+              status: true,
+              createdAt: true,
+              deviceModel: true,
+              batteryHealthPercent: true,
+              estimatedPrice: true,
+            },
+            orderBy: {
+              createdAt: 'desc'
+            },
+            take: 1
           }
         },
         orderBy: [
