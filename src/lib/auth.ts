@@ -58,6 +58,18 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile }) {
+      // Verificar se o usuário está banido
+      if (user.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+          select: { status: true }
+        })
+
+        if (dbUser?.status === 'BANNED') {
+          return false // Impede login de usuários banidos
+        }
+      }
+
       // Permitir login com credenciais normalmente
       if (account?.provider === 'credentials') {
         return true

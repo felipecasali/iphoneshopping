@@ -131,9 +131,18 @@ export default function AdminDashboard() {
               <h1 className="text-2xl font-bold text-gray-900">Dashboard Administrativo</h1>
               <p className="text-sm text-gray-600 mt-1">Visão geral do iPhoneShopping</p>
             </div>
-            <div className="flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-lg">
-              <Activity className="h-5 w-5" />
-              <span className="font-semibold">Admin</span>
+            <div className="flex items-center gap-3">
+              <a
+                href="/admin/users"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
+              >
+                <Users className="h-4 w-4" />
+                Gerenciar Usuários
+              </a>
+              <div className="flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-lg">
+                <Activity className="h-5 w-5" />
+                <span className="font-semibold">Admin</span>
+              </div>
             </div>
           </div>
         </div>

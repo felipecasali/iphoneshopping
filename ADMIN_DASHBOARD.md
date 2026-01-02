@@ -73,29 +73,89 @@ npx tsx scripts/create-admin.ts seu@email.com
 
 ## Funcionalidades do Dashboard
 
-### Métricas Principais
+### 1. Dashboard Principal (`/admin/dashboard`)
+#### Métricas Principais
 - Total de usuários
 - Total de avaliações
 - Total de laudos técnicos
 - Total de anúncios
 
-### Crescimento (30 dias)
+#### Crescimento (30 dias)
 - Novos usuários
 - Novas avaliações
 - Novos laudos
 - Novos anúncios
 - Percentual de crescimento comparado ao mês anterior
 
-### Funil de Conversão
+#### Funil de Conversão
 - Taxa de conversão: Avaliação → Laudo
 - Taxa de conversão: Laudo → Anúncio
 - Taxa de conversão: Avaliação → Anúncio
 
-### Atividades Recentes
+#### Atividades Recentes
 - 5 últimos usuários cadastrados
 - 5 últimas avaliações
 - 5 últimos laudos técnicos
 - 5 últimos anúncios
+
+### 2. Gestão de Usuários (`/admin/users`) ✅ IMPLEMENTADO
+
+#### Lista de Usuários
+- Tabela com todos os usuários do sistema
+- Busca por nome ou email
+- Filtros:
+  - Por role (USER, MODERATOR, ADMIN)
+  - Por status (ACTIVE, BANNED)
+- Paginação (10 usuários por página)
+
+#### Informações Exibidas
+- Avatar e nome
+- Email e telefone
+- Role (com badge colorido)
+- Status (Ativo/Banido)
+- Contadores de atividade:
+  - Número de anúncios
+  - Número de laudos técnicos
+  - Número de avaliações
+- Data de cadastro
+
+#### Ações Disponíveis
+- **Ver Detalhes**: Abre página com informações completas
+- **Banir/Ativar**: Bloqueia ou libera acesso do usuário
+- **Promover a Admin**: Concede permissões administrativas
+
+#### Detalhes do Usuário (`/admin/users/[id]`)
+- Informações completas de contato
+- Estatísticas de atividade
+- Lista de anúncios recentes (últimos 5)
+- Lista de laudos técnicos (últimos 5)
+- Botões de ação:
+  - Banir/Ativar usuário
+  - Promover a Admin
+  - Alterar role
+
+#### Proteção de Acesso
+- Usuários banidos não conseguem fazer login
+- Validação no callback `signIn` do NextAuth
+- Mensagem de erro automática ao tentar acessar
+
+### 3. Moderação de Anúncios ⏳ PENDENTE
+- Listar anúncios pendentes de aprovação
+- Aprovar ou rejeitar anúncios
+- Destacar anúncios na página principal
+- Remover anúncios por violação de políticas
+
+### 4. Gestão de Laudos ⏳ PENDENTE
+- Listar todos os laudos técnicos
+- Validar ou invalidar laudos
+- Ver detalhes completos de cada laudo
+- Histórico de alterações
+
+### 5. Logs de Atividades ⏳ PENDENTE
+- Registro de ações importantes
+- Filtros por tipo de ação e usuário
+- Busca por período
+- Exportação de logs
 
 ## Segurança
 
