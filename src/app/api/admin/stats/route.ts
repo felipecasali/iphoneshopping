@@ -75,10 +75,13 @@ export async function GET(request: NextRequest) {
         orderBy: { createdAt: 'desc' },
         select: {
           id: true,
-          title: true,
+          condition: true,
           price: true,
           status: true,
           createdAt: true,
+          device: {
+            select: { model: true }
+          },
           user: {
             select: { name: true, email: true }
           }
