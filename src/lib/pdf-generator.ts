@@ -88,6 +88,39 @@ async function loadImageAsDataURL(url: string): Promise<string | null> {
   }
 }
 
+// Cores do novo branding
+const BRAND_COLORS = {
+  primary: {
+    main: [31, 58, 95] as [number, number, number], // #1F3A5F - Azul profundo
+    dark: [11, 60, 93] as [number, number, number], // #0B3C5D - Azul profundo escuro
+    light: [71, 143, 175] as [number, number, number], // #478faf
+  },
+  secondary: {
+    main: [74, 74, 74] as [number, number, number], // #4A4A4A - Cinza grafite
+    dark: [46, 46, 46] as [number, number, number], // #2E2E2E - Cinza grafite escuro
+  },
+  accent: {
+    green: [46, 204, 113] as [number, number, number], // #2ECC71 - Verde técnico
+    cyan: [0, 180, 216] as [number, number, number], // #00B4D8 - Ciano
+  },
+  text: {
+    primary: [0, 0, 0] as [number, number, number],
+    secondary: [75, 85, 99] as [number, number, number],
+    muted: [107, 114, 128] as [number, number, number],
+  },
+  status: {
+    success: [46, 204, 113] as [number, number, number], // Verde
+    warning: [234, 179, 8] as [number, number, number], // Amarelo
+    error: [239, 68, 68] as [number, number, number], // Vermelho
+    info: [0, 180, 216] as [number, number, number], // Ciano
+  },
+  background: {
+    main: [247, 249, 251] as [number, number, number], // #F7F9FB - Off-white
+    card: [249, 250, 251] as [number, number, number],
+    border: [229, 231, 235] as [number, number, number],
+  }
+}
+
 export async function generateTechnicalReportPDF(report: TechnicalReport): Promise<Blob> {
   const doc = new jsPDF()
   const pageWidth = doc.internal.pageSize.getWidth()
@@ -105,12 +138,12 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   }
 
   // Header com gradiente e logo
-  // Fundo com gradiente simulado (azul para verde)
-  doc.setFillColor(37, 99, 235) // primary-600
+  // Fundo com gradiente simulado (azul profundo)
+  doc.setFillColor(...BRAND_COLORS.primary.main) // #1F3A5F
   doc.rect(0, 0, pageWidth, 15, 'F')
-  doc.setFillColor(45, 110, 230)
+  doc.setFillColor(...BRAND_COLORS.primary.dark) // Gradiente mais escuro
   doc.rect(0, 15, pageWidth, 10, 'F')
-  doc.setFillColor(52, 121, 225)
+  doc.setFillColor(...BRAND_COLORS.primary.light) // Gradiente mais claro
   doc.rect(0, 25, pageWidth, 10, 'F')
   
   // Logo e Título
@@ -126,9 +159,9 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   // Badge do tipo de laudo no canto
   const badgeX = pageWidth - 70
   const badgeY = 8
-  let badgeColor: [number, number, number] = [107, 114, 128] // gray
-  if (report.reportType === 'PREMIUM') badgeColor = [147, 51, 234] // purple
-  else if (report.reportType === 'STANDARD') badgeColor = [37, 99, 235] // blue
+  let badgeColor: [number, number, number] = BRAND_COLORS.secondary.main // gray
+  if (report.reportType === 'PREMIUM') badgeColor = BRAND_COLORS.accent.cyan // ciano premium
+  else if (report.reportType === 'STANDARD') badgeColor = BRAND_COLORS.primary.main // azul profundo
   
   doc.setFillColor(...badgeColor)
   doc.roundedRect(badgeX, badgeY, 55, 8, 2, 2, 'F')
@@ -186,20 +219,20 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   
   // Determinar parecer
   let parecerTexto = ''
-  let parecerColor: [number, number, number] = [34, 197, 94]
+  let parecerColor: [number, number, number] = BRAND_COLORS.status.success
   let parecerIcon = '✓'
   
   if (totalNaoConforme === 0 && report.batteryHealthPercent >= 80 && report.icloudFree && !report.hasWaterDamage) {
     parecerTexto = 'CONFORME'
-    parecerColor = [34, 197, 94]
+    parecerColor = BRAND_COLORS.status.success // Verde
     parecerIcon = '✓'
   } else if (totalNaoConforme <= 2 && report.batteryHealthPercent >= 50 && report.icloudFree) {
     parecerTexto = 'CONFORME COM OBSERVAÇÃO'
-    parecerColor = [234, 179, 8]
+    parecerColor = BRAND_COLORS.status.warning // Amarelo
     parecerIcon = '⚠'
   } else {
     parecerTexto = 'NÃO CONFORME'
-    parecerColor = [239, 68, 68]
+    parecerColor = BRAND_COLORS.status.error // Vermelho
     parecerIcon = '✗'
   }
 
@@ -269,7 +302,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   yPos += 28
 
   // Seção 1: DADOS DO APARELHO (esquerda) + SITUAÇÃO GERAL (direita)
-  doc.setFillColor(37, 99, 235)
+  doc.setFillColor(...BRAND_COLORS.primary.main)
   doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(12)
@@ -373,7 +406,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(37, 99, 235)
+  doc.setFillColor(...BRAND_COLORS.primary.main)
   doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
@@ -455,7 +488,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(37, 99, 235)
+  doc.setFillColor(...BRAND_COLORS.primary.main)
   doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
@@ -517,7 +550,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(37, 99, 235)
+  doc.setFillColor(...BRAND_COLORS.primary.main)
   doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
@@ -640,7 +673,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(37, 99, 235)
+  doc.setFillColor(...BRAND_COLORS.primary.main)
   doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
@@ -758,7 +791,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     head: [['Item', 'Status']],
     body: statusData,
     theme: 'striped',
-    headStyles: { fillColor: [37, 99, 235] },
+    headStyles: { fillColor: BRAND_COLORS.primary.main },
     margin: { left: 15, right: 15 },
     columnStyles: {
       0: { cellWidth: 100 },
@@ -784,7 +817,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(37, 99, 235)
+  doc.setFillColor(...BRAND_COLORS.primary.main)
   doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
@@ -864,7 +897,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
     yPos = 20
   }
 
-  doc.setFillColor(37, 99, 235)
+  doc.setFillColor(...BRAND_COLORS.primary.main)
   doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFont('helvetica', 'bold')
@@ -943,7 +976,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
 
   // Pontuação geral no canto direito
   const totalScore = Math.round((conditionMultiplier + batteryMultiplier + functionalityMultiplier) / 3 * 100)
-  doc.setFillColor(37, 99, 235)
+  doc.setFillColor(...BRAND_COLORS.accent.cyan)
   doc.circle(pageWidth - 30, yPos + 17, 12, 'F')
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(14)
@@ -993,7 +1026,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
       yPos = 20
     }
 
-    doc.setFillColor(37, 99, 235)
+    doc.setFillColor(...BRAND_COLORS.primary.main)
     doc.roundedRect(15, yPos, pageWidth - 30, 10, 2, 2, 'F')
     doc.setTextColor(255, 255, 255)
     doc.setFont('helvetica', 'bold')
@@ -1121,7 +1154,7 @@ export async function generateTechnicalReportPDF(report: TechnicalReport): Promi
   doc.setFillColor(249, 250, 251)
   doc.roundedRect(15, yPos, pageWidth - 30, 18, 2, 2, 'F')
   
-  doc.setTextColor(37, 99, 235)
+  doc.setTextColor(...BRAND_COLORS.primary.main)
   doc.setFontSize(8)
   doc.setFont('helvetica', 'bold')
   doc.text('Suporte:', 20, yPos + 5)
