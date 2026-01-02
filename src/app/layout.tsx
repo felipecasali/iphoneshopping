@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     default: 'iPhoneShopping - Compre e Venda iPhones e iPads com Segurança',
     template: '%s | iPhoneShopping'
   },
-  description: 'Marketplace especializado na compra e venda de iPhones e iPads no Brasil. Avalie seu aparelho gratuitamente e anuncie com segurança. Sistema inteligente de avaliação e chat seguro.',
+  description: 'Seu Apple pode valer muito mais do que você imagina. Avalie seu iPhone ou iPad gratuitamente, crie um laudo técnico profissional e anuncie com segurança. Sistema inteligente de avaliação e valorização.',
   keywords: ['iPhone', 'iPad', 'comprar iPhone', 'vender iPhone', 'marketplace Apple', 'iPhone usado', 'iPad usado', 'iPhone seminovo', 'avaliar iPhone', 'preço iPhone usado', 'Apple Brasil', 'vender celular'],
   authors: [{ name: 'iPhoneShopping' }],
   creator: 'iPhoneShopping',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
     url: 'https://www.iphoneshopping.com.br',
     title: 'iPhoneShopping - Compre e Venda iPhones e iPads com Segurança',
-    description: 'Marketplace especializado na compra e venda de iPhones e iPads no Brasil. Avalie seu aparelho gratuitamente e anuncie com segurança.',
+    description: 'Seu Apple pode valer muito mais do que você imagina. Avalie gratuitamente, crie um laudo técnico e anuncie com segurança. Valorize seu iPhone ou iPad em até 20%.',
     siteName: 'iPhoneShopping',
     images: [
       {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'iPhoneShopping - Compre e Venda iPhones e iPads',
-    description: 'Marketplace especializado em dispositivos Apple no Brasil. Avalie e anuncie gratuitamente.',
+    description: 'Seu Apple pode valer muito mais do que você imagina. Avalie gratuitamente e crie um laudo técnico profissional. Valorize seu aparelho em até 20%.',
     images: ['/og-image.jpg'],
   },
   robots: {
