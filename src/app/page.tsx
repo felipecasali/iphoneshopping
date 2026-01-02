@@ -535,7 +535,7 @@ export default function Home() {
             <div>
               <h3 className="text-lg font-semibold mb-4">iPhoneShopping</h3>
               <p className="text-gray-400">
-                Marketplace especializado em iPhones e iPads no Brasil
+                Avalie e Anuncie seu Apple com Segurança
               </p>
             </div>
             <div>

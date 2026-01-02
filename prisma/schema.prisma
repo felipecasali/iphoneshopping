@@ -143,6 +143,7 @@ model Listing {
   device      Device   @relation(fields: [deviceId], references: [id])
   conversations Conversation[]
   transactions Transaction[]
+  technicalReports TechnicalReport[]
 
   @@index([userId])
   @@index([deviceId])
@@ -326,9 +327,11 @@ model TechnicalReport {
   // Relação com usuário e avaliação
   user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   evaluation          Evaluation? @relation(fields: [evaluationId], references: [id])
+  listing             Listing? @relation(fields: [listingId], references: [id])
   
   @@index([userId])
   @@index([evaluationId])
+  @@index([listingId])
   @@index([reportNumber])
   @@index([status])
   @@map("technical_reports")

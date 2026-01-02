@@ -34,6 +34,18 @@ export async function GET(
             avatar: true,
           },
         },
+        technicalReports: {
+          select: {
+            id: true,
+            reportNumber: true,
+            reportType: true,
+            status: true,
+          },
+          where: {
+            status: 'VALIDATED',
+          },
+          take: 1,
+        },
       },
     })
 
@@ -74,6 +86,8 @@ export async function GET(
       ...listing,
       images: listing.images ? JSON.parse(listing.images) : [],
       views: shouldIncrementView ? listing.views + 1 : listing.views,
+      technicalReport: listing.technicalReports && listing.technicalReports.length > 0 ? listing.technicalReports[0] : null,
+      technicalReports: undefined, // Remove o array do retorno
     }
 
     return NextResponse.json({

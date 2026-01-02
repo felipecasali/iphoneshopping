@@ -23,6 +23,11 @@ interface Listing {
   hasCharger: boolean
   icloudFree: boolean
   batteryHealth?: number
+  technicalReport?: {
+    id: string
+    reportNumber: string
+    reportType: string
+  }
   device: {
     model: string
     storage: number
@@ -97,6 +102,31 @@ export default function AnuncioDetalhesPage() {
     } catch (error) {
       console.error('Erro:', error)
       alert('Erro ao iniciar conversa')
+    }
+  }
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/anuncios/${params.id}`
+    const text = `${listing?.device.model} ${listing?.device.storage}GB - R$ ${listing?.price.toLocaleString('pt-BR')}`
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: text,
+          text: `Confira este ${listing?.device.model} no iPhoneShopping!`,
+          url: url,
+        })
+      } catch (err) {
+        console.log('Compartilhamento cancelado')
+      }
+    } else {
+      // Fallback: copiar para clipboard
+      try {
+        await navigator.clipboard.writeText(url)
+        alert('Link copiado para a área de transferência!')
+      } catch (err) {
+        console.error('Erro ao copiar link:', err)
+      }
     }
   }
 
@@ -298,6 +328,33 @@ export default function AnuncioDetalhesPage() {
                 )}
               </div>
 
+              {/* Badge de Laudo Técnico */}
+              {listing.technicalReport && (
+                <Link
+                  href={`/laudo/${listing.technicalReport.id}`}
+                  className="block bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-500 rounded-lg p-4 hover:shadow-lg transition group"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-green-500 text-white p-2 rounded-lg group-hover:scale-110 transition">
+                        <CheckCircle className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-green-900 text-sm">Laudo Técnico Certificado</p>
+                        <p className="text-xs text-green-700">#{listing.technicalReport.reportNumber}</p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-500 text-white">
+                      {listing.technicalReport.reportType === 'PREMIUM' ? 'Premium' : 
+                       listing.technicalReport.reportType === 'STANDARD' ? 'Profissional' : 'Básico'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-green-700 mt-2">
+                    🔒 Anúncio com laudo verificado. Clique para ver detalhes.
+                  </p>
+                </Link>
+              )}
+
               {/* Location */}
               <div className="flex items-start text-gray-700">
                 <MapPin className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
@@ -323,7 +380,10 @@ export default function AnuncioDetalhesPage() {
                       <MessageCircle className="h-5 w-5 mr-2" />
                       Entrar em Contato
                     </button>
-                    <button className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition flex items-center justify-center">
+                    <button 
+                      onClick={handleShare}
+                      className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition flex items-center justify-center"
+                    >
                       <Share2 className="h-5 w-5 mr-2" />
                       Compartilhar
                     </button>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Smartphone, MapPin, Search, Filter, SlidersHorizontal } from 'lucide-react'
+import { Smartphone, MapPin, Search, Filter, SlidersHorizontal, CheckCircle } from 'lucide-react'
 
 interface Listing {
   id: string
@@ -14,6 +14,11 @@ interface Listing {
   condition: string
   negotiable: boolean
   acceptsTrade: boolean
+  technicalReport?: {
+    id: string
+    reportNumber: string
+    reportType: string
+  }
   device: {
     model: string
     storage: number
@@ -213,17 +218,25 @@ export default function AnunciosPage() {
                         <Smartphone className="h-16 w-16 text-gray-400" />
                       </div>
                     )}
-                    <div className="absolute top-2 left-2 flex gap-2">
-                      {listing.negotiable && (
-                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded">
-                          Negociável
+                    <div className="absolute top-2 left-2 flex flex-col gap-2">
+                      {listing.technicalReport && (
+                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded flex items-center gap-1 font-semibold shadow-lg">
+                          <CheckCircle className="h-3 w-3" />
+                          Laudo Verificado
                         </span>
                       )}
-                      {listing.acceptsTrade && (
-                        <span className="bg-cyan-500 text-white text-xs px-2 py-1 rounded">
-                          Aceita troca
-                        </span>
-                      )}
+                      <div className="flex gap-2">
+                        {listing.negotiable && (
+                          <span className="bg-green-500 text-white text-xs px-2 py-1 rounded">
+                            Negociável
+                          </span>
+                        )}
+                        {listing.acceptsTrade && (
+                          <span className="bg-cyan-500 text-white text-xs px-2 py-1 rounded">
+                            Aceita troca
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
 
