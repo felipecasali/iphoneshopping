@@ -164,9 +164,9 @@ async function generateTestPDF(scenario: keyof typeof testScenarios = 'excelente
 }
 
 // CLI handler
-const scenario = process.argv[2] as keyof typeof testScenarios || 'excelente'
+const scenarioArg = process.argv[2] || 'excelente'
 
-if (scenario === 'todos' || scenario === 'all') {
+if (scenarioArg === 'todos' || scenarioArg === 'all') {
   console.log('🔄 Gerando todos os cenários de teste...\n')
   Promise.all(
     Object.keys(testScenarios).map(async (key) => {
@@ -177,7 +177,8 @@ if (scenario === 'todos' || scenario === 'all') {
   ).then(() => {
     console.log('\n✅ Todos os PDFs foram gerados!\n')
   })
-} else if (scenario in testScenarios) {
+} else if (scenarioArg in testScenarios) {
+  const scenario = scenarioArg as keyof typeof testScenarios
   generateTestPDF(scenario)
 } else {
   console.log(`
