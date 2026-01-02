@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         select: {
           id: true,
           deviceModel: true,
-          estimatedPrice: true,
+          estimatedValue: true,
           createdAt: true,
           user: {
             select: { name: true, email: true }
