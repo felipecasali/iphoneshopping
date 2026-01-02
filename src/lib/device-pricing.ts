@@ -260,7 +260,7 @@ export const CONDITION_MULTIPLIERS = {
   MUITO_BOM: 0.75,      // 75% do preço novo
   BOM: 0.65,            // 65% do preço novo
   REGULAR: 0.50,        // 50% do preço novo
-  DEFEITO: 0.30,        // 30% do preço novo
+  DEFEITO: 0.40,        // 40% do preço novo (aumentado de 0.30)
 }
 
 // Ajustes adicionais
@@ -275,18 +275,18 @@ export const ADJUSTMENTS = {
   icloudFree: 0,         // Obrigatório, não adiciona valor
   imeiClean: 0,          // Obrigatório, não adiciona valor
   batteryHealthGood: 0,  // >= 85% é esperado
-  batteryHealthBad: -300, // < 80% desconta
-  batteryHealthTerrible: -600, // < 70% desconta mais
-  waterDamage: -500,     // Dano por água
-  functionalIssues: -400, // Problemas funcionais
+  batteryHealthBad: -200, // < 80% desconta (reduzido de -300)
+  batteryHealthTerrible: -400, // < 70% desconta mais (reduzido de -600)
+  waterDamage: -300,     // Dano por água (reduzido de -500)
+  functionalIssues: -300, // Problemas funcionais (reduzido de -400)
   screenPerfect: 0,
-  screenLightScratches: -100,
-  screenVisibleScratches: -300,
-  screenCracked: -800,
+  screenLightScratches: -80,
+  screenVisibleScratches: -200, // Reduzido de -300
+  screenCracked: -500,   // Reduzido de -800
   bodyPerfect: 0,
-  bodyLightMarks: -80,
-  bodyVisibleMarks: -200,
-  bodyDented: -400,
+  bodyLightMarks: -60,   // Reduzido de -80
+  bodyVisibleMarks: -150, // Reduzido de -200
+  bodyDented: -300,      // Reduzido de -400
 }
 
 // Depreciação mensal por tipo de aparelho
@@ -410,6 +410,27 @@ export function calculateDevicePrice(evaluation: {
   // IMEI deve estar limpo (obrigatório)
   if (evaluation.imeiClean === false) {
     price = 0 // Não pode vender se IMEI estiver bloqueado
+  }
+
+  // Garantir valor mínimo baseado no tipo de dispositivo e ano
+  // Mesmo aparelhos antigos e com defeitos têm valor de peças/reposição
+  if (price > 0) {
+    const deviceAge = new Date().getFullYear() - evaluation.device.year
+    let minValue = 300 // Valor mínimo padrão
+    
+    if (evaluation.device.type === 'IPHONE') {
+      // iPhones mantêm valor por mais tempo
+      if (deviceAge <= 2) minValue = 800      // Modelos recentes
+      else if (deviceAge <= 4) minValue = 500 // 2-4 anos
+      else minValue = 300                     // Mais de 4 anos
+    } else if (evaluation.device.type === 'IPAD') {
+      // iPads têm valor de revenda menor
+      if (deviceAge <= 2) minValue = 600
+      else if (deviceAge <= 4) minValue = 400
+      else minValue = 250
+    }
+    
+    price = Math.max(minValue, price)
   }
 
   return Math.max(0, Math.round(price))
