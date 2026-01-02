@@ -170,6 +170,7 @@ function CriarLaudoContent() {
   })
 
   const evaluationId = searchParams.get('evaluationId')
+  const listingId = searchParams.get('listingId')
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -180,8 +181,77 @@ function CriarLaudoContent() {
   useEffect(() => {
     if (evaluationId && session) {
       fetchEvaluation()
+    } else if (listingId && session) {
+      fetchListingEvaluation()
     }
-  }, [evaluationId, session])
+  }, [evaluationId, listingId, session])
+
+  const fetchListingEvaluation = async () => {
+    try {
+      // Buscar o listing primeiro
+      const listingRes = await fetch(`/api/listings/${listingId}`)
+      const listingData = await listingRes.json()
+      
+      if (listingData.listing && listingData.listing.evaluationId) {
+        // Buscar a avaliação associada
+        const evalRes = await fetch(`/api/evaluate?id=${listingData.listing.evaluationId}`)
+        const evalData = await evalRes.json()
+        
+        if (evalData.evaluation) {
+          setEvaluation(evalData.evaluation)
+          preencheDadosAvaliacao(evalData.evaluation)
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar avaliação do anúncio:', error)
+    }
+  }
+
+  const preencheDadosAvaliacao = (evaluationData: any) => {
+    // Mapeamento de valores da avaliação para o laudo
+    const mapScreenCondition = (value?: string) => {
+      const map: Record<string, string> = {
+        'PERFEITA': 'PERFEITO',
+        'LEVES_ARRANHOS': 'ARRANHOES_LEVES',
+        'ARRANHOS_VISIVEIS': 'ARRANHOES_VISIVEIS',
+        'TRINCADA': 'TRINCADO'
+      }
+      return value && map[value] ? map[value] : value || 'PERFEITO'
+    }
+
+    const mapBodyCondition = (value?: string) => {
+      const map: Record<string, string> = {
+        'PERFEITO': 'PERFEITO',
+        'LEVES_MARCAS': 'MARCAS_USO',
+        'MARCAS_VISIVEIS': 'ARRANHOES',
+        'AMASSADOS': 'AMASSADOS'
+      }
+      return value && map[value] ? map[value] : value || 'PERFEITO'
+    }
+    
+    // Pré-preencher campos do reportData com dados da avaliação
+    setReportData(prev => ({
+      ...prev,
+      batteryHealth: evaluationData.batteryHealth || prev.batteryHealth,
+      screenCondition: mapScreenCondition(evaluationData.screenCondition),
+      bodyCondition: mapBodyCondition(evaluationData.bodyCondition),
+      icloudFree: evaluationData.icloudFree ?? prev.icloudFree,
+      hasWaterDamage: evaluationData.hasWaterDamage ?? prev.hasWaterDamage,
+      hasBox: evaluationData.hasBox ?? prev.hasBox,
+      hasCharger: evaluationData.hasCharger ?? prev.hasCharger,
+      hasCable: evaluationData.hasCable ?? prev.hasCable,
+      hasInvoice: evaluationData.hasInvoice ?? prev.hasInvoice,
+    }))
+    
+    // Se for iPad, adicionar acessórios específicos
+    if (evaluationData.deviceType === 'IPAD') {
+      setReportData(prev => ({
+        ...prev,
+        hasPencil: evaluationData.hasPencil ?? prev.hasPencil,
+        hasKeyboard: evaluationData.hasKeyboard ?? prev.hasKeyboard,
+      }))
+    }
+  }
 
   const fetchEvaluation = async () => {
     try {
@@ -189,50 +259,7 @@ function CriarLaudoContent() {
       const data = await res.json()
       if (data.evaluation) {
         setEvaluation(data.evaluation)
-        
-        // Mapeamento de valores da avaliação para o laudo
-        const mapScreenCondition = (value?: string) => {
-          const map: Record<string, string> = {
-            'PERFEITA': 'PERFEITO',
-            'LEVES_ARRANHOS': 'ARRANHOES_LEVES',
-            'ARRANHOS_VISIVEIS': 'ARRANHOES_VISIVEIS',
-            'TRINCADA': 'TRINCADO'
-          }
-          return value && map[value] ? map[value] : value || 'PERFEITO'
-        }
-
-        const mapBodyCondition = (value?: string) => {
-          const map: Record<string, string> = {
-            'PERFEITO': 'PERFEITO',
-            'LEVES_MARCAS': 'MARCAS_USO',
-            'MARCAS_VISIVEIS': 'ARRANHOES',
-            'AMASSADOS': 'AMASSADOS'
-          }
-          return value && map[value] ? map[value] : value || 'PERFEITO'
-        }
-        
-        // Pré-preencher campos do reportData com dados da avaliação
-        setReportData(prev => ({
-          ...prev,
-          batteryHealth: data.evaluation.batteryHealth || prev.batteryHealth,
-          screenCondition: mapScreenCondition(data.evaluation.screenCondition),
-          bodyCondition: mapBodyCondition(data.evaluation.bodyCondition),
-          icloudFree: data.evaluation.icloudFree ?? prev.icloudFree,
-          hasWaterDamage: data.evaluation.hasWaterDamage ?? prev.hasWaterDamage,
-          hasBox: data.evaluation.hasBox ?? prev.hasBox,
-          hasCharger: data.evaluation.hasCharger ?? prev.hasCharger,
-          hasCable: data.evaluation.hasCable ?? prev.hasCable,
-          hasInvoice: data.evaluation.hasInvoice ?? prev.hasInvoice,
-        }))
-        
-        // Se for iPad, adicionar acessórios específicos
-        if (data.evaluation.deviceType === 'IPAD') {
-          setReportData(prev => ({
-            ...prev,
-            hasPencil: data.evaluation.hasPencil ?? prev.hasPencil,
-            hasKeyboard: data.evaluation.hasKeyboard ?? prev.hasKeyboard,
-          }))
-        }
+        preencheDadosAvaliacao(data.evaluation)
       }
     } catch (error) {
       console.error('Erro ao carregar avaliação:', error)
@@ -247,7 +274,7 @@ function CriarLaudoContent() {
     )
   }
 
-  if (!evaluationId) {
+  if (!evaluationId && !listingId) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4">
@@ -255,7 +282,7 @@ function CriarLaudoContent() {
             <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Avaliação Necessária</h1>
             <p className="text-gray-600 mb-6">
-              Para criar um laudo técnico, você precisa primeiro avaliar seu aparelho.
+              Para criar um laudo técnico, você precisa primeiro avaliar seu aparelho ou ter um anúncio ativo.
             </p>
             <Link
               href="/avaliar"
@@ -349,7 +376,8 @@ function CriarLaudoContent() {
 
       // Criar laudo no banco
       const reportPayload = {
-        evaluationId: evaluationId,
+        evaluationId: evaluationId || evaluation?.id,
+        listingId: listingId || null,
         reportType: selectedType,
         deviceType: evaluation?.deviceType,
         deviceModel: evaluation?.deviceModel,
