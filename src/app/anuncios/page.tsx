@@ -238,6 +238,13 @@ export default function AnunciosPage() {
                         )}
                       </div>
                     </div>
+                    {listing.technicalReport && (
+                      <div className="absolute bottom-2 right-2">
+                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded font-semibold shadow-md">
+                          🔒 Laudo Técnico
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Content */}

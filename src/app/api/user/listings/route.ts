@@ -38,6 +38,18 @@ export async function GET() {
       },
       include: {
         device: true,
+        technicalReports: {
+          where: {
+            status: 'VALIDATED',
+          },
+          select: {
+            id: true,
+            reportNumber: true,
+            reportType: true,
+            status: true,
+          },
+          take: 1,
+        },
       },
       orderBy: {
         createdAt: 'desc',

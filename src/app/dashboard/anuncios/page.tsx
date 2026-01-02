@@ -22,6 +22,12 @@ interface Listing {
     storage: number
     type: string
   }
+  technicalReports?: Array<{
+    id: string
+    reportNumber: string
+    reportType: string
+    status: string
+  }>
 }
 
 export default function MeusAnunciosPage() {
@@ -221,6 +227,13 @@ export default function MeusAnunciosPage() {
                         </span>
                       )}
                     </div>
+                    {listing.technicalReports && listing.technicalReports.length > 0 && (
+                      <div className="absolute bottom-2 right-2">
+                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded font-semibold shadow-md">
+                          🔒 Laudo Técnico
+                        </span>
+                      </div>
+                    )}
                     <div className="absolute top-2 right-2">
                       <span className={`px-2 py-1 text-xs font-semibold rounded ${
                         listing.status === 'ACTIVE' 
@@ -265,13 +278,23 @@ export default function MeusAnunciosPage() {
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
-                      <button
-                        onClick={() => handleCreateReport(listing)}
-                        className="w-full flex items-center justify-center px-3 py-2 bg-green-50 border border-green-300 text-green-700 rounded-lg hover:bg-green-100 text-sm font-medium transition-colors"
-                      >
-                        <FileText className="h-4 w-4 mr-1" />
-                        Criar Laudo Técnico
-                      </button>
+                      {listing.technicalReports && listing.technicalReports.length > 0 ? (
+                        <Link
+                          href={`/laudo/${listing.technicalReports[0].id}`}
+                          className="w-full flex items-center justify-center px-3 py-2 bg-primary-50 border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-100 text-sm font-medium transition-colors"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          Visualizar Laudo
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => handleCreateReport(listing)}
+                          className="w-full flex items-center justify-center px-3 py-2 bg-green-50 border border-green-300 text-green-700 rounded-lg hover:bg-green-100 text-sm font-medium transition-colors"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          Criar Laudo Técnico
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

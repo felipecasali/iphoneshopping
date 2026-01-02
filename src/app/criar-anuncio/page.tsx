@@ -121,13 +121,12 @@ export default function CriarAnuncioPage() {
 
       const data = await response.json()
       console.log('Anúncio criado:', data)
-      
+
       // Limpa os dados salvos
       localStorage.removeItem('evaluationData')
       
-      // Redireciona para o dashboard
-      alert('Anúncio criado com sucesso!')
-      router.push('/dashboard/anuncios')
+      // Redireciona para a página de sucesso com opções de compartilhamento
+      router.push(`/anuncios/${data.id}/sucesso`)
     } catch (err) {
       console.error('Erro:', err)
       setError(err instanceof Error ? err.message : 'Erro ao criar anúncio. Tente novamente.')
