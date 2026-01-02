@@ -38,13 +38,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
             <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <p className="text-sm font-semibold">🚗 Venda seu iPhone como quem vende um carro: com valor, confiança e transparência</p>
+              <p className="text-sm font-semibold">� Você sabia que um laudo pode garantir até 20% a mais no seu bolso?</p>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Seu iPhone Vale Mais<br />Do Que Você Imagina
+              Vai Anunciar Seu iPhone?<br />
+              <span className="text-primary-200">Descubra Quanto Ele Vale!</span>
             </h1>
             <p className="text-xl mb-8 text-primary-100 max-w-3xl mx-auto">
-              Assim como carros premium, iPhones e iPads mantêm valor excepcional. Avalie, anuncie e venda com a mesma segurança e profissionalismo.
+              Avalie seu aparelho em 2 minutos e crie um laudo técnico completo. Tenha a garantia e confiança iPhoneShopping para vender com segurança e valor justo.
             </p>
             <nav className="flex flex-col sm:flex-row justify-center gap-4 mb-12" aria-label="Ações principais">
               <Link 
@@ -52,7 +53,7 @@ export default function Home() {
                 className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 aria-label="Avaliar meu aparelho"
               >
-                ✨ Descobrir Valor do Meu Aparelho
+                ✨ Avaliar Meu Aparelho Agora
               </Link>
               <Link 
                 href="/laudo/criar"
@@ -60,7 +61,7 @@ export default function Home() {
                 aria-label="Criar laudo técnico"
               >
                 <FileText className="h-5 w-5" />
-                Laudo Técnico Profissional
+                Criar Laudo Profissional
               </Link>
               <Link 
                 href="/anuncios"
@@ -74,21 +75,110 @@ export default function Home() {
             {/* Trust Indicators */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12">
               <div className="text-center">
-                <div className="text-3xl font-bold mb-1">5-7 anos</div>
-                <div className="text-sm text-primary-100">Vida útil média</div>
+                <div className="text-3xl font-bold mb-1">2 min</div>
+                <div className="text-sm text-primary-100">Avaliação completa</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold mb-1">70%+</div>
-                <div className="text-sm text-primary-100">Retenção de valor</div>
+                <div className="text-3xl font-bold mb-1">+20%</div>
+                <div className="text-sm text-primary-100">Valor com laudo</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold mb-1">100%</div>
-                <div className="text-sm text-primary-100">Avaliação grátis</div>
+                <div className="text-sm text-primary-100">Grátis</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold mb-1">0 taxas</div>
                 <div className="text-sm text-primary-100">Para anunciar</div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Nova Seção: Valorização com Laudo - DESTAQUE PRINCIPAL */}
+      <section className="py-20 bg-gradient-to-br from-green-600 via-emerald-600 to-green-700 text-white relative overflow-hidden">
+        {/* Elementos decorativos */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl opacity-10 translate-x-1/3 -translate-y-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-300 rounded-full filter blur-3xl opacity-10 -translate-x-1/2 translate-y-1/2"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
+              <TrendingUp className="h-5 w-5" />
+              <span className="font-bold text-lg">VALORIZE SEU IPHONE ATÉ 20% A MAIS</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              Por Que Criar um Laudo iPhoneShopping?
+            </h2>
+            <p className="text-2xl text-green-100 max-w-3xl mx-auto mb-4">
+              Se ainda não sabe quanto seu aparelho vale, você está no lugar certo!
+            </p>
+            <p className="text-xl text-green-50 max-w-3xl mx-auto">
+              Com um laudo técnico profissional, você ganha credibilidade, vende mais rápido e pode aumentar o preço em até 20%.
+            </p>
+          </div>
+
+          {/* Cards de Benefícios */}
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition">
+              <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <TrendingUp className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-center">Até 20% Mais Valor</h3>
+              <p className="text-green-50 text-center text-lg">
+                Aparelhos com laudo técnico podem alcançar até R$ 500 a mais no valor final de venda.
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition">
+              <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Clock className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-center">Venda 2x Mais Rápido</h3>
+              <p className="text-green-50 text-center text-lg">
+                Compradores confiam mais e decidem mais rápido quando veem documentação profissional completa.
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition">
+              <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <BadgeCheck className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-center">Garantia e Confiança</h3>
+              <p className="text-green-50 text-center text-lg">
+                Laudo verificado e certificado pela iPhoneShopping com número único e validade de 90 dias.
+              </p>
+            </div>
+          </div>
+
+          {/* CTA Destacado */}
+          <div className="bg-white rounded-2xl shadow-2xl p-12 text-center">
+            <div className="max-w-3xl mx-auto">
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Crie Seu Laudo em Apenas 2 Minutos
+              </h3>
+              <p className="text-xl text-gray-600 mb-8">
+                Documentos fotográficas, testes de funcionalidade, certificação digital e estimativa de preço. Tudo 100% gratuito!
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/laudo/criar"
+                  className="bg-green-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-green-700 transition shadow-lg hover:shadow-xl inline-flex items-center gap-3 justify-center group"
+                >
+                  <FileText className="h-6 w-6 group-hover:scale-110 transition" />
+                  Criar Meu Laudo Agora
+                  <span className="text-green-200">→</span>
+                </Link>
+                <Link
+                  href="/avaliar"
+                  className="bg-primary-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-primary-700 transition shadow-lg border-2 border-primary-400"
+                >
+                  Ou Fazer Avaliação Rápida
+                </Link>
+              </div>
+              <p className="text-sm text-gray-500 mt-6">
+                ✅ Sem cartão de crédito  |  ✅ Sem taxas ocultas  |  ✅ Resultado instantâneo
+              </p>
             </div>
           </div>
         </div>
@@ -177,14 +267,14 @@ export default function Home() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full mb-4">
               <FileText className="h-5 w-5" />
-              <span className="font-semibold">NOVO: Laudo Técnico Profissional</span>
+              <span className="font-semibold">LAUDO TÉCNICO PROFISSIONAL</span>
             </div>
             <h2 id="laudo-heading" className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
-              Venda com Laudo Técnico
-              <span className="block text-green-600 mt-2">Como uma Vistoria Veicular</span>
+              Documente Seu Aparelho
+              <span className="block text-green-600 mt-2">Como uma Vistoria Veicular Premium</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Assim como carros premium têm laudo de vistoria, seu iPhone merece um certificado profissional que comprova qualidade e valoriza sua venda.
+              Laudo técnico completo com fotos, testes e certificação. A garantia iPhoneShopping que valoriza sua venda em até 20%.
             </p>
           </div>
 
@@ -232,8 +322,8 @@ export default function Home() {
                     <TrendingUp className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-2">Venda Mais Rápido</h4>
-                    <p className="text-gray-600">Anúncios com laudo vendem até 2x mais rápido que anúncios convencionais</p>
+                    <h4 className="font-bold text-lg mb-2">Até 20% Mais Valor</h4>
+                    <p className="text-gray-600">Aparelhos com laudo técnico certificado podem alcançar até 20% mais no valor de venda</p>
                   </div>
                 </div>
               </div>
@@ -244,8 +334,8 @@ export default function Home() {
                     <BadgeCheck className="h-6 w-6 text-primary-600" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-2">Valorização Garantida</h4>
-                    <p className="text-gray-600">Aparelhos certificados podem alcançar até 15% mais valor de venda</p>
+                    <h4 className="font-bold text-lg mb-2">Venda 2x Mais Rápido</h4>
+                    <p className="text-gray-600">Compradores decidem mais rápido com documentação profissional completa e verificada</p>
                   </div>
                 </div>
               </div>
