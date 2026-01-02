@@ -308,6 +308,12 @@ model TechnicalReport {
   verifiedAt          DateTime? // Data de verificação/assinatura
   verifiedBy          String?  // ID do verificador (futuro: equipe técnica)
   
+  // Validação Administrativa
+  isValidated         Boolean  @default(true) // Laudo validado pelo admin
+  validatedAt         DateTime? // Data da validação/invalidação
+  validatedBy         String?   // ID do admin que validou/invalidou
+  invalidationReason  String?   // Motivo da invalidação (se isValidated = false)
+  
   // Valor Estimado
   estimatedPrice      Float?   // Preço estimado baseado no laudo
   priceValidity       DateTime? // Validade da estimativa

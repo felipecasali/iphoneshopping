@@ -146,6 +146,13 @@ export default function AdminDashboard() {
                 <ClipboardList className="h-4 w-4" />
                 Anúncios
               </a>
+              <a
+                href="/admin/reports"
+                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+              >
+                <FileText className="h-4 w-4" />
+                Laudos
+              </a>
               <div className="flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-lg">
                 <Activity className="h-5 w-5" />
                 <span className="font-semibold">Admin</span>
