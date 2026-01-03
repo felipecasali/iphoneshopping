@@ -40,6 +40,9 @@ export default function Home() {
             <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
               <p className="text-sm font-semibold">� Você sabia que um laudo pode garantir até 20% a mais no seu bolso?</p>
             </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Vai Anunciar Seu Apple?<br />
+            </h1>
             <p className="text-xl mb-8 text-primary-100 max-w-3xl mx-auto">
               Avalie seu aparelho em 2 minutos e crie um laudo técnico completo. Tenha a garantia e confiança iPhoneShopping para vender com segurança e valor justo.
             </p>
