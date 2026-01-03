@@ -288,14 +288,26 @@ export default function AdminDashboard() {
             </h3>
             <div className="space-y-2 sm:space-y-3">
               {stats.recentActivity.reports.map((report: any) => (
-                <div key={report.id} className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{report.reportNumber}</p>
-                    <p className="text-xs sm:text-sm text-gray-600 truncate">{report.deviceModel}</p>
+                <div key={report.id} className="py-2 border-b border-gray-100">
+                  <div className="flex items-start justify-between mb-1">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{report.reportNumber}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 truncate">{report.deviceModel}</p>
+                    </div>
+                    <p className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                      {new Date(report.createdAt).toLocaleDateString('pt-BR')}
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-500 ml-2 flex-shrink-0">
-                    {new Date(report.createdAt).toLocaleDateString('pt-BR')}
-                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs text-gray-600 truncate">
+                      👤 {report.user?.name || 'Usuário'}
+                    </span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 font-medium flex-shrink-0">
+                      {report.reportType === 'BASIC' ? 'Básico' : 
+                       report.reportType === 'STANDARD' ? 'Profissional' : 
+                       report.reportType === 'PREMIUM' ? 'Premium' : report.reportType}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
