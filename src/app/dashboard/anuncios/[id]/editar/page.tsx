@@ -225,7 +225,8 @@ export default function EditarAnuncioPage() {
                 <h3 className="font-semibold mb-4">Fotos do Aparelho</h3>
                 <ImageUpload
                   images={formData.images}
-                  onImagesChange={(urls) => setFormData(prev => ({ ...prev, images: urls }))}
+                  onImagesChange={(newUrl) => setFormData(prev => ({ ...prev, images: [...prev.images, newUrl] }))}
+                  onRemoveImage={(index) => setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }))}
                   maxImages={5}
                 />
               </div>

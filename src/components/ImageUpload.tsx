@@ -7,23 +7,22 @@ import { Upload, X } from 'lucide-react'
 
 interface ImageUploadProps {
   images: string[]
-  onImagesChange: (urls: string[]) => void
+  onImagesChange: (newUrl: string) => void
+  onRemoveImage: (index: number) => void
   maxImages?: number
 }
 
-export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUploadProps) {
+export default function ImageUpload({ images, onImagesChange, onRemoveImage, maxImages = 5 }: ImageUploadProps) {
   const [error, setError] = useState<string>('')
 
   console.log('🔍 ImageUpload renderizado - images atuais:', images)
 
   const handleSuccess = (result: any) => {
     console.log('✅ Upload successful:', result)
-    console.log('📦 Current images prop:', images)
     const newUrl = result.info.secure_url
     console.log('🆕 New URL:', newUrl)
-    const updatedImages = [...images, newUrl]
-    console.log('📤 Updated images array:', updatedImages)
-    onImagesChange(updatedImages)
+    console.log('📤 Calling onImagesChange with new URL')
+    onImagesChange(newUrl)
     setError('')
   }
 
@@ -33,8 +32,7 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
   }
 
   const removeImage = (indexToRemove: number) => {
-    const updatedImages = images.filter((_, index) => index !== indexToRemove)
-    onImagesChange(updatedImages)
+    onRemoveImage(indexToRemove)
   }
 
   return (
