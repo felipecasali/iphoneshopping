@@ -207,7 +207,16 @@ export default function CriarAnuncioPage() {
                 <h3 className="font-semibold mb-4">Fotos do Aparelho</h3>
                 <ImageUpload
                   images={formData.images}
-                  onImagesChange={(urls) => setFormData(prev => ({ ...prev, images: urls }))}
+                  onImagesChange={(urls) => {
+                    console.log('🔄 onImagesChange chamado com:', urls)
+                    console.log('📋 formData.images antes:', formData.images)
+                    setFormData(prev => {
+                      console.log('📋 prev.images:', prev.images)
+                      const newState = { ...prev, images: urls }
+                      console.log('📋 novo estado:', newState.images)
+                      return newState
+                    })
+                  }}
                   maxImages={5}
                 />
               </div>

@@ -14,19 +14,21 @@ interface ImageUploadProps {
 export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUploadProps) {
   const [error, setError] = useState<string>('')
 
+  console.log('🔍 ImageUpload renderizado - images atuais:', images)
+
   const handleSuccess = (result: any) => {
-    console.log('Upload successful:', result)
-    console.log('Current images prop:', images)
+    console.log('✅ Upload successful:', result)
+    console.log('📦 Current images prop:', images)
     const newUrl = result.info.secure_url
-    console.log('New URL:', newUrl)
+    console.log('🆕 New URL:', newUrl)
     const updatedImages = [...images, newUrl]
-    console.log('Updated images array:', updatedImages)
+    console.log('📤 Updated images array:', updatedImages)
     onImagesChange(updatedImages)
     setError('')
   }
 
   const handleError = (error: any) => {
-    console.error('Upload error:', error)
+    console.error('❌ Upload error:', error)
     setError('Erro ao fazer upload da imagem. Tente novamente.')
   }
 
@@ -98,7 +100,9 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
             <button
               type="button"
               onClick={() => {
-                console.log('Opening upload widget...')
+                console.log('🚀 Abrindo widget de upload...')
+                console.log('📊 Upload preset:', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET)
+                console.log('📷 Imagens antes do upload:', images)
                 open()
               }}
               className="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary-400 transition"
