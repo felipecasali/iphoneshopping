@@ -40,10 +40,6 @@ export default function Home() {
             <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
               <p className="text-sm font-semibold">� Você sabia que um laudo pode garantir até 20% a mais no seu bolso?</p>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Vai Anunciar Seu iPhone?<br />
-              <span className="text-primary-200">Descubra Quanto Ele Vale!</span>
-            </h1>
             <p className="text-xl mb-8 text-primary-100 max-w-3xl mx-auto">
               Avalie seu aparelho em 2 minutos e crie um laudo técnico completo. Tenha a garantia e confiança iPhoneShopping para vender com segurança e valor justo.
             </p>
@@ -110,9 +106,6 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
               Por Que Criar um Laudo?
             </h2>
-            <p className="text-2xl text-green-100 max-w-3xl mx-auto mb-4">
-              Se ainda não sabe quanto seu aparelho vale, você está no lugar certo!
-            </p>
             <p className="text-xl text-green-50 max-w-3xl mx-auto">
               Com um laudo técnico profissional, você ganha credibilidade, vende mais rápido e pode aumentar o preço em até 20%.
             </p>
@@ -158,7 +151,7 @@ export default function Home() {
                 Crie Seu Laudo em Apenas 2 Minutos
               </h3>
               <p className="text-xl text-gray-600 mb-8">
-                Documentos fotográficas, testes de funcionalidade, certificação digital e estimativa de preço. Tudo 100% gratuito!
+                Evidências fotográficas, testes de funcionalidade, certificação digital e estimativa de preço. Tudo 100% gratuito!
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -278,7 +271,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 gap-8 mb-12 items-center">
             {/* Card Principal */}
             <div className="bg-white rounded-2xl shadow-2xl p-8 border-2 border-green-500">
               <div className="flex items-start gap-4 mb-6">
@@ -396,95 +389,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-20 bg-gray-50" aria-labelledby="features-heading">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 id="features-heading" className="text-3xl font-bold text-center mb-12">
-            Por que escolher o iPhoneShopping?
-          </h2>
-          <div className="grid md:grid-cols-4 gap-8">
-            <article className="bg-white p-6 rounded-xl shadow-sm text-center">
-              <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                <TrendingUp className="h-8 w-8 text-primary-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Avaliação Inteligente</h3>
-              <p className="text-gray-600">
-                Sistema avançado que calcula o valor real do seu aparelho em minutos
-              </p>
-            </article>
-
-            <article className="bg-white p-6 rounded-xl shadow-sm text-center">
-              <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                <Shield className="h-8 w-8 text-primary-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Transações Seguras</h3>
-              <p className="text-gray-600">
-                Garantia de segurança em todas as negociações entre compradores e vendedores
-              </p>
-            </article>
-
-            <article className="bg-white p-6 rounded-xl shadow-sm text-center">
-              <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                <MessageSquare className="h-8 w-8 text-primary-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Chat Seguro</h3>
-              <p className="text-gray-600">
-                Comunique-se diretamente com compradores e vendedores de forma segura
-              </p>
-            </article>
-
-            <article className="bg-white p-6 rounded-xl shadow-sm text-center">
-              <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                <Smartphone className="h-8 w-8 text-primary-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Anúncio Gratuito</h3>
-              <p className="text-gray-600">
-                Cadastre seu aparelho gratuitamente após a avaliação
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="py-20" aria-labelledby="how-it-works-heading">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 id="how-it-works-heading" className="text-3xl font-bold text-center mb-12">
-            Como Funciona
-          </h2>
-          <ol className="grid md:grid-cols-3 gap-8">
-            <li className="text-center">
-              <div className="bg-primary-600 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold" aria-hidden="true">
-                1
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Avalie seu Aparelho</h3>
-              <p className="text-gray-600">
-                Responda algumas perguntas sobre o estado do seu iPhone ou iPad
-              </p>
-            </li>
-
-            <li className="text-center">
-              <div className="bg-primary-600 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold" aria-hidden="true">
-                2
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Receba a Avaliação</h3>
-              <p className="text-gray-600">
-                Veja o valor estimado baseado nas condições do aparelho
-              </p>
-            </li>
-
-            <li className="text-center">
-              <div className="bg-primary-600 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold" aria-hidden="true">
-                3
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Anuncie Gratuitamente</h3>
-              <p className="text-gray-600">
-                Publique seu anúncio e negocie com compradores interessados
-              </p>
-            </li>
-          </ol>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="bg-primary-600 text-white py-16">
