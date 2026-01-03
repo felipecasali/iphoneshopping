@@ -16,8 +16,11 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 5 }: I
 
   const handleSuccess = (result: any) => {
     console.log('Upload successful:', result)
+    console.log('Current images prop:', images)
     const newUrl = result.info.secure_url
+    console.log('New URL:', newUrl)
     const updatedImages = [...images, newUrl]
+    console.log('Updated images array:', updatedImages)
     onImagesChange(updatedImages)
     setError('')
   }
