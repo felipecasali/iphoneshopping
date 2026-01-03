@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { Smartphone, MessageSquare, User, LogOut, LayoutDashboard, Menu, X } from 'lucide-react'
+import { MessageSquare, User, LogOut, LayoutDashboard, Menu, X, Package } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
@@ -64,7 +64,14 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-1.5 sm:space-x-2">
-            <Smartphone className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <Image 
+              src="/logo.png" 
+              alt="iPhoneShopping Logo" 
+              width={32} 
+              height={32} 
+              className="h-6 w-6 sm:h-8 sm:w-8"
+              priority
+            />
             <span className="text-lg sm:text-2xl font-bold text-gray-900">iPhoneShopping</span>
           </Link>
           
@@ -159,7 +166,7 @@ export default function Header() {
                         className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full"
                         onClick={() => setShowUserMenu(false)}
                       >
-                        <Smartphone className="w-4 h-4" />
+                        <Package className="w-4 h-4" />
                         Meus Anúncios
                       </Link>
                       <Link
