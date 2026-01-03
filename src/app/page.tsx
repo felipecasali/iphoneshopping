@@ -105,10 +105,10 @@ export default function Home() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
               <TrendingUp className="h-5 w-5" />
-              <span className="font-bold text-lg">VALORIZE SEU IPHONE ATÉ 20% A MAIS</span>
+              <span className="font-bold text-lg">VALORIZE SEU IPHONE ATÉ 20%</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Por Que Criar um Laudo iPhoneShopping?
+              Por Que Criar um Laudo?
             </h2>
             <p className="text-2xl text-green-100 max-w-3xl mx-auto mb-4">
               Se ainda não sabe quanto seu aparelho vale, você está no lugar certo!
