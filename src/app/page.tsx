@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Smartphone, Shield, MessageSquare, TrendingUp, Award, Clock, BadgeCheck, Target, FileText, CheckCircle, Camera } from 'lucide-react'
+import { Smartphone, Shield, MessageSquare, TrendingUp, Award, Clock, BadgeCheck, Target, FileText, CheckCircle, Camera, Sparkles, Crown, ChevronRight } from 'lucide-react'
 import Header from '@/components/Header'
 import { OrganizationSchema, WebSiteSchema, FAQSchema } from '@/components/StructuredData'
 
@@ -176,6 +176,186 @@ export default function Home() {
                 ✅ Sem cartão de crédito  |  ✅ Sem taxas ocultas  |  ✅ Resultado instantâneo
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Laudo Types Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-primary-600 rounded-full filter blur-3xl opacity-10"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-green-600 rounded-full filter blur-3xl opacity-10"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
+              <FileText className="h-5 w-5" />
+              <span className="font-bold text-lg">ESCOLHA SEU LAUDO</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              Tipos de Laudos Disponíveis
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Do básico ao premium, escolha o laudo ideal para dar credibilidade à sua venda
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Laudo Básico */}
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-gray-700 hover:border-gray-500 transition hover:bg-white/10">
+              <div className="bg-gray-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <FileText className="h-8 w-8 text-gray-300" />
+              </div>
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold mb-2">Laudo Básico</h3>
+                <div className="text-4xl font-bold mb-2">
+                  GRÁTIS
+                </div>
+                <p className="text-gray-400">Ideal para vendas pessoais</p>
+              </div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-300">Informações básicas do aparelho</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-300">5 fotos obrigatórias</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-300">Verificação de IMEI</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-300">Condição externa</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-300">Validade de 30 dias</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-300">Marca d'água no PDF</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Laudo Profissional */}
+            <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 backdrop-blur-md rounded-2xl p-8 border-2 border-blue-500 hover:border-blue-400 transition relative hover:shadow-2xl hover:shadow-blue-500/20">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-6 py-1.5 rounded-full text-sm font-bold">
+                MAIS POPULAR
+              </div>
+              <div className="bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Sparkles className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold mb-2">Laudo Profissional</h3>
+                <div className="text-4xl font-bold mb-2">
+                  R$ 29,90
+                </div>
+                <p className="text-gray-300">Para vendedores que querem destaque</p>
+              </div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-white font-medium">Tudo do Básico +</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">15 fotos profissionais</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Saúde detalhada da bateria</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Testes funcionais completos</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Certificado digital</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Validade de 90 dias</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Sem marca d'água</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Laudo Premium */}
+            <div className="bg-gradient-to-br from-purple-600/20 to-purple-900/20 backdrop-blur-md rounded-2xl p-8 border-2 border-purple-500 hover:border-purple-400 transition relative hover:shadow-2xl hover:shadow-purple-500/20">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-1.5 rounded-full text-sm font-bold">
+                RECOMENDADO
+              </div>
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Crown className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold mb-2">Laudo Premium</h3>
+                <div className="text-4xl font-bold mb-2">
+                  R$ 49,90
+                </div>
+                <p className="text-gray-300">Máxima credibilidade profissional</p>
+              </div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-white font-medium">Tudo do Profissional +</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Fotos ilimitadas</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Análise técnica detalhada</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Histórico de reparos</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Garantia de autenticidade</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Verificação iCloud</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Validade de 180 dias</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Prioridade no suporte</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-200">Selo Premium exclusivo</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-12">
+            <Link
+              href="/laudo/criar"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500 to-green-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:from-green-600 hover:to-green-700 transition shadow-lg hover:shadow-xl group"
+            >
+              <FileText className="h-6 w-6 group-hover:scale-110 transition" />
+              Criar Meu Laudo Agora
+              <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition" />
+            </Link>
+            <p className="text-sm text-gray-400 mt-4">
+              Comece com o Laudo Básico gratuito e faça upgrade quando precisar
+            </p>
           </div>
         </div>
       </section>
