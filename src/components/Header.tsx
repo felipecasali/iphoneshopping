@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { Smartphone, MessageSquare, User, LogOut, LayoutDashboard } from 'lucide-react'
+import { Smartphone, MessageSquare, User, LogOut, LayoutDashboard, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
@@ -10,6 +10,7 @@ export default function Header() {
   const { data: session, status } = useSession()
   const [unreadCount, setUnreadCount] = useState(0)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [userAvatar, setUserAvatar] = useState<string | null>(null)
 
   useEffect(() => {
@@ -48,48 +49,51 @@ export default function Header() {
 
   return (
     <>
-      {/* Overlay para fechar o menu */}
-      {showUserMenu && (
+      {/* Overlay para fechar os menus */}
+      {(showUserMenu || showMobileMenu) && (
         <div 
           className="fixed inset-0 z-40" 
-          onClick={() => setShowUserMenu(false)}
+          onClick={() => {
+            setShowUserMenu(false)
+            setShowMobileMenu(false)
+          }}
         />
       )}
       
       <header className="bg-white shadow-sm sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2">
-            <Smartphone className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-gray-900">iPhoneShopping</span>
+          <Link href="/" className="flex items-center space-x-1.5 sm:space-x-2">
+            <Smartphone className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <span className="text-lg sm:text-2xl font-bold text-gray-900">iPhoneShopping</span>
           </Link>
           
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/avaliar" className="text-gray-700 hover:text-primary font-medium">
+          <div className="hidden lg:flex items-center space-x-6">
+            <Link href="/avaliar" className="text-gray-700 hover:text-primary font-medium text-sm">
               Avaliar Aparelho
             </Link>
-            <Link href="/anuncios" className="text-gray-700 hover:text-primary font-medium">
+            <Link href="/anuncios" className="text-gray-700 hover:text-primary font-medium text-sm">
               Anúncios
             </Link>
-            <Link href="/laudo/criar" className="text-gray-700 hover:text-primary font-medium flex items-center gap-1">
+            <Link href="/laudo/criar" className="text-gray-700 hover:text-primary font-medium flex items-center gap-1 text-sm">
               Laudo Técnico
-              <span className="text-xs bg-primary-600 text-white px-2 py-0.5 rounded-full">Novo</span>
+              <span className="text-xs bg-primary-600 text-white px-1.5 py-0.5 rounded-full">Novo</span>
             </Link>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             {status === 'authenticated' ? (
               <>
                 {/* Mensagens */}
                 <Link 
                   href="/dashboard/mensagens" 
-                  className="p-2 text-gray-600 hover:text-primary relative"
+                  className="p-1.5 sm:p-2 text-gray-600 hover:text-primary relative"
                   title="Mensagens"
                   onClick={() => setUnreadCount(0)}
                 >
-                  <MessageSquare className="h-6 w-6" />
+                  <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
@@ -99,11 +103,11 @@ export default function Header() {
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center gap-2 p-2 text-gray-600 hover:text-primary transition"
+                    className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 text-gray-600 hover:text-primary transition"
                     title="Menu do usuário"
                   >
                     <div className="relative">
-                      <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold ring-2 ring-primary ring-offset-2 overflow-hidden">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold ring-2 ring-primary ring-offset-1 overflow-hidden text-sm">
                         {userAvatar ? (
                           <Image
                             src={userAvatar}
@@ -117,9 +121,9 @@ export default function Header() {
                         )}
                       </div>
                       {/* Indicador online */}
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-white"></div>
                     </div>
-                    <span className="hidden md:block font-medium text-gray-700">
+                    <span className="hidden lg:block font-medium text-gray-700 text-sm">
                       {session.user?.name?.split(' ')[0] || 'Usuário'}
                     </span>
                   </button>
@@ -182,26 +186,83 @@ export default function Header() {
 
                 <Link 
                   href="/criar-anuncio" 
-                  className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 font-medium"
+                  className="hidden sm:inline-block bg-primary text-white px-4 sm:px-6 py-1.5 sm:py-2 rounded-lg hover:bg-primary/90 font-medium text-sm"
                 >
                   Anunciar
                 </Link>
+
+                {/* Botão Menu Mobile */}
+                <button
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
+                  className="lg:hidden p-1.5 text-gray-600 hover:text-primary"
+                  title="Menu"
+                >
+                  {showMobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </button>
               </>
             ) : (
               <>
-                <Link href="/login" className="text-gray-700 hover:text-primary font-medium">
+                <Link href="/login" className="text-gray-700 hover:text-primary font-medium text-sm">
                   Entrar
                 </Link>
                 <Link 
                   href="/register" 
-                  className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 font-medium"
+                  className="bg-primary text-white px-3 sm:px-6 py-1.5 sm:py-2 rounded-lg hover:bg-primary/90 font-medium text-sm"
                 >
                   Cadastrar
                 </Link>
+
+                {/* Botão Menu Mobile */}
+                <button
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
+                  className="lg:hidden p-1.5 text-gray-600 hover:text-primary"
+                  title="Menu"
+                >
+                  {showMobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </button>
               </>
             )}
           </div>
         </div>
+
+        {/* Menu Mobile Dropdown */}
+        {showMobileMenu && (
+          <div className="lg:hidden absolute left-0 right-0 top-full bg-white border-t border-gray-200 shadow-lg z-50">
+            <div className="px-4 py-3 space-y-3">
+              <Link 
+                href="/avaliar" 
+                className="block text-gray-700 hover:text-primary font-medium py-2"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Avaliar Aparelho
+              </Link>
+              <Link 
+                href="/anuncios" 
+                className="block text-gray-700 hover:text-primary font-medium py-2"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Anúncios
+              </Link>
+              <Link 
+                href="/laudo/criar" 
+                className="block text-gray-700 hover:text-primary font-medium py-2 flex items-center gap-2"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Laudo Técnico
+                <span className="text-xs bg-primary-600 text-white px-2 py-0.5 rounded-full">Novo</span>
+              </Link>
+              {status === 'authenticated' && (
+                <Link 
+                  href="/criar-anuncio" 
+                  className="block bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 font-medium text-center"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  Criar Anúncio
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
     </header>
     </>

@@ -35,36 +35,36 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white" aria-label="Seção principal">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
           <div className="text-center">
-            <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <p className="text-sm font-semibold">� Você sabia que um laudo pode garantir até 20% a mais no seu bolso?</p>
+            <div className="inline-block bg-white/10 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-4 sm:mb-6">
+              <p className="text-xs sm:text-sm font-semibold">💎 Você sabia que um laudo pode garantir até 20% a mais no seu bolso?</p>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
               Vai Anunciar Seu Apple?<br />
             </h1>
-            <p className="text-xl mb-8 text-primary-100 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-primary-100 max-w-3xl mx-auto px-2">
               Avalie seu aparelho em 2 minutos e crie um laudo técnico completo. Tenha a garantia e confiança iPhoneShopping para vender com segurança e valor justo.
             </p>
             <nav className="flex flex-col sm:flex-row justify-center gap-4 mb-12" aria-label="Ações principais">
               <Link 
                 href="/avaliar"
-                className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="bg-white text-primary-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base"
                 aria-label="Avaliar meu aparelho"
               >
                 ✨ Avaliar Meu Aparelho Agora
               </Link>
               <Link 
                 href="/laudo/criar"
-                className="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2 justify-center"
+                className="bg-green-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2 justify-center text-sm sm:text-base"
                 aria-label="Criar laudo técnico"
               >
-                <FileText className="h-5 w-5" />
+                <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
                 Criar Laudo Profissional
               </Link>
               <Link 
                 href="/anuncios"
-                className="bg-primary-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-400 transition border-2 border-white/30"
+                className="bg-primary-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-primary-400 transition border-2 border-white/30 text-sm sm:text-base"
                 aria-label="Ver anúncios disponíveis"
               >
                 🔍 Explorar Anúncios
@@ -72,22 +72,22 @@ export default function Home() {
             </nav>
             
             {/* Trust Indicators */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto mt-8 sm:mt-12 px-4">
               <div className="text-center">
-                <div className="text-3xl font-bold mb-1">2 min</div>
-                <div className="text-sm text-primary-100">Avaliação completa</div>
+                <div className="text-2xl sm:text-3xl font-bold mb-1">2 min</div>
+                <div className="text-xs sm:text-sm text-primary-100">Avaliação completa</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold mb-1">+20%</div>
-                <div className="text-sm text-primary-100">Valor com laudo</div>
+                <div className="text-2xl sm:text-3xl font-bold mb-1">+20%</div>
+                <div className="text-xs sm:text-sm text-primary-100">Valor com laudo</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold mb-1">100%</div>
-                <div className="text-sm text-primary-100">Grátis</div>
+                <div className="text-2xl sm:text-3xl font-bold mb-1">100%</div>
+                <div className="text-xs sm:text-sm text-primary-100">Grátis</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold mb-1">0 taxas</div>
-                <div className="text-sm text-primary-100">Para anunciar</div>
+                <div className="text-2xl sm:text-3xl font-bold mb-1">0 taxas</div>
+                <div className="text-xs sm:text-sm text-primary-100">Para anunciar</div>
               </div>
             </div>
           </div>
@@ -181,92 +181,92 @@ export default function Home() {
       </section>
 
       {/* Laudo Types Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-primary-600 rounded-full filter blur-3xl opacity-10"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-green-600 rounded-full filter blur-3xl opacity-10"></div>
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-64 sm:w-96 h-64 sm:h-96 bg-primary-600 rounded-full filter blur-3xl opacity-10"></div>
+        <div className="absolute bottom-0 right-0 w-64 sm:w-96 h-64 sm:h-96 bg-green-600 rounded-full filter blur-3xl opacity-10"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
-              <FileText className="h-5 w-5" />
-              <span className="font-bold text-lg">ESCOLHA SEU LAUDO</span>
+          <div className="text-center mb-10 sm:mb-16">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-4 sm:mb-6">
+              <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="font-bold text-sm sm:text-base md:text-lg">ESCOLHA SEU LAUDO</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 leading-tight px-4">
               Tipos de Laudos Disponíveis
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
               Do básico ao premium, escolha o laudo ideal para dar credibilidade à sua venda
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
             {/* Laudo Básico */}
-            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-gray-700 hover:border-gray-500 transition hover:bg-white/10">
-              <div className="bg-gray-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <FileText className="h-8 w-8 text-gray-300" />
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-gray-700 hover:border-gray-500 transition hover:bg-white/10">
+              <div className="bg-gray-700 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-gray-300" />
               </div>
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold mb-2">Laudo Básico</h3>
-                <div className="text-4xl font-bold mb-2">
+              <div className="text-center mb-4 sm:mb-6">
+                <h3 className="text-xl sm:text-2xl font-bold mb-2">Laudo Básico</h3>
+                <div className="text-3xl sm:text-4xl font-bold mb-2">
                   GRÁTIS
                 </div>
-                <p className="text-gray-400">Ideal para vendas pessoais</p>
+                <p className="text-sm sm:text-base text-gray-400">Ideal para vendas pessoais</p>
               </div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-300">Informações básicas do aparelho</span>
+              <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-300">Informações básicas do aparelho</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-300">5 fotos obrigatórias</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-300">5 fotos obrigatórias</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-300">Verificação de IMEI</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-300">Verificação de IMEI</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-300">Condição externa</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-300">Condição externa</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-300">Validade de 30 dias</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-300">Validade de 30 dias</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-300">Marca d'água no PDF</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-300">Marca d'água no PDF</span>
                 </li>
               </ul>
             </div>
 
             {/* Laudo Profissional */}
-            <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 backdrop-blur-md rounded-2xl p-8 border-2 border-blue-500 hover:border-blue-400 transition relative hover:shadow-2xl hover:shadow-blue-500/20">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-6 py-1.5 rounded-full text-sm font-bold">
+            <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 backdrop-blur-md rounded-2xl p-6 sm:p-8 border-2 border-blue-500 hover:border-blue-400 transition relative hover:shadow-2xl hover:shadow-blue-500/20">
+              <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 sm:px-6 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold">
                 MAIS POPULAR
               </div>
-              <div className="bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Sparkles className="h-8 w-8 text-white" />
+              <div className="bg-blue-500 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold mb-2">Laudo Profissional</h3>
-                <div className="text-4xl font-bold mb-2">
+              <div className="text-center mb-4 sm:mb-6">
+                <h3 className="text-xl sm:text-2xl font-bold mb-2">Laudo Profissional</h3>
+                <div className="text-3xl sm:text-4xl font-bold mb-2">
                   R$ 29,90
                 </div>
-                <p className="text-gray-300">Para vendedores que querem destaque</p>
+                <p className="text-sm sm:text-base text-gray-300">Para vendedores que querem destaque</p>
               </div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-white font-medium">Tudo do Básico +</span>
+              <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-white font-medium">Tudo do Básico +</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">15 fotos profissionais</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">15 fotos profissionais</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Saúde detalhada da bateria</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Saúde detalhada da bateria</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
@@ -288,66 +288,66 @@ export default function Home() {
             </div>
 
             {/* Laudo Premium */}
-            <div className="bg-gradient-to-br from-purple-600/20 to-purple-900/20 backdrop-blur-md rounded-2xl p-8 border-2 border-purple-500 hover:border-purple-400 transition relative hover:shadow-2xl hover:shadow-purple-500/20">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-1.5 rounded-full text-sm font-bold">
+            <div className="bg-gradient-to-br from-purple-600/20 to-purple-900/20 backdrop-blur-md rounded-2xl p-6 sm:p-8 border-2 border-purple-500 hover:border-purple-400 transition relative hover:shadow-2xl hover:shadow-purple-500/20">
+              <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 sm:px-6 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold">
                 RECOMENDADO
               </div>
-              <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Crown className="h-8 w-8 text-white" />
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold mb-2">Laudo Premium</h3>
-                <div className="text-4xl font-bold mb-2">
+              <div className="text-center mb-4 sm:mb-6">
+                <h3 className="text-xl sm:text-2xl font-bold mb-2">Laudo Premium</h3>
+                <div className="text-3xl sm:text-4xl font-bold mb-2">
                   R$ 49,90
                 </div>
-                <p className="text-gray-300">Máxima credibilidade profissional</p>
+                <p className="text-sm sm:text-base text-gray-300">Máxima credibilidade profissional</p>
               </div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-white font-medium">Tudo do Profissional +</span>
+              <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-white font-medium">Tudo do Profissional +</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Fotos ilimitadas</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Fotos ilimitadas</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Análise técnica detalhada</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Análise técnica detalhada</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Histórico de reparos</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Histórico de reparos</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Garantia de autenticidade</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Garantia de autenticidade</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Verificação iCloud</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Verificação iCloud</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Validade de 180 dias</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Validade de 180 dias</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Prioridade no suporte</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Prioridade no suporte</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-200">Selo Premium exclusivo</span>
+                <li className="flex items-start gap-2 sm:gap-3">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm sm:text-base text-gray-200">Selo Premium exclusivo</span>
                 </li>
               </ul>
             </div>
           </div>
 
           {/* CTA */}
-          <div className="text-center mt-12">
+          <div className="text-center mt-8 sm:mt-12 px-4">
             <Link
               href="/laudo/criar"
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500 to-green-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:from-green-600 hover:to-green-700 transition shadow-lg hover:shadow-xl group"
+              className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 sm:px-10 py-3 sm:py-5 rounded-xl font-bold text-base sm:text-lg hover:from-green-600 hover:to-green-700 transition shadow-lg hover:shadow-xl group"
             >
               <FileText className="h-6 w-6 group-hover:scale-110 transition" />
               Criar Meu Laudo Agora
@@ -361,71 +361,71 @@ export default function Home() {
       </section>
 
       {/* Value Proposition - Like Premium Cars */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 px-4">
               Produtos Apple São Investimentos Duráveis
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Assim como veículos premium, iPhones e iPads são projetados para durar. Qualidade de construção, 
               sistema operacional otimizado e suporte de longa duração fazem toda a diferença.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-cyan-500">
-              <div className="bg-cyan-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Award className="h-8 w-8 text-cyan-600" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-cyan-500">
+              <div className="bg-cyan-100 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Award className="h-6 w-6 sm:h-8 sm:w-8 text-cyan-600" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-center">Qualidade Premium</h3>
-              <p className="text-gray-600 text-center">
+              <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-center">Qualidade Premium</h3>
+              <p className="text-sm sm:text-base text-gray-600 text-center">
                 Construção em alumínio e vidro, processadores de última geração e câmeras profissionais.
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-green-500">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Clock className="h-8 w-8 text-green-600" />
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-green-500">
+              <div className="bg-green-100 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-center">Longa Durabilidade</h3>
-              <p className="text-gray-600 text-center">
+              <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-center">Longa Durabilidade</h3>
+              <p className="text-sm sm:text-base text-gray-600 text-center">
                 Atualizações de iOS por até 7 anos. Seu aparelho continua atual e valorizado por muito tempo.
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-purple-500">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <BadgeCheck className="h-8 w-8 text-purple-600" />
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-purple-500">
+              <div className="bg-purple-100 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <BadgeCheck className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-center">Valor Preservado</h3>
-              <p className="text-gray-600 text-center">
+              <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-center">Valor Preservado</h3>
+              <p className="text-sm sm:text-base text-gray-600 text-center">
                 Produtos Apple mantêm 60-80% do valor original mesmo após anos de uso.
               </p>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-orange-500">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Target className="h-8 w-8 text-orange-600" />
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-orange-500">
+              <div className="bg-orange-100 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Target className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-center">Alta Demanda</h3>
-              <p className="text-gray-600 text-center">
+              <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-center">Alta Demanda</h3>
+              <p className="text-sm sm:text-base text-gray-600 text-center">
                 Mercado aquecido com milhares de compradores procurando iPhones e iPads usados.
               </p>
             </div>
           </div>
 
-          <div className="mt-16 bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-12 text-white text-center">
-            <h3 className="text-3xl font-bold mb-4">
+          <div className="mt-12 sm:mt-16 bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-6 sm:p-8 md:p-12 text-white text-center">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 px-4">
               🏆 Venda com Transparência Total
             </h3>
-            <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-primary-100 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
               Nossa avaliação considera mais de 15 fatores - do estado da bateria aos acessórios inclusos. 
               Você recebe um laudo completo como uma vistoria veicular!
             </p>
             <Link 
               href="/avaliar"
-              className="inline-block bg-white text-primary-600 px-10 py-4 rounded-lg font-bold hover:bg-gray-100 transition shadow-lg text-lg"
+              className="inline-block bg-white text-primary-600 px-6 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition shadow-lg text-base sm:text-lg"
             >
               Começar Avaliação Gratuita →
             </Link>
