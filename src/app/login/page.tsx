@@ -2,9 +2,9 @@
 
 import { useState, Suspense, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { Smartphone } from 'lucide-react'
 import GoogleSignInButton from '@/components/GoogleSignInButton'
 import LoginErrorHandler from '@/components/LoginErrorHandler'
 
@@ -49,7 +49,14 @@ function LoginForm() {
       
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex justify-center">
-          <Smartphone className="h-12 w-12 text-primary-600" />
+          <Image 
+            src="/logo.png" 
+            alt="iPhoneShopping Logo" 
+            width={48} 
+            height={48} 
+            className="h-12 w-12"
+            priority
+          />
         </Link>
         <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
           Entre na sua conta

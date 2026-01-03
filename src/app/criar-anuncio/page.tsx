@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Smartphone } from 'lucide-react'
+import Image from 'next/image'
 import ImageUpload from '@/components/ImageUpload'
 import { ESTADOS_BRASIL, PRINCIPAIS_CIDADES } from '@/lib/locations'
 
@@ -156,7 +156,14 @@ export default function CriarAnuncioPage() {
       <header className="bg-white shadow-sm">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <Link href="/" className="flex items-center space-x-2">
-            <Smartphone className="h-8 w-8 text-primary-600" />
+            <Image 
+              src="/logo.png" 
+              alt="iPhoneShopping Logo" 
+              width={32} 
+              height={32} 
+              className="h-8 w-8"
+              priority
+            />
             <span className="text-2xl font-bold text-gray-900">iPhoneShopping</span>
           </Link>
         </nav>
