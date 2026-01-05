@@ -94,6 +94,113 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Como Funciona - Comparação Processo */}
+      <section className="py-16 sm:py-20 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full mb-4 font-semibold text-sm">
+              ⚠️ Cansado de perder tempo?
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Vender iPhone não precisa ser complicado
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+              Compare o processo tradicional com o iPhoneShopping e veja como economizamos seu tempo
+            </p>
+          </div>
+
+          {/* Comparação Lado a Lado */}
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            {/* Método Tradicional */}
+            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 border-2 border-red-200">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <Clock className="h-6 w-6 text-red-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Método Tradicional</h3>
+                  <p className="text-sm text-red-600 font-semibold">3-4 horas de trabalho</p>
+                </div>
+              </div>
+              <ul className="space-y-3 text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">❌</span>
+                  <span>Pesquisar preços manualmente em vários sites</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">❌</span>
+                  <span>Definir preço "no chute" sem dados concretos</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">❌</span>
+                  <span>Criar múltiplos anúncios em diferentes plataformas</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">❌</span>
+                  <span>Responder as mesmas perguntas dezenas de vezes</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">❌</span>
+                  <span>Ouvir "tá caro" sem ter como comprovar o valor</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Com iPhoneShopping */}
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow-lg p-6 sm:p-8 border-2 border-green-400 relative">
+              <div className="absolute -top-3 -right-3 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                RECOMENDADO
+              </div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-green-600 rounded-lg">
+                  <Sparkles className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Com iPhoneShopping</h3>
+                  <p className="text-sm text-green-600 font-semibold">5-10 minutos • 90% mais rápido</p>
+                </div>
+              </div>
+              <ul className="space-y-3 text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-500 mt-1">✅</span>
+                  <span><strong>Avalie:</strong> Preço justo em menos de 1 minuto</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-500 mt-1">✅</span>
+                  <span><strong>Anuncie:</strong> Um link único com todas as informações</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-500 mt-1">✅</span>
+                  <span><strong>Negocie:</strong> Sem perguntas repetitivas</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-500 mt-1">✅</span>
+                  <span>Laudo técnico profissional (opcional)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-500 mt-1">✅</span>
+                  <span>Compartilhe em qualquer lugar: WhatsApp, OLX, etc</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* CTA para a página detalhada */}
+          <div className="text-center">
+            <Link
+              href="/como-funciona"
+              className="inline-flex items-center gap-2 bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition shadow-lg"
+            >
+              Ver Comparação Completa
+              <ChevronRight className="h-5 w-5" />
+            </Link>
+            <p className="text-sm text-gray-500 mt-4">
+              Descubra como economizar horas e vender com mais confiança
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Nova Seção: Valorização com Laudo - DESTAQUE PRINCIPAL */}
       <section className="py-20 bg-gradient-to-br from-green-600 via-emerald-600 to-green-700 text-white relative overflow-hidden">
         {/* Elementos decorativos */}
